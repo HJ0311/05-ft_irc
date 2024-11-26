@@ -248,6 +248,8 @@ client는 개발하지 말아라.
 
 서버가 보내는 모든 것을 올바르게 수행하는 것을 확인하기 위해 nc를 사용하여 다음과 같은 간단한 테스트를 진행할 수 있다:
 
+<img width="316" alt="스크린샷 2024-11-26 오후 6 07 40" src="https://github.com/user-attachments/assets/7aca2272-cd42-49b9-972f-a4b2b2acdb3a">
+
 ##### Use **ctrl+D** to send the command in several parts: 'com', than 'man', than 'd\n'.
 
 ctrl+D를 사용하여 여러 부분으로 명령어를 보낸다: 'com', 'man', 'd\n'
