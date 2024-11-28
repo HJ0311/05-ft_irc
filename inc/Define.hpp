@@ -1,14 +1,18 @@
 #pragma once
 
 #include <iostream>
-#include <string>
-#include <netinet/in.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
-#include <fcntl.h>
-#include <vector>
-#include <map>
 #include <unistd.h>
+#include <string.h>
+#include <fcntl.h>
+#include <netdb.h>
+#include <poll.h>
+#include <map>
+#include <vector>
+#include <iomanip>
+#include <sstream>
 
 #include "Client.hpp"
 #include "Server.hpp"

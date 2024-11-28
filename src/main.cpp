@@ -7,9 +7,8 @@ int	main(int argc, char** argv)
 		if (argc != 3)
 		throw (std::string)"Usage: ./ircserv <port> <password>";
 		
-		Server	*server = new Server(argv[1], argv[2]);
-		server->run();
-		delete server;
+		Server	srv(10, argv[1], argv[2]);
+		srv.startServer();
 	}
 	catch(const std::string& e)
 	{

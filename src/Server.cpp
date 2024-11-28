@@ -1,13 +1,13 @@
 #include "../inc/Define.hpp"
 
-Server::Server(const std::string& port, const std::string& password) : port(0), password(password)
+Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), port(0), password(password)
 {
 	try
 	{
 		this->port = stoi(port);
 		if (this->port < 0 || this->port > 65535)
 			throw (std::string) "Invalid port";
-		initSocket();
+		initSocket(port);
 	}
 	catch(const std::string& e)
 	{
@@ -18,9 +18,9 @@ Server::Server(const std::string& port, const std::string& password) : port(0), 
 
 Server::~Server() {}
 
-Server::Server() {}
+Server::Server() : maxClientCnt(0),  onlineClient(0), port(0), password(""), servSockFd(0) {}
 
-Server::Server(const Server& obj) : port(obj.port), password(obj.password)
+Server::Server(const Server& obj)
 {
 	*this = obj;
 }
@@ -29,74 +29,104 @@ Server&	Server::operator=(const Server& obj)
 {
 	if (this != &obj)
 	{
+		this->maxClientCnt = obj.maxClientCnt;
+		this->onlineClient = obj.onlineClient;
 		this->port = obj.port;
 		this->password = obj.password;
+		this->servSockFd = obj.servSockFd;
 	}
 	return *this;
 }
 
-// =====================================================================================================
+// =================================================================================================================
+// =================================================================================================================
+// =================================================================================================================
+// =================================================================================================================
+// =================================================================================================================
 
-void	Server::initSocket()
+
+void	Server::initSocket(const std::string& port)
 {
-	this->sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (this->sock == -1)
-		throw std::runtime_error("Socket creation error");
-	if (fcntl(this->sock, F_SETFL, O_NONBLOCK) == -1) // 소켓 논 블로킹 모드로 설정
-		throw std::runtime_error("fcntl error");
+	int	yes = 1;
+	struct addrinfo	hint, *servinfo;
+	int	status;
 
-	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	servAddr.sin_port = htons(this->port);
+	memset(&hint, 0, sizeof(hint));
+	hint.ai_family = AF_INET; // IPv4 주소 체계
+	hint.ai_socktype = SOCK_STREAM; // TCP 소켓 타입 지정
+	hint.ai_protocol = getprotobyname("TCP")->p_proto; // 소켓에서 사용할 프토로콜 지정, TCP 라는 프로토콜의 정보 반환
 
-	if (bind(sock, (struct sockaddr*) &servAddr, sizeof(servAddr)) == -1)
-		throw std::runtime_error("Bind error");
+	status = getaddrinfo("0.0.0.0", port.c_str(), &hint, &servinfo); // 실질적인 주소의 정보 servinfo에 저장
+	if (status != 0) // error
+		throw std::runtime_error("Unable to retrieve address information");
 	
-	if (listen(sock, SOMAXCONN) == -1) // 연결 요청 대기
-		throw std::runtime_error("Listen error");
+	struct addrinfo	*tmp;
+	for (tmp = servinfo; tmp != NULL; tmp = tmp->ai_next) // servinfo에 있는 주소들 중 사용 가능한 주소를 찾는다
+	{
+		this->servSockFd = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
+		if (this->servSockFd < 0)
+			continue;
+		if (fcntl(this->servSockFd, F_SETFL, O_NONBLOCK) < 0)
+			throw std::runtime_error("Fcntl error");
+		setsockopt(this->servSockFd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
+		if (bind(this->servSockFd, tmp->ai_addr, tmp->ai_addrlen) < 0)
+		{
+			close(this->servSockFd);
+			continue;
+		}
+		break;
+	}
+	freeaddrinfo(servinfo); // 소켓의 fd는 addrinfo와 독립적이므로 쓸모 없어진 주소 정보는 해제
+
+	if (tmp == NULL)
+		throw std::runtime_error("Bind error");
+	if (listen(this->servSockFd, this->maxClientCnt) < 0)
+		throw std::runtime_error("Listen error");
 }
 
-void	Server::run()
+void	Server::startServer()
 {
-	this->servSockSize = sizeof(sockaddr_in); // 소켓 함수의 호환성 유지를 위해 필요
-	
-	// 파일 디스크립터 집합들 초기화
-	FD_ZERO(&this->readFds);
-	FD_ZERO(&this->writeFds);
-	FD_ZERO(&this->readFdsCopy);
-	FD_ZERO(&this->writeFdsCopy);
-
-	FD_SET(this->sock, &readFds); // select가 호출될 때 해당 집합의 소켓에 읽을 데이터가 있는지 확인할 수 있게 됨
-
 	while (true)
 	{
-		readFdsCopy = readFds;
-		writeFdsCopy = writeFds; // select를 사용하면 집합 상태가 변할 수 있으므로 복사
-		if (select(Utils::getMaxFd(this->clients, this->sock) + 1, &readFdsCopy, &writeFdsCopy, NULL, 0) == -1)
-			throw std::runtime_error("Select error");
-
-		if (FD_ISSET(this->sock, &this->readFdsCopy)) // 소켓이 집합에 포함되어있는지 확인, select()이 집합을 검사한 뒤 준비된 디스크립터만 남기기 때문에 확인이 필요
+		int	pollCnt = poll(this->pfds, this->onlineClient, -1);
+		if (pollCnt < 0)
+			throw std::runtime_error("Poll() error");
+		for (int i = 0; i < this->onlineClient; i++) // 온라인 중인 클라이언트 개수만큼
 		{
-			std::cout << "Connected" << std::endl;
-			break ;
-			// handleNewConnection(); // 연결 요청 처리
-			// continue;
+			if (this->pfds[i].revents & POLLIN)
+				newClient();
+			// else
+			// 	clientRequest(i);
 		}
 	}
 }
 
-// void	Server::handleNewConnection()
-// {
-// 	int	newSocket = accept(this->sock, (sockaddr*) &clntAddr, &this->servSockSize); // 연결 요청이 들어왔는지 확인하고 들어왔다면 클라이언트 정보를 저장
-// 	if (newSocket == -1)
-// 		throw std::runtime_error("Accept error");
+void	Server::newClient()
+{
+	struct sockaddr_storage	clientAddr; // 클라이언트의 주소 정보 저장
+	socklen_t	addrLen = sizeof(clientAddr);
+	int	newFd = accept(this->servSockFd, (struct sockaddr*) &clientAddr, &addrLen);
+	if (newFd < 0)
+		throw std::runtime_error("Accept error");
+	else
+	{
+		std::cout << "Welcome!" << std::endl;
+		addToPoll(newFd);
+	}
+}
 
-// 	if (fcntl(newSocket, F_SETFL, O_NONBLOCK) == -1)
-// 		throw std::runtime_error("Fcntl error");
-	
-// 	int port = ntohs(clntAddr.sin_port);
-// 	Client	newClient(newSocket, port)
-
-// }
+void	Server::addToPoll(int newFd)
+{
+	if (this->onlineClient == this->maxClientCnt)
+	{
+		this->maxClientCnt *= 2;
+		this->pfds = (struct pollfd*)realloc(this->pfds, this->maxClientCnt);
+		if (pfds == NULL)
+			throw std::runtime_error("Memory allocation failed for pollfd array");
+	}
+	this->pfds[this->onlineClient].fd = newFd;
+	this->pfds[this->onlineClient].events = POLLIN;
+	this->clients.insert(std::make_pair(newFd, new Client(newFd)));
+	this->onlineClient++;
+}
