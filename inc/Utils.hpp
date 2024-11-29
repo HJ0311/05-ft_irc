@@ -7,4 +7,5 @@ class Client;
 namespace Utils
 {
 	std::string	getTime();
+	std::string	welcomeMsg();
 }

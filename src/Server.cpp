@@ -1,13 +1,16 @@
 #include "../inc/Define.hpp"
 
-Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), port(0), password(password)
+Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), password(password)
 {
 	try
 	{
-		this->port = stoi(port);
-		if (this->port < 0 || this->port > 65535)
+		if (stoi(port) < 0 || stoi(port) > 65535)
 			throw (std::string) "Invalid port";
+		this->pfds = new struct pollfd[this->maxClientCnt];
 		initSocket(port);
+		this->onlineClient++;
+		this->pfds[0].fd = this->servSockFd;
+		this->pfds[0].events = POLLIN;
 	}
 	catch(const std::string& e)
 	{
@@ -16,9 +19,16 @@ Server::Server(int maxClientCnt, const std::string& port, const std::string& pas
 	}
 }
 
-Server::~Server() {}
+Server::~Server()
+{
+	if (this->pfds)
+		delete [] this->pfds;
+	for (std::map<int, Client*>::iterator it = this->clients.begin(); it != this->clients.end(); ++it)
+		delete it->second;
+	this->clients.clear();
+}
 
-Server::Server() : maxClientCnt(0),  onlineClient(0), port(0), password(""), servSockFd(0) {}
+Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(0) {}
 
 Server::Server(const Server& obj)
 {
@@ -31,7 +41,6 @@ Server&	Server::operator=(const Server& obj)
 	{
 		this->maxClientCnt = obj.maxClientCnt;
 		this->onlineClient = obj.onlineClient;
-		this->port = obj.port;
 		this->password = obj.password;
 		this->servSockFd = obj.servSockFd;
 	}
@@ -95,9 +104,12 @@ void	Server::startServer()
 		for (int i = 0; i < this->onlineClient; i++) // 온라인 중인 클라이언트 개수만큼
 		{
 			if (this->pfds[i].revents & POLLIN)
-				newClient();
-			// else
-			// 	clientRequest(i);
+			{
+				if (this->pfds[i].fd == this->servSockFd)
+					newClient();
+				else
+					clientRequest(i);
+			}
 		}
 	}
 }
@@ -111,8 +123,12 @@ void	Server::newClient()
 		throw std::runtime_error("Accept error");
 	else
 	{
-		std::cout << "Welcome!" << std::endl;
 		addToPoll(newFd);
+		std::string welcome = Utils::welcomeMsg();
+		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)
+			throw std::runtime_error("send() error");
+		std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
+				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
 	}
 }
 
@@ -129,4 +145,12 @@ void	Server::addToPoll(int newFd)
 	this->pfds[this->onlineClient].events = POLLIN;
 	this->clients.insert(std::make_pair(newFd, new Client(newFd)));
 	this->onlineClient++;
+}
+
+void	Server::removeFromPoll(int i)
+{
+	close(this->pfds[i].fd);
+	this->pfds[i] = this->pfds[this->onlineClient - 1];
+	this->clients.erase(this->pfds[i].fd);
+	this->onlineClient--;
 }

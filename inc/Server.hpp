@@ -14,6 +14,8 @@ class Server
 		void	startServer();
 		void	newClient();
 		void	addToPoll(int newFd);
+		void	removeFromPoll(int i);
+		void	clientRequest(int i);
 	private:
 		Server();
 		Server(const Server& obj);
@@ -21,7 +23,6 @@ class Server
 
 		int	maxClientCnt;
 		int	onlineClient;
-		int	port;
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
