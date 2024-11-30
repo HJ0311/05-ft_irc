@@ -17,12 +17,7 @@ void	Server::clientRequest(int i)
 	}
 	else
 	{
-		std::string	message(buf, strlen(buf) - 1);
-		
-		if (message.back() == '\r')
-			message.erase(message.end() - 1);
-		if (send(senderFd, message.c_str(), message.length(), 0) < 0)
-			std::cerr << "send() error" << std::endl;
+		// command 처리
 	}
 	memset(&buf, 0, 5000);
 }

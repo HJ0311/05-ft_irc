@@ -10,22 +10,23 @@ OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 DEP := $(SRC:%.cpp=$(DEP_DIR)/%.d)
 INC := -I$(INC_DIR)
 
-RESET = "\033[0m"
-YELLOW = "\033[33m"
-GREEN = "\033[32m"
-RED = "\033[31m"
+RESET := "\033[0m"
+YELLOW := "\033[33m"
+GREEN := "\033[32m"
+RED := "\033[31m"
 
 
-CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+CXX := c++
+CXXFLAGS := -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
 
 
-RM = rm -rf
+RM := rm -rf
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@$(CXX) $(CXXFLAGS) $(INC) $^ -o $@
+	@echo $(GREEN)"creating" $(NAME) "✓" $(RESET)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR) $(DEP_DIR)
 	@$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@

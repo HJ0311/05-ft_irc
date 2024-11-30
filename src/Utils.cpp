@@ -19,6 +19,7 @@ std::string	Utils::getTime()
 std::string	Utils::welcomeMsg()
 {
 	std::string	welcome = YELLOW;
+	welcome.append("\n");
 	welcome.append("██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗\n");
 	welcome.append("██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝\n");
 	welcome.append("██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗\n");
