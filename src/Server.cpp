@@ -125,7 +125,7 @@ void	Server::newClient()
 	{
 		addToPoll(newFd);
 		std::string welcome = Utils::welcomeMsg();
-		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)
+		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
 			throw std::runtime_error("send() error");
 		std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
 				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
