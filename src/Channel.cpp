@@ -1,1 +1,3 @@
-// 채널과 관련된 처리
+#include "../inc/Define.hpp"
+
+// channel 관련 처리

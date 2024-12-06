@@ -3,6 +3,7 @@
 #include "Define.hpp"
 
 class Client;
+class Request;
 
 class Server
 {
@@ -16,7 +17,9 @@ class Server
 		void	addToPoll(int newFd);
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
-		// 사용자가 아직 로컬 서버에 로그인 되어 있지 않을 경우 경고문을 띄우는 함수
+		// command 처리
+		std::string	parsing(const std::string& message, int i) const;
+		Request	splitCommand(const std::string& message) const;
 	private:
 		Server();
 		Server(const Server& obj);

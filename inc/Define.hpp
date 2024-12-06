@@ -17,6 +17,8 @@
 #include "Client.hpp"
 #include "Server.hpp"
 #include "Utils.hpp"
+#include "Channel.hpp"
+#include "Request.hpp"
 
 #define RESET "\033[0m"
 #define YELLOW "\033[33m"
