@@ -26,3 +26,8 @@
 #define RED "\033[31m"
 #define BLUE "\033[34m"
 #define PURPLE "\033[35m"
+
+#define CLEAR_SCREEN "\033[2J"    // 화면 전체 지우기
+#define CURSOR_HOME "\033[H"      // 커서를 화면 맨 위로 이동
+#define CURSOR_HIDE "\033[?25l"   // 커서 숨기기
+#define CURSOR_SHOW "\033[?25h"   // 커서 보이기

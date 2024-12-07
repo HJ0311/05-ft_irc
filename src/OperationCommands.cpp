@@ -10,3 +10,5 @@
 // -l: 채널에 대한 사용자의 제한 설정/제거
 
 // NICK <nickname>: 닉네임 설정
+
+// USER <username> <unused> <unused> <realname> : 서버에 자신을 등록

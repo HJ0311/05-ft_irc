@@ -24,11 +24,9 @@ void	Server::clientRequest(int i)
 	memset(&buf, 0, 5000);
 }
 
-std::string	Server::parsing(const std::string& message, int i) const
+std::string	Server::parsing(const std::string& message, int i)
 {
 	Request	request(splitCommand(message));
-
-	(void)i;
 
 	if (request.command.empty())
 		return ("Invalid Command!\n");
@@ -50,7 +48,7 @@ std::string	Server::parsing(const std::string& message, int i) const
 	else if (request.command == "KICK")
 		return ("KICK\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "JOIN")
-		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
+		return (commandJoin(request, i)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "INVITE")
 		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")

@@ -12,3 +12,22 @@
 
 // TOPIC <channel> <Topic> : Topic 설정
 // TOPIC <channel> : Topic 보여주기
+
+#include "../inc/Define.hpp"
+
+std::string	Server::commandJoin(Request request, int i)
+{
+	(void)request;
+	(void)i;
+	
+	std::string	chatroom;
+    // chatroom.append(CLEAR_SCREEN);
+	// chatroom.append(CURSOR_HOME);
+	chatroom.append("+===========================+\n");
+	chatroom.append("|         Chatroom          |\n");
+	chatroom.append("+===========================+\n");
+
+	if (send(this->clients[i]->getSockFd(), chatroom.c_str(), chatroom.length(), 0) < 0)
+		throw std::runtime_error("send() error");
+	return ("");
+}

@@ -1,6 +1,8 @@
 #include "../inc/Define.hpp"
 
-Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), password(password)
+Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
+
+Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), password(password), servSockFd(-1), pfds(), clients(), allChannels()
 {
 	try
 	{
@@ -28,7 +30,6 @@ Server::~Server()
 	this->clients.clear();
 }
 
-Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(0) {}
 
 Server::Server(const Server& obj)
 {
@@ -43,6 +44,9 @@ Server&	Server::operator=(const Server& obj)
 		this->onlineClient = obj.onlineClient;
 		this->password = obj.password;
 		this->servSockFd = obj.servSockFd;
+		this->pfds = obj.pfds;
+		this->clients = obj.clients;
+		this->allChannels = obj.allChannels;
 	}
 	return *this;
 }
