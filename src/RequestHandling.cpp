@@ -28,8 +28,8 @@ std::string	Server::parsing(const std::string& message, int i)
 {
 	Request	request(splitCommand(message));
 
-	if (request.command.empty())
-		return ("Invalid Command!\n");
+	// if (request.command.empty())
+	// 	return ("Invalid Command!\n");
 
 	(void)i;
 	if (request.command == "PASS")
