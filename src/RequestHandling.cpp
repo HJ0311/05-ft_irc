@@ -31,6 +31,7 @@ std::string	Server::parsing(const std::string& message, int i)
 	if (request.command.empty())
 		return ("Invalid Command!\n");
 
+	(void)i;
 	if (request.command == "PASS")
 		return ("PASS\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "KILL")
@@ -48,7 +49,7 @@ std::string	Server::parsing(const std::string& message, int i)
 	else if (request.command == "KICK")
 		return ("KICK\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "JOIN")
-		return (commandJoin(request, i)); // 명령어 처리 함수로 바꿀 것
+		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "INVITE")
 		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")
