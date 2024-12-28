@@ -22,3 +22,10 @@ std::string	Utils::welcomeMsg()
 	welcome.append("Hello! You need to login so you can start chatting!\n");
 	return welcome;
 }
+
+std::string	Utils::authenticateMsg()
+{
+	std::string authenticate = ":irc.local 451 * JOIN ";
+	authenticate.append(":You have to authenticate!\r\n");
+	return authenticate;
+}

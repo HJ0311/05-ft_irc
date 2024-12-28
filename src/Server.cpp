@@ -126,6 +126,10 @@ void	Server::newClient()
 		throw std::runtime_error("Accept error");
 	else
 	{
+		// std::string authenticat = Utils::welcomeMsg();
+		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
+		// 	throw std::runtime_error("send() error");
+
 		addToPoll(newFd);
 		std::string welcome = Utils::welcomeMsg();
 		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
@@ -134,6 +138,11 @@ void	Server::newClient()
 				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
 	}
 }
+
+// void Server::authenticateClient() 
+// {
+	
+// }
 
 void	Server::addToPoll(int newFd)
 {
@@ -156,4 +165,9 @@ void	Server::removeFromPoll(int i)
 	this->pfds[i] = this->pfds[this->onlineClient - 1];
 	this->clients.erase(this->pfds[i].fd);
 	this->onlineClient--;
+}
+
+//TODO jungslee 추가
+std::string Server::getPassword() {
+	return this->password;
 }

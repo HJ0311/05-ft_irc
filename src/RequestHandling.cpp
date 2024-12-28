@@ -28,12 +28,15 @@ std::string	Server::parsing(const std::string& message, int i)
 {
 	Request	request(splitCommand(message));
 
-	// if (request.command.empty())
-	// 	return ("Invalid Command!\n");
+	if (request.command.empty())
+		return ("Invalid Command!\n");
 
 	(void)i;
-	if (request.command == "PASS")
-		return ("PASS\n"); // 명령어 처리 함수로 바꿀 것
+	if (request.command == "PASS") {
+		request.handlePass(*this);
+		return ("PASS\n");
+	}
+		// return ("PASS\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "KILL")
 		return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "MODE")
@@ -58,6 +61,8 @@ std::string	Server::parsing(const std::string& message, int i)
 		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVMSG")
 		return ("PRIVMSG\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "CAP")
+		return ("");
 	else
 		return ("Invalid Command!\n");
 }

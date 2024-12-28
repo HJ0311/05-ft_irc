@@ -13,4 +13,6 @@ class Request
 
 		Request();
 		Request&	operator=(const Request& obj);
+		
+		void handlePass(Server server);
 };

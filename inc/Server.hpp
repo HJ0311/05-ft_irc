@@ -15,6 +15,7 @@ class Server
 		void	initSocket(const std::string& port);
 		void	startServer();
 		void	newClient();
+		void	authenticateClient();
 		void	addToPoll(int newFd);
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
@@ -25,6 +26,10 @@ class Server
 		Request	splitCommand(const std::string& message) const;
 		// command 처리
 		std::string	commandJoin(Request request, int i);
+
+		//TODO jungslee 추가
+		std::string getPassword();
+
 	private:
 		Server();
 		Server(const Server& obj);
