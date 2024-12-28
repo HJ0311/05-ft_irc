@@ -76,6 +76,14 @@ fclean: clean
 # Rebuild everything
 re: fclean all
 
+run-script:
+	./ubuntu_exe.sh
+
+rm-docker:
+	@docker container rm ubuntu-irc-container
+	@docker rmi ubuntu-irc
+
+
 # -----------------------------------------
 # Include Dependencies
 # -----------------------------------------
@@ -83,4 +91,4 @@ re: fclean all
 # Include automatically generated dependency files
 -include $(DEP)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re run-script rm-docker
