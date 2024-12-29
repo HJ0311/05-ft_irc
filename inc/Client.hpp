@@ -11,10 +11,12 @@ class Client
 		~Client();
 		// getter
 		int	getSockFd() const;
+		bool isAuthenticated() const;
 	private:
 		Client();
 
 		int	clntSockFd; // 클라이언트의 소켓 fd
+		bool    authenticated;
 		bool	isRegistered; // 등록된 유저?
 		bool	isOperator; // 관리자?
 		std::string	nickName;

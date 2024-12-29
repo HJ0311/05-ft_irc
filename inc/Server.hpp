@@ -15,7 +15,7 @@ class Server
 		void	initSocket(const std::string& port);
 		void	startServer();
 		void	newClient();
-		void	authenticateClient();
+		void	authenticateClient(int i);
 		void	addToPoll(int newFd);
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
@@ -25,6 +25,8 @@ class Server
 		std::string	parsing(const std::string& message, int i);
 		Request	splitCommand(const std::string& message) const;
 		// command 처리
+		std::string execCommand(const std::string& message, int i);
+
 		std::string	commandJoin(Request request, int i);
 
 		//TODO jungslee 추가

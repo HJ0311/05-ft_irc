@@ -1,11 +1,19 @@
 #include "../inc/Define.hpp"
 
-void Request::handlePass(Server server) {
+void Request::execPass(Server server) {
 	std::cout << "command ::::: " << this->command << std::endl;
-	std::cout << "here???" << std::endl;
 	std::cout << "server password ::::: " << server.getPassword() << std::endl;
-	std::cout << "here???" << std::endl;
 }
+
+void Request::execNick(Server server) {
+	std::cout << "command ::::: " << this->command << std::endl;
+}
+
+void Request::execUser(Server server) {
+	std::cout << "command ::::: " << this->command << std::endl;
+}
+
+
 // PASS <password> : 로컬 네트워크에 연결
 
 // KILL <nickname> <nickname> ...: 네트워크에서 강제로 연결 해제

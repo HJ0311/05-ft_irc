@@ -126,23 +126,22 @@ void	Server::newClient()
 		throw std::runtime_error("Accept error");
 	else
 	{
-		// std::string authenticat = Utils::welcomeMsg();
+		addToPoll(newFd);
+		std::string authentication = Utils::authenticateMsg();
+		if (send(newFd, authentication.c_str(), authentication.length(), 0) < 0)  
+			throw std::runtime_error("send() error");
+		// std::string welcome = Utils::welcomeMsg();
 		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
 		// 	throw std::runtime_error("send() error");
+		// std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
+		// 		<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
+		// addToPoll(newFd);
 
-		addToPoll(newFd);
-		std::string welcome = Utils::welcomeMsg();
-		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
-			throw std::runtime_error("send() error");
-		std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
-				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
+		// /*인증 완료 전에 소켓이 연결된 메세지를 띄우는 것이 좋을까??*/
+		// std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
+		// 		<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
 	}
 }
-
-// void Server::authenticateClient() 
-// {
-	
-// }
 
 void	Server::addToPoll(int newFd)
 {
