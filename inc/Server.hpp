@@ -23,14 +23,14 @@ class Server
 		
 		// request 처리
 		std::string	parsing(const std::string& message, int i);
-		Request	splitCommand(const std::string& message) const;
+		void	splitCommand(Request &request, const std::string& message) const;
 		// command 처리
 		std::string execCommand(const std::string& message, int i);
 
 		std::string	commandJoin(Request request, int i);
 
 		//TODO jungslee 추가
-		std::string getPassword();
+		std::string getPassword() const;
 
 	private:
 		Server();

@@ -167,6 +167,6 @@ void	Server::removeFromPoll(int i)
 }
 
 //TODO jungslee 추가
-std::string Server::getPassword() {
+std::string Server::getPassword() const {
 	return this->password;
 }

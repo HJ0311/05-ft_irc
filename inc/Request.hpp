@@ -14,7 +14,7 @@ class Request
 		Request();
 		Request&	operator=(const Request& obj);
 		
-		void execPass(Server server);
-		void execNick(Server server);
-		void execUser(Server server);
+		void execPass(const Server &server);
+		void execNick(const Server &server);
+		void execUser(const Server &server);
 };

@@ -19,107 +19,78 @@ void	Server::clientRequest(int i)
 	{
 		size_t idx = 0;
 		std::string message = buf;
-		// while (1) {
-		// 	size_t preIdx = idx;
-		// 	idx = message.find("\r\n", idx);
-		// 	if (idx == std::string::npos)
-		// 		break;
-		// 	std::string line = message.substr(preIdx, idx - preIdx + 2);
-		// 	std::string result = execCommand(line, i);
-		// 	if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
-		// 		std::cerr << RED << "send() error" << RESET << std::endl;
-		// 	idx += 2;
-		// }
-		// execCommand(buf, i);
-		std::string	result = execCommand(buf, i);
-		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
-			std::cerr << RED << "send() error" << RESET << std::endl;
+		while (1) {
+			size_t preIdx = idx;
+			idx = message.find("\r\n", idx);
+			if (idx == std::string::npos)
+				break;
+			std::string line = message.substr(preIdx, idx - preIdx + 2);
+			std::cout << "line :::: " << line << std::endl;
+			std::string result = execCommand(line, i);
+			std::cout << "result ::: " << result << std::endl;
+			if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
+				std::cerr << RED << "send() error" << RESET << std::endl;
+			idx += 2;
+		}
 	}
 	memset(&buf, 0, 5000);
 }
 
-std::string Server::execCommand(const std::string& message, int i) {
-
-	Request	request(splitCommand(message));
-	if (request.command.empty())
-		return ("Invalid Command!\n");
-
-	(void)i;
-	if (request.command == "NICK") {
-		request.execNick(*this);
-		return("NICK\n"); // 명령어 처리 함수로 바꿀 것
-	}
-	else if (request.command == "PASS") {
-		request.execPass(*this);
-		return("PASS\n");
-	}
-	else if (request.command == "USER") {
-		request.execUser(*this);
-		return("USER\n");
-	}
-	else if (request.command == "CAP")
-		return("");
-	else if (request.command == "JOIN")
-		return ("JOIN\n");
-	else
-	{
-		std::cout << "Command:: " << request.command << std::endl;
-		return("Invalid Command!\n");
-	}
-	
-}
-
-std::string	Server::parsing(const std::string& message, int i)
+std::string	Server::execCommand(const std::string& message, int i)
 {
-	return "";
-	// if (cli)
-	// Request	request(splitCommand(message));
+	Request	request;
+	
+	splitCommand(request, message);
 
 	// if (request.command.empty())
 	// 	return ("Invalid Command!\n");
 
-	// (void)i;
-	// if (request.command == "NICK") {
-	// 	request.execNick(*this);
-	// 	return ("NICK\n"); // 명령어 처리 함수로 바꿀 것
-	// }
-	// else if (request.command == "PASS") {
-	// 	request.execPass(*this);
-	// 	return ("PASS\n");
-	// }
-	// 	// return ("PASS\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "KILL")
-	// 	return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "MODE")
-	// 	return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "PART")
-	// 	return ("PART\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "NANES")
-	// 	return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "LIST")
-	// 	return ("LIST\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "KICK")
-	// 	return ("KICK\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "JOIN")
-	// 	return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "INVITE")
-	// 	return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "TOPIC")
-	// 	return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "NOTICE")
-	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "PRIVMSG")
-	// 	return ("PRIVMSG\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "CAP")
-	// 	return ("");
-	// else
-	// 	return ("Invalid Command!\n");
+	(void)i;
+	if (request.command == "PASS")
+	{
+		request.execPass(*this);
+		return ("PASS\n"); // 명령어 처리 함수로 바꿀 것
+	}
+	else if (request.command == "KILL")
+		return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "MODE")
+		return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "NICK")
+	{
+		request.execNick(*this);
+		return ("NICK\n"); // 명령어 처리 함수로 바꿀 것
+	}
+	else if (request.command == "PART")
+		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "NANES")
+		return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "LIST")
+		return ("LIST\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "KICK")
+		return ("KICK\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "JOIN")
+		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "INVITE")
+		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "TOPIC")
+		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "NOTICE")
+		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "PRIVMSG")
+		return ("PRIVMSG\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "USER")
+	{
+		request.execUser(*this);
+		return ("USER\n");
+	}
+	else if (request.command == "CAP")
+		return ("");
+	else
+		return ("Invalid Command!\n");
 }
 
-Request	Server::splitCommand(const std::string& message) const
+void	Server::splitCommand(Request &request, const std::string& message) const
 {
-	Request	request;
-
 	std::vector<std::string>	splitStr;
 	std::stringstream	ss(message);
 	std::string	token;
@@ -132,7 +103,6 @@ Request	Server::splitCommand(const std::string& message) const
 	if (splitStr.empty())
 	{
 		request.command = "";
-		return request;
 	}
 	request.command = splitStr[0];
 	if (request.command.back() == '\n')//이 부분 캐리지 리턴으로 바꿔야?
@@ -143,5 +113,4 @@ Request	Server::splitCommand(const std::string& message) const
 			it->pop_back();
 		request.args.push_back(*it);
 	}
-	return (request);
 }

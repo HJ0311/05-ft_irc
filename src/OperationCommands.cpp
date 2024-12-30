@@ -1,15 +1,15 @@
 #include "../inc/Define.hpp"
 
-void Request::execPass(Server server) {
+void Request::execPass(const Server &server) {
 	std::cout << "command ::::: " << this->command << std::endl;
 	std::cout << "server password ::::: " << server.getPassword() << std::endl;
 }
 
-void Request::execNick(Server server) {
+void Request::execNick(const Server &server) {
 	std::cout << "command ::::: " << this->command << std::endl;
 }
 
-void Request::execUser(Server server) {
+void Request::execUser(const Server &server) {
 	std::cout << "command ::::: " << this->command << std::endl;
 }
 
