@@ -23,7 +23,7 @@ class Server
 		
 		// request 처리
 		std::string	parsing(const std::string& message, int i);
-		void	splitCommand(Request &request, const std::string& message) const;
+		Request	splitCommand(const std::string& message) const;
 		// command 처리
 		std::string execCommand(const std::string& message, int i);
 

@@ -38,9 +38,7 @@ void	Server::clientRequest(int i)
 
 std::string	Server::execCommand(const std::string& message, int i)
 {
-	Request	request;
-	
-	splitCommand(request, message);
+	Request	request(splitCommand(message));
 
 	// if (request.command.empty())
 	// 	return ("Invalid Command!\n");
@@ -89,8 +87,10 @@ std::string	Server::execCommand(const std::string& message, int i)
 		return ("Invalid Command!\n");
 }
 
-void	Server::splitCommand(Request &request, const std::string& message) const
+Request	Server::splitCommand(const std::string& message) const
 {
+	Request request;
+
 	std::vector<std::string>	splitStr;
 	std::stringstream	ss(message);
 	std::string	token;
@@ -103,6 +103,7 @@ void	Server::splitCommand(Request &request, const std::string& message) const
 	if (splitStr.empty())
 	{
 		request.command = "";
+		return request;
 	}
 	request.command = splitStr[0];
 	if (request.command.back() == '\n')//이 부분 캐리지 리턴으로 바꿔야?
@@ -113,4 +114,5 @@ void	Server::splitCommand(Request &request, const std::string& message) const
 			it->pop_back();
 		request.args.push_back(*it);
 	}
+	return request;
 }
