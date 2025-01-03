@@ -4,9 +4,10 @@
 
 class Client;
 
-namespace Utils
-{
+namespace Utils {
+    extern std::string MSG_451;
+    extern std::string MSG_461;
+    extern std::string MSG_462;
+	extern std::string MSG_464;
 	std::string	getTime();
-	std::string	welcomeMsg();
-	std::string authenticateMsg();
 }

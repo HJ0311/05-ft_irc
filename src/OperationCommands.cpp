@@ -1,18 +1,32 @@
 #include "../inc/Define.hpp"
 
-void Request::execPass(const Server &server) {
-	std::cout << "command ::::: " << this->command << std::endl;
-	std::cout << "server password ::::: " << server.getPassword() << std::endl;
+std::string Request::execPass(const Server &server, bool &registerStatus) {
+	// std::cout << "Pass command" << std::endl;
+	if (this->args.size() == 0) {
+		std::cout << "not enough params" << std::endl;
+		return Utils::MSG_461;
+	}//RFC문서에는 있는데,...irssi를 사용하면. 이게 나올 일이 없다. 462도 마찬가지
+
+	if (registerStatus) {
+		return Utils::MSG_462;
+	}//이것도 나올 일이 없음
+
+	if (server.getPassword().append("\r") != this->args[0]) { //TODO 지금 끝에 \r가 포함되어있다.
+		return Utils::MSG_464;
+	}
+	registerStatus = true;
+	return ("");
 }
 
-void Request::execNick(const Server &server) {
+std::string Request::execNick(const Server &server, int i) {
 	std::cout << "command ::::: " << this->command << std::endl;
+	return ("");
 }
 
-void Request::execUser(const Server &server) {
+std::string Request::execUser(const Server &server, int i) {
 	std::cout << "command ::::: " << this->command << std::endl;
+	return ("");
 }
-
 
 // PASS <password> : 로컬 네트워크에 연결
 

@@ -15,17 +15,18 @@ class Server
 		void	initSocket(const std::string& port);
 		void	startServer();
 		void	newClient();
-		void	authenticateClient(int i);
 		void	addToPoll(int newFd);
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
 		// getter
 		
 		// request 처리
-		std::string	parsing(const std::string& message, int i);
-		Request	splitCommand(const std::string& message) const;
+		// std::string	parsing(const std::string& message, int i);
+		void execCommandByLine(int i, std::string message);
+		Request	parsingCommand(const std::string& message) const;
 		// command 처리
-		std::string execCommand(const std::string& message, int i);
+		std::string registerHandler(const std::string& message, int i);
+		std::string commandHandler(const std::string& message, int i);
 
 		std::string	commandJoin(Request request, int i);
 
@@ -39,6 +40,7 @@ class Server
 
 		int	maxClientCnt; // 최대 온라인 가능 유저 수
 		int	onlineClient; // 온라인 중인 유저 수
+		std::string servName; //TODO 이런식으로 이름을 놓아도 되는지?
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
