@@ -10,7 +10,7 @@ void Server::execCommandByLine(int i, std::string message)
 		idx = message.find("\r\n", idx);
 		if (idx == std::string::npos)
 			break;
-		std::string line = message.substr(preIdx, idx - preIdx + 2);
+		std::string line = message.substr(preIdx, idx - preIdx);
 		std::string result;
 		if (!this->clients.find(senderFd)->second->registerStatus) {
 			result = registerHandler(line, i);
@@ -125,13 +125,14 @@ Request	Server::parsingCommand(const std::string& message) const
 		return request;
 	}
 	request.command = splitStr[0];
-	if (request.command.back() == '\n')//TODO \r\n으로 바꾸기
-		request.command.pop_back();
+	// if (request.command.back() == '\n')//TODO \r\n으로 바꾸기
+	// 	request.command.pop_back();
 	for (std::vector<std::string>::iterator it = std::next(splitStr.begin(), 1); it != splitStr.end(); ++it)
 	{
-		if (it->back() == '\n')//TODO \r\n으로 바꾸기
-			it->pop_back();
+		// if (it->back() == '\n')//TODO \r\n으로 바꾸기
+		// 	it->pop_back();
 		request.args.push_back(*it);
-	}
+	}//마지막 개행 잘라주는 작업?
+
 	return request;
 }

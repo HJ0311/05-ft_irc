@@ -11,7 +11,7 @@ std::string Request::execPass(const Server &server, bool &registerStatus) {
 		return Utils::MSG_462;
 	}//이것도 나올 일이 없음
 
-	if (server.getPassword().append("\r") != this->args[0]) { //TODO 지금 끝에 \r가 포함되어있다.
+	if (server.getPassword() != this->args[0]) { //TODO 지금 끝에 \r가 포함되어있다.
 		return Utils::MSG_464;
 	}
 	registerStatus = true;
