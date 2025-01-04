@@ -16,6 +16,8 @@ class Client
 		void	setNickName(const std::string& nickname);
 		const std::string&	getUserName() const;
 		void	setUserName(const std::string& username);
+		const std::string&	getServerName() const;
+		void	setServerName(const std::string& servername);
 	private:
 		Client();
 
@@ -24,5 +26,5 @@ class Client
 		bool	isOperator; // 관리자?
 		std::string	nickName;
 		std::string	userName;
-		std::string	realName;
+		std::string	serverName;
 };
