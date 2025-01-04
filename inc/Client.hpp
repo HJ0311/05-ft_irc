@@ -11,6 +11,11 @@ class Client
 		~Client();
 		// getter
 		int	getSockFd() const;
+
+		const std::string&	getNickName() const;
+		void	setNickName(const std::string& nickname);
+		const std::string&	getUserName() const;
+		void	setUserName(const std::string& username);
 	private:
 		Client();
 

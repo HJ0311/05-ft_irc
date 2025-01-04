@@ -33,3 +33,23 @@ int	Client::getSockFd() const
 {
 	return this->clntSockFd;
 }
+
+const std::string&	Client::getNickName() const
+{
+	return (this->nickName);
+}
+
+void	Client::setNickName(const std::string& nickname)
+{
+	this->nickName = nickname;
+}
+
+const std::string&	Client::getUserName() const
+{
+	return (this->userName);
+}
+
+void	Client::setUserName(const std::string& username)
+{
+	this->userName = username;
+}

@@ -41,7 +41,7 @@ class Channel
 		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
 
-		void	inviteClient(Client* inviter, const std::string& inviteeNickname);
+		void	inviteClient(Client* inviter, const std::string& invitee);
 
 		size_t	getClientCount() const;
 		bool	isFull() const;
