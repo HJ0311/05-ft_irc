@@ -16,9 +16,25 @@ std::string	Utils::getTime()
 		return ss.str();
 }
 
-std::string	Utils::welcomeMsg()
-{
-	std::string	welcome = YELLOW;
-	welcome.append("Hello! You need to login so you can start chatting!\n");
-	return welcome;
+
+namespace Utils
+{//TODO * -> 클라이언트로 바꿔야함 , printf 사용할 것으로 올바른 플래그 넣어주기
+	// std::string SUCCESS_MSG = "%s!%s@%s %s %s";
+
+	std::string RPL_451 = ":irc.local 451 * JOIN :You have to authenticate!\r\n";
+	std::string RPL_461 = ":irc.local 461 * PASS :Not enough parameters.\r\n";
+	std::string RPL_462 = ":irc.local 462 * :You may not register.\r\n";
+	std::string RPL_464 = ":irc.local 464 * :Incorrect password.\r\n";
+	std::string RPL_433 = ":irc.local 433 * :Nickname is already in use.\r\n";
+	// std::string	welcomeRPL();
+	// std::string authenticateRPL();
+	// std::string notEnoughParams();
+	// std::string alreadyRegistered();
 }
+
+// std::string	Utils::welcomeRPL()
+// {
+// 	std::string	welcome = YELLOW;
+// 	welcome.append("Hello! You need to login so you can start chatting!\n");
+// 	return welcome;
+// }

@@ -13,4 +13,8 @@ class Request
 
 		Request();
 		Request&	operator=(const Request& obj);
+		
+		std::string execPass(const Server &server, bool &registerStatus);
+		std::string execNick(const Server &server, Client *client, std::map<int, Client*> clients);
+		std::string execUser(const Server &server, int i);
 };

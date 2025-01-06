@@ -21,10 +21,19 @@ class Server
 		// getter
 		
 		// request 처리
-		std::string	parsing(const std::string& message, int i);
-		Request	splitCommand(const std::string& message) const;
+		// std::string	parsing(const std::string& message, int i);
+		void execCommandByLine(int i, const std::string &message);
+		Request	parsingCommand(const std::string& message) const;
 		// command 처리
+		std::string registerHandler(const std::string& message, int i);
+		std::string commandHandler(const std::string& message, int i);
+
 		std::string	commandJoin(Request request, int i);
+
+		//TODO jungslee 추가
+		std::string getPassword() const;
+		std::map<int, Client*>	clients; // 현존 유저
+
 	private:
 		Server();
 		Server(const Server& obj);
@@ -32,9 +41,9 @@ class Server
 
 		int	maxClientCnt; // 최대 온라인 가능 유저 수
 		int	onlineClient; // 온라인 중인 유저 수
+		std::string servName; //TODO 이런식으로 이름을 놓아도 되는지?
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
-		std::map<int, Client*>	clients; // 현존 유저
 		std::map<std::string, Channel*> allChannels; // 현존 채널
 };

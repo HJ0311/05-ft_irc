@@ -1,8 +1,8 @@
 #include "../inc/Define.hpp"
 
-Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
+Server::Server() : maxClientCnt(0),  onlineClient(0), servName("ircserv"), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
 
-Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), password(password), servSockFd(-1), pfds(), clients(), allChannels()
+Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), servName("ircserv"), password(password), servSockFd(-1), pfds(), clients(), allChannels()
 {
 	try
 	{
@@ -42,6 +42,7 @@ Server&	Server::operator=(const Server& obj)
 	{
 		this->maxClientCnt = obj.maxClientCnt;
 		this->onlineClient = obj.onlineClient;
+		this->servName = obj.servName;
 		this->password = obj.password;
 		this->servSockFd = obj.servSockFd;
 		this->pfds = obj.pfds;
@@ -127,9 +128,17 @@ void	Server::newClient()
 	else
 	{
 		addToPoll(newFd);
-		std::string welcome = Utils::welcomeMsg();
-		if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
-			throw std::runtime_error("send() error");
+
+		if (send(newFd, Utils::RPL_451.c_str(), Utils::RPL_451.length(), 0) < 0)  
+			throw std::runtime_error("send() error"); 
+		// std::string welcome = Utils::welcomeRPL();
+		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
+		// 	throw std::runtime_error("send() error");
+		// std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
+		// 		<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
+		// addToPoll(newFd);
+
+		/*인증 완료 전에 소켓이 연결된 메세지를 띄우는 것이 좋을까??*/
 		std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
 				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
 	}
@@ -156,4 +165,9 @@ void	Server::removeFromPoll(int i)
 	this->pfds[i] = this->pfds[this->onlineClient - 1];
 	this->clients.erase(this->pfds[i].fd);
 	this->onlineClient--;
+}
+
+//TODO jungslee 추가
+std::string Server::getPassword() const {
+	return this->password;
 }
