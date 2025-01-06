@@ -5,9 +5,11 @@
 class Client;
 
 namespace Utils {
-    extern std::string MSG_451;
-    extern std::string MSG_461;
-    extern std::string MSG_462;
-	extern std::string MSG_464;
+    extern std::string RPL_451;
+    extern std::string RPL_461;
+    extern std::string RPL_462;
+	extern std::string RPL_464;
+	extern std::string RPL_433;
 	std::string	getTime();
+	std::string formatString();
 }

@@ -22,7 +22,7 @@ class Server
 		
 		// request 처리
 		// std::string	parsing(const std::string& message, int i);
-		void execCommandByLine(int i, std::string message);
+		void execCommandByLine(int i, const std::string &message);
 		Request	parsingCommand(const std::string& message) const;
 		// command 처리
 		std::string registerHandler(const std::string& message, int i);
@@ -32,6 +32,7 @@ class Server
 
 		//TODO jungslee 추가
 		std::string getPassword() const;
+		std::map<int, Client*>	clients; // 현존 유저
 
 	private:
 		Server();
@@ -44,6 +45,5 @@ class Server
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
-		std::map<int, Client*>	clients; // 현존 유저
 		std::map<std::string, Channel*> allChannels; // 현존 채널
 };

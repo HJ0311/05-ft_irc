@@ -129,9 +129,9 @@ void	Server::newClient()
 	{
 		addToPoll(newFd);
 
-		if (send(newFd, Utils::MSG_451.c_str(), Utils::MSG_451.length(), 0) < 0)  
+		if (send(newFd, Utils::RPL_451.c_str(), Utils::RPL_451.length(), 0) < 0)  
 			throw std::runtime_error("send() error"); 
-		// std::string welcome = Utils::welcomeMsg();
+		// std::string welcome = Utils::welcomeRPL();
 		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
 		// 	throw std::runtime_error("send() error");
 		// std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "

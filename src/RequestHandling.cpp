@@ -1,6 +1,6 @@
 #include "../inc/Define.hpp"
 
-void Server::execCommandByLine(int i, std::string message)
+void Server::execCommandByLine(int i, const std::string &message)
 {
 	size_t idx = 0;
 	int	senderFd = this->pfds[i].fd;
@@ -12,14 +12,13 @@ void Server::execCommandByLine(int i, std::string message)
 			break;
 		std::string line = message.substr(preIdx, idx - preIdx);
 		std::string result;
-		if (!this->clients.find(senderFd)->second->registerStatus) {
+		if (!this->clients.find(senderFd)->second->registerStatus) 
 			result = registerHandler(line, i);
-		}
 		else
 			result = commandHandler(line, i);
 		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
 			std::cerr << RED << "send() error" << RESET << std::endl;
-		if (result == Utils::MSG_464) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
+		if (result == Utils::RPL_464 || result == Utils::RPL_461) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
 			close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
@@ -52,25 +51,25 @@ void	Server::clientRequest(int i)
 std::string Server::registerHandler(const std::string& message, int i)
 {
 	int	senderFd = this->pfds[i].fd;
-	std::map<int, Client*>::iterator it = this->clients.find(this->pfds[i].fd);
 	Request	request(parsingCommand(message));
 	(void)i;
 
 	if (request.command == "CAP")
 		return ("");
-    else if (request.command == "PASS")
-		return (request.execPass(*this, this->clients.find(senderFd)->second->registerStatus));
-	else if (request.command == "NICK")
-		return (request.execNick(*this, i));
 	else if (request.command == "JOIN")
 		return (""); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "USER")
-		return (request.execUser(*this, i));
+    else if (request.command == "PASS")
+		return (request.execPass(*this, this->clients.find(senderFd)->second->registerStatus));
+
+	if (request.command == "NICK" || request.command == "USER") 
+		return Utils::RPL_461;
+
 	return ("");
 }
 
 std::string	Server::commandHandler(const std::string& message, int i)
 {
+	std::map<int, Client*>::iterator it = this->clients.find(this->pfds[i].fd);
 	Request	request(parsingCommand(message));
 	(void)i;
 	// if (request.command.empty())
@@ -81,7 +80,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "MODE")
 		return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NICK")
-		return (request.execNick(*this, i));
+		return (request.execNick(*this, it->second, this->clients));
 	else if (request.command == "JOIN")
 		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "USER")
@@ -100,8 +99,8 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NOTICE")
 		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "PRIVMSG")
-		return ("PRIVMSG\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "PRIVRPL")
+		return ("PRIVRPL\n"); // 명령어 처리 함수로 바꿀 것
 	else
 		return ("Invalid Command!\n");
 }
@@ -113,26 +112,32 @@ Request	Server::parsingCommand(const std::string& message) const
 	std::vector<std::string>	splitStr;
 	std::stringstream	ss(message);
 	std::string	token;
+	std::string trailing = "";
+	bool colonFlag = false;
 
-	while (std::getline(ss, token, ' '))
+	while (std::getline(ss, token, ' '))//TODO trailing은 공백 포함할 수 있게 수정
 	{
-		if (!token.empty())
+		if (token.find(':', 0) != std::string::npos)
+			colonFlag = true;
+		
+
+		if (colonFlag)
+			trailing.append(" ").append(token);
+		else if (!token.empty())
 			splitStr.push_back(token);
 	}
+	if (!trailing.empty())
+		splitStr.push_back(trailing);
+
 	if (splitStr.empty())
 	{
 		request.command = "";
 		return request;
 	}
 	request.command = splitStr[0];
-	// if (request.command.back() == '\n')//TODO \r\n으로 바꾸기
-	// 	request.command.pop_back();
 	for (std::vector<std::string>::iterator it = std::next(splitStr.begin(), 1); it != splitStr.end(); ++it)
 	{
-		// if (it->back() == '\n')//TODO \r\n으로 바꾸기
-		// 	it->pop_back();
 		request.args.push_back(*it);
-	}//마지막 개행 잘라주는 작업?
-
+	}
 	return request;
 }
