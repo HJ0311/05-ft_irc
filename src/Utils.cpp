@@ -27,6 +27,7 @@ namespace Utils
 	std::string RPL_464 = ":irc.local 464 * :Incorrect password.\r\n";
 	std::string RPL_433 = ":irc.local 433 * :Nickname is already in use.\r\n";
 	std::string RPL_431 = ":irc.local 431 * :No nickname given.\r\n";
+	std::string RPL_432 = ":irc.local 432 * :Erroneus nickname\r\n";
 
 
     // std::cout << RPL_CONNECTION_SUCCESS.str();
