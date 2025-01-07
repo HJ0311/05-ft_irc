@@ -26,6 +26,5 @@ class Client
 		bool	isOperator; // 관리자?
 		std::string	nickName;
 		std::string	userName;
-		// std::string hostName;
 		std::string	serverName;
 };

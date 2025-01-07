@@ -18,8 +18,6 @@ Client&	Client::operator=(const Client& obj)
 		this->isOperator = obj.isOperator;
 		this->nickName = obj.nickName;
 		this->userName = obj.userName;
-		// this->hostName = obj.hostName;
-		// this->realName = obj.realName;
 	}
 	return *this;
 }
