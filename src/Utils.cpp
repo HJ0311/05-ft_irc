@@ -26,6 +26,14 @@ namespace Utils
 	std::string RPL_462 = ":irc.local 462 * :You may not register.\r\n";
 	std::string RPL_464 = ":irc.local 464 * :Incorrect password.\r\n";
 	std::string RPL_433 = ":irc.local 433 * :Nickname is already in use.\r\n";
+	std::string RPL_431 = ":irc.local 431 * :No nickname given.\r\n";
+
+
+    // std::cout << RPL_CONNECTION_SUCCESS.str();
+	// std::string RPL_CONNECTION_SUCCESS = ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
+	// 									+ ":irc.local 002 jungslee :Your host is irc.local, running version InspIRCd-3\r\n"
+	// 									+ ":irc.local 003 jungslee :This server was created 16:04:34 Jan 06 2025\r\n"
+	// 									+ ":irc.local 004 jungslee irc.local InspIRCd-3 iosw biklmnopstv :bklov\r\n";
 	// std::string	welcomeRPL();
 	// std::string authenticateRPL();
 	// std::string notEnoughParams();

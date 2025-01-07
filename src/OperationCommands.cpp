@@ -11,15 +11,20 @@ std::string Request::execPass(const Server &server, bool &registerStatus) {
 	return ("");
 }
 
-std::string Request::execNick(const Server &server, Client *client, std::map<int, Client*> clients) {
-	//args가 없을때! (파라미터가 없을때)
-	//닉네임이 유효하지 않을때
+std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
+	//TODO 유효성 검사 (printable 검사..?)ERR_ERRONEUSNICKNAME (432)
+	//TODO 자원 부족으로 닉네임, 유저네임 설정할 수 없을 때 ERR_UNAVAILRESOURCE (437)
+	//TODO 닉네임 변경을 막아놓았을 때 ERR_RESTRICTED (484)
+
+	if (this->args.size() == 0)
+		return (Utils::RPL_431);//ERR_NONICKNAMEGIVEN 
+
 	if (this->args[0] == client->getNickName()) //이미 나의 닉네임일때
 		return ("");
 
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
         if (this->args[0] == it->second->getNickName())
-			return (Utils::RPL_433);
+			return (Utils::RPL_433);//ERR_NICKNAMEINUSE
     }
 	
 	std::string result = "";
@@ -29,9 +34,21 @@ std::string Request::execNick(const Server &server, Client *client, std::map<int
 	return (result);
 }
 
-std::string Request::execUser(const Server &server, int i) {
+std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
+	if (this->args.size() != 4)
+		return Utils::RPL_461;
+
+	if (client->getUserName() != "")
+		return Utils::RPL_462;
 	
-	return ("");
+	client->setUserName(this->args[0]);
+	client->setRealName(this->args[3]);
+
+	std::stringstream RPL_CONNECTION_SUCCESS;
+    RPL_CONNECTION_SUCCESS << ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
+                           << ":irc.local 002 jungslee :Your host is irc.local, running version V1\n"
+                           << ":irc.local 003 jungslee :This server was created 16:04:34 Jan 06 2025\r\n";
+	return (RPL_CONNECTION_SUCCESS.str());
 }
 
 // KILL <nickname> <nickname> ...: 네트워크에서 강제로 연결 해제

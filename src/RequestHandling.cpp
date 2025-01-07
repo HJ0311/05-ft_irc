@@ -80,11 +80,11 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "MODE")
 		return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NICK")
-		return (request.execNick(*this, it->second, this->clients));
+		return (request.execNick(it->second, this->clients));
 	else if (request.command == "JOIN")
 		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "USER")
-		return (request.execUser(*this, i));
+		return (request.execUser(it->second, this->clients));
 	else if (request.command == "PART")
 		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NANES")
@@ -101,6 +101,8 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVRPL")
 		return ("PRIVRPL\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "PING")
+		return ("PING\n");
 	else
 		return ("Invalid Command!\n");
 }
