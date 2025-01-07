@@ -26,3 +26,90 @@ Channel::~Channel() {}
 // =================================================================================================================
 // member function
 // =================================================================================================================
+
+void	Channel::addClient(Client* user)
+{
+	clients[user->getNickName()] = user;
+}
+
+void	Channel::removeClient(const std::string& nickname)
+{
+	if (clients.find(nickname) != clients.end())
+		clients.erase(nickname);
+}
+
+bool	Channel::isClientInChannel(const std::string& nickname)
+{
+	if (clients.find(nickname) != clients.end())
+		return (1);
+	else
+		return (0);
+}
+
+void	Channel::addOperator(const std::string& nickname)
+{
+	operators.insert(nickname);
+}
+
+void	Channel::removeOperator(const std::string& nickname)
+{
+	operators.erase(nickname);
+}
+
+bool	Channel::isOperator(const std::string& nickname)
+{
+	if (operators.find("Alice") != operators.end())
+		return (1);
+	else
+		return (0);
+}
+
+void	Channel::broadcastMessage(const std::string& message, Client* sender)
+{
+
+}
+
+void	Channel::setTopic(const std::string& newTopic, const std::string& nickname)
+{
+
+}
+
+void	Channel::setPassword(const std::string& password)
+{
+
+}
+
+void	Channel::setClientLimit(size_t limit)
+{
+
+}
+
+void	Channel::setInviteOnly(bool inviteOnly)
+{
+
+}
+
+void	Channel::inviteClient(Client* inviter, const std::string& inviteeNickname)
+{
+
+}
+
+size_t	Channel::getClientCount() const
+{
+
+}
+
+bool	Channel::isFull() const
+{
+
+}
+
+const std::string&	Channel::getName() const
+{
+	return (this->name);
+}
+
+const std::string&	Channel::getTopic() const
+{
+	return (this->topic);
+}

@@ -12,16 +12,12 @@ class Client
 		// getter
 		int	getSockFd() const;
 
-		std::string getNickName() const;
-		std::string getUserName() const;
-		std::string getHostName() const;
-		std::string getRealName() const;
-		
-		void setNickName(std::string name);
-		void setUserName(std::string name);
-		void setRealName(std::string name);
-		void setHostName(std::string name);
-
+		const std::string&	getNickName() const;
+		void	setNickName(const std::string& nickname);
+		const std::string&	getUserName() const;
+		void	setUserName(const std::string& username);
+		const std::string&	getServerName() const;
+		void	setServerName(const std::string& servername);
 		bool registerStatus;
 	private:
 		Client();
@@ -30,6 +26,6 @@ class Client
 		bool	isOperator; // 관리자?
 		std::string	nickName;
 		std::string	userName;
-		std::string hostName;
-		std::string	realName;
+		// std::string hostName;
+		std::string	serverName;
 };
