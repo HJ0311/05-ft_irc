@@ -87,7 +87,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return (request.execUser(it->second, this->clients));
 	else if (request.command == "PART")
 		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "NANES")
+	else if (request.command == "NAMES")
 		return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "LIST")
 		return ("LIST\n"); // 명령어 처리 함수로 바꿀 것

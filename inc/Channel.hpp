@@ -34,7 +34,7 @@ class Channel
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
 		bool	isOperator(const std::string& nickname); // 얘가 운영자인지 확인
 
-		void	broadcastMessage(const std::string& message, Client* sender);
+		void	sendMessage(const std::string& message, Client* sender);
 
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);

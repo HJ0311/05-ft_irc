@@ -58,13 +58,13 @@ void	Channel::removeOperator(const std::string& nickname)
 
 bool	Channel::isOperator(const std::string& nickname)
 {
-	if (operators.find("Alice") != operators.end())
+	if (operators.find(nickname) != operators.end())
 		return (1);
 	else
 		return (0);
 }
-
-void	Channel::broadcastMessage(const std::string& message, Client* sender)
+/*
+void	Channel::sendMessage(const std::string& message, Client* sender)
 {
 
 }
@@ -113,3 +113,4 @@ const std::string&	Channel::getTopic() const
 {
 	return (this->topic);
 }
+*/
