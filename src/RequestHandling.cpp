@@ -103,6 +103,8 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("PRIVRPL\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
 		return ("PING\n");
+	else if (request.command == "PONG")
+		return ("PONG\n");
 	else
 		return ("Invalid Command!\n");
 }

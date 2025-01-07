@@ -47,7 +47,7 @@ std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
 	std::stringstream RPL_CONNECTION_SUCCESS;
     RPL_CONNECTION_SUCCESS << ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
                            << ":irc.local 002 jungslee :Your host is irc.local, running version V1\n"
-                           << ":irc.local 003 jungslee :This server was created 16:04:34 Jan 06 2025\r\n";
+                           << ":irc.local 003 jungslee :This server was created " + Utils::getTime() + "\r\n";
 	return (RPL_CONNECTION_SUCCESS.str());
 }
 
