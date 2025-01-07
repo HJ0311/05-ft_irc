@@ -49,7 +49,7 @@ void	Server::clientRequest(int i)
 }
 
 std::string Server::registerHandler(const std::string& message, int i)
-{
+{//TODO 입력 타임아웃 처리?
 	int	senderFd = this->pfds[i].fd;
 	Request	request(parsingCommand(message));
 	(void)i;
@@ -119,7 +119,7 @@ Request	Server::parsingCommand(const std::string& message) const
 	std::string trailing = "";
 	bool colonFlag = false;
 
-	while (std::getline(ss, token, ' '))//TODO trailing은 공백 포함할 수 있게 수정
+	while (std::getline(ss, token, ' '))
 	{
 		if (token.find(':', 0) != std::string::npos)
 			colonFlag = true;

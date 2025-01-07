@@ -25,15 +25,8 @@ bool Request::validateNick(const std::string &nick) {
     }
 	return true;
 }
-// 설명:
-// 닉네임 시작: 반드시 <letter> (영문 알파벳)으로 시작해야 합니다.
-// 닉네임 문자: 첫 번째 문자 뒤에는 다음을 포함할 수 있습니다:
-// <letter>: 알파벳 문자 (A-Z, a-z)
-// <number>: 숫자 (0-9)
-// <special>: 허용된 특수 문자 (-, [, ], \, ```, ^, {, })
-// 최대 길이: 닉네임의 길이는 최대 9자로 제한됩니다.
+
 std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
-	//TODO 유효성 검사 (printable 검사..?)ERR_ERRONEUSNICKNAME (432)
 	//TODO 자원 부족으로 닉네임, 유저네임 설정할 수 없을 때 ERR_UNAVAILRESOURCE (437)
 	//TODO 닉네임 변경을 막아놓았을 때 ERR_RESTRICTED (484)
 
@@ -69,9 +62,9 @@ std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
 	client->setRealName(this->args[3]);
 
 	std::stringstream RPL_CONNECTION_SUCCESS;
-    RPL_CONNECTION_SUCCESS << ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
-                           << ":irc.local 002 jungslee :Your host is irc.local, running version V1\n"
-                           << ":irc.local 003 jungslee :This server was created " + Utils::getTime() + "\r\n";
+    RPL_CONNECTION_SUCCESS << ":irc.local 001 " << client->getNickName() << " :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
+                           << ":irc.local 002 " << client->getNickName() << " :Your host is irc.local, running version V1\r\n"
+                           << ":irc.local 003 " << client->getNickName() << " :This server was created " << Utils::getTime() + "\r\n";
 	return (RPL_CONNECTION_SUCCESS.str());
 }
 
