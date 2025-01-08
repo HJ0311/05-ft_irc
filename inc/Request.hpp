@@ -13,4 +13,6 @@ class Request
 
 		Request();
 		Request&	operator=(const Request& obj);
+
+		std::string execPrivmsg(int senderFd, const Server &server);
 };

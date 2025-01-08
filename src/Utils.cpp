@@ -16,6 +16,12 @@ std::string	Utils::getTime()
 		return ss.str();
 }
 
+namespace Utils
+{
+	std::string RPL_403 = ":irc.local 403 sender #nochannel :No such channel\r\n";
+	std::string RPL_401 = ":irc.local 401 sender nonick :No such nick\r\n";
+}
+
 std::string	Utils::welcomeMsg()
 {
 	std::string	welcome = YELLOW;
