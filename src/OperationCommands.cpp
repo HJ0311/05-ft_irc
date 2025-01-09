@@ -110,7 +110,7 @@ std::string Request::execPrivmsg(Client *sender, const Server &server)
 		return (Utils::RPL_401); // 대상 유저 없음
 	}
 }
-
+/*
 std::string Request::execJoin(Client *client, const Server &server)
 {
 	if (args.empty())
@@ -149,6 +149,7 @@ std::string Request::execJoin(Client *client, const Server &server)
 
     return "";  // 성공적으로 채널에 참가했음을 나타냄
 }
+*/
 
 //404 - 사용자가 채널에 메시지를 보낼 권한이 없음.
 
