@@ -29,6 +29,8 @@ namespace Utils
 	std::string RPL_431 = ":irc.local 431 :No nickname given.\r\n";
 	std::string RPL_432 = ":irc.local 432 jungslee :Erroneus nickname\r\n";
 
+	std::string RPL_403 = ":irc.local 403 sender #nochannel :No such channel\r\n";
+	std::string RPL_401 = ":irc.local 401 sender nonick :No such nick\r\n";
 
     // std::cout << RPL_CONNECTION_SUCCESS.str();
 	// std::string RPL_CONNECTION_SUCCESS = ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"

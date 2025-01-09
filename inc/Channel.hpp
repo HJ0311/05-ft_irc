@@ -6,7 +6,7 @@
 class Channel
 {
 	public:
-		std::vector<Client>	clients; // 현재 채널에 소속된 유저들 목록//std::map<std::string, Client*>	clients;
+		std::map<std::string, Client*>	clients;//std::vector<Client>	clients; // 현재 채널에 소속된 유저들 목록
 		std::set<std::string>	operators;
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
@@ -19,6 +19,9 @@ class Channel
 		time_t	creationTime;
 
 		// std::vector<std::string>	banned; // 밴 당한(KICK) 유저 목록
+
+		getClients//만들어야 됨
+
 	private:
 		Channel();
 		Channel(const std::string& name, const std::string& topic, const std::string& key);

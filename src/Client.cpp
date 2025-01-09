@@ -53,12 +53,12 @@ void	Client::setUserName(const std::string& username)
 	this->userName = username;
 }
 
-const std::string&	Client::getServerName() const
+const std::string&	Client::getHostName() const
 {
-	return (this->serverName);
+	return (this->hostName);
 }
 
-void	Client::setServerName(const std::string& servername)
+void	Client::setHostName(const std::string& hostname)
 {
-	this->serverName = servername;
+	this->hostName = hostname;
 }
