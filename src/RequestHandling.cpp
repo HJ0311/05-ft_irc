@@ -72,8 +72,6 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	std::map<int, Client*>::iterator it = this->clients.find(this->pfds[i].fd);
 	Request	request(parsingCommand(message));
 	(void)i;
-	// if (request.command.empty())
-	// 	return ("Invalid Command!\n"); //없어도 되지 않을까?
 	
 	if (request.command == "KILL")
 		return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
