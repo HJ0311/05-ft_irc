@@ -1,8 +1,8 @@
 #include "../inc/Define.hpp"
 
-Client::Client() : registerStatus(false), clntSockFd(0), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1"), realName("") {}
+Client::Client() : registerStatus(false), clntSockFd(0), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1"), inChannel(false) {}
 
-Client::Client(int newFd) : registerStatus(false), clntSockFd(newFd), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1"), realName("") {}
+Client::Client(int newFd) : registerStatus(false), clntSockFd(newFd), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1"), inChannel(false){}
 //TODO hostname 어떻게 할지.
 Client::Client(const Client& obj)
 {
@@ -14,12 +14,11 @@ Client&	Client::operator=(const Client& obj)
 	if (this != &obj)
 	{
 		this->registerStatus = obj.registerStatus;
+		this->inChannel = obj.inChannel;
 		this->clntSockFd = obj.clntSockFd;
 		this->isOperator = obj.isOperator;
 		this->nickName = obj.nickName;
 		this->userName = obj.userName;
-		this->hostName = obj.hostName;
-		this->realName = obj.realName;
 	}
 	return *this;
 }
@@ -35,42 +34,52 @@ int	Client::getSockFd() const
 	return this->clntSockFd;
 }
 
-std::string Client::getNickName() const 
+const std::string&	Client::getNickName() const
 {
-	return this->nickName;
+	return (this->nickName);
 }
 
-std::string Client::getUserName() const
+void	Client::setNickName(const std::string& nickname)
 {
-	return this->userName;
+	this->nickName = nickname;
 }
 
-std::string Client::getHostName() const
+const std::string&	Client::getUserName() const
 {
-	return this->hostName;
+	return (this->userName);
 }
 
-std::string Client::getRealName() const
+void	Client::setUserName(const std::string& username)
 {
-	return this->realName;
+	this->userName = username;
 }
 
-void Client::setNickName(std::string name)
+const std::string&	Client::getHostName() const
 {
-	this->nickName = name;
+	return (this->hostName);
 }
 
-void Client::setUserName(std::string name) 
+void	Client::setHostName(const std::string& hostName)
 {
-	this->userName = name;
+	this->hostName = hostName;
 }
 
-void Client::setHostName(std::string name)
+bool &Client::getRegisterStatus()
 {
-	this->hostName = name;
+	return this->registerStatus;
 }
 
-void Client::setRealName(std::string name)
+void Client::setRegisterStatus(const bool &status)
 {
-	this->realName = name;
+	this->registerStatus = status;
+}
+
+bool &Client::IsInChannel()
+{
+	return this->inChannel;
+}
+
+void Client::setInChannel(const bool &status)
+{
+	this->inChannel = status;
 }

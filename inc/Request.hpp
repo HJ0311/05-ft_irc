@@ -18,5 +18,9 @@ class Request
 
 		std::string execPass(const Server &server, bool &registerStatus);
 		std::string execNick(Client *client, std::map<int, Client*> clients);
-		std::string execUser(Client *client, std::map<int, Client*> clients);
+		std::string execUser(Client *client, const std::string &servName);
+
+		std::string execInvite(Client *client, std::map<int, Client*> clients);
+		// std::string exec(Client *client, std::map<int, Client*> clients);
+
 };

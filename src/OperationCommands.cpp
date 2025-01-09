@@ -51,7 +51,7 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 	return (result);
 }
 
-std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
+std::string Request::execUser(Client *client, const std::string &servName) {
 	if (this->args.size() != 4)
 		return Utils::RPL_461;
 
@@ -59,15 +59,18 @@ std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
 		return Utils::RPL_462;
 	
 	client->setUserName(this->args[0]);
-	client->setRealName(this->args[3]);
 
 	std::stringstream RPL_CONNECTION_SUCCESS;
-    RPL_CONNECTION_SUCCESS << ":irc.local 001 " << client->getNickName() << " :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
-                           << ":irc.local 002 " << client->getNickName() << " :Your host is irc.local, running version V1\r\n"
-                           << ":irc.local 003 " << client->getNickName() << " :This server was created " << Utils::getTime() + "\r\n";
+    RPL_CONNECTION_SUCCESS << ":" << servName << " 001 " << client->getNickName() << " :Welcome to the Localnet IRC Network " << client->getNickName() << "!" << client->getUserName() << "@" << client->getHostName() << "\r\n"
+                           << ":" << servName << " 002 " << client->getNickName() << " :Your host is " << servName <<  ", running version V1\r\n"
+                           << ":" << servName << " 003 " << client->getNickName() << " :This server was created " << Utils::getTime() + "\r\n";
 	return (RPL_CONNECTION_SUCCESS.str());
 }
 
+std::string Request::execInvite(Client *client, std::map<int, Client*> clients)
+{
+
+}
 // KILL <nickname> <nickname> ...: 네트워크에서 강제로 연결 해제
 
 // MODE <options>

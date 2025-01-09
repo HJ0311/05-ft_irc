@@ -12,7 +12,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 			break;
 		std::string line = message.substr(preIdx, idx - preIdx);
 		std::string result;
-		if (!this->clients.find(senderFd)->second->registerStatus) 
+		if (!this->clients.find(senderFd)->second->getRegisterStatus()) 
 			result = registerHandler(line, i);
 		else
 			result = commandHandler(line, i);
@@ -59,7 +59,7 @@ std::string Server::registerHandler(const std::string& message, int i)
 	else if (request.command == "JOIN")
 		return (""); // 명령어 처리 함수로 바꿀 것
     else if (request.command == "PASS")
-		return (request.execPass(*this, this->clients.find(senderFd)->second->registerStatus));
+		return (request.execPass(*this, this->clients.find(senderFd)->second->getRegisterStatus()));
 
 	if (request.command == "NICK" || request.command == "USER") 
 		return Utils::RPL_461;
@@ -75,34 +75,32 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	
 	if (request.command == "KILL")
 		return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "MODE")
-		return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NICK")
 		return (request.execNick(it->second, this->clients));
-	else if (request.command == "JOIN")
-		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "USER")
-		return (request.execUser(it->second, this->clients));
+		return (request.execUser(it->second, this->servName));
+	else if (request.command == "INVITE")
+		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "TOPIC")
+		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "MODE")
+		return ("MODE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PART")
 		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "JOIN")
+		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NANES")
 		return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "LIST")
 		return ("LIST\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "KICK")
 		return ("KICK\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "INVITE")
-		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "TOPIC")
-		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "NOTICE")
 		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVRPL")
 		return ("PRIVRPL\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
-		return ("");
-	else if (request.command == "PONG")
-		return ("");
+		return (":" + this->servName + " PONG " + this->servName + " :" + this->servName + "\r\n");
 	else
 		return ("Invalid Command!\n");
 }
@@ -121,7 +119,6 @@ Request	Server::parsingCommand(const std::string& message) const
 	{
 		if (token.find(':', 0) != std::string::npos)
 			colonFlag = true;
-		
 
 		if (colonFlag)
 			trailing.append(" ").append(token);
