@@ -18,6 +18,9 @@ class Client
 		void	setUserName(const std::string& username);
 		const std::string&	getHostName() const;
 		void	setHostName(const std::string& hostname);
+
+		const int&	getClntSockFd() const;
+
 		bool registerStatus;
 	private:
 		Client();

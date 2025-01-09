@@ -29,21 +29,29 @@ Channel::~Channel() {}
 
 void	Channel::addClient(Client* user)
 {
-	clients[user->getNickName()] = user;
+	clients[user->getClntSockFd()] = user;
 }
 
 void	Channel::removeClient(const std::string& nickname)
 {
-	if (clients.find(nickname) != clients.end())
-		clients.erase(nickname);
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second->getNickName() == nickname)
+		{
+			clients.erase(it);
+			break;
+		}
+	}
 }
 
 bool	Channel::isClientInChannel(const std::string& nickname)
 {
-	if (clients.find(nickname) != clients.end())
-		return (1);
-	else
-		return (0);
+	for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second->getNickName() == nickname)
+			return (1);
+	}
+	return (0);
 }
 
 void	Channel::addOperator(const std::string& nickname)
@@ -103,7 +111,7 @@ bool	Channel::isFull() const
 {
 
 }
-
+*/
 const std::string&	Channel::getName() const
 {
 	return (this->name);
@@ -113,4 +121,8 @@ const std::string&	Channel::getTopic() const
 {
 	return (this->topic);
 }
-*/
+
+const std::map<int, Client*>& Channel::getClients() const
+{
+	return (this->clients);
+}

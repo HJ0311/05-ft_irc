@@ -34,6 +34,8 @@ class Server
 		std::string getPassword() const;
 		std::map<int, Client*>	clients; // 현존 유저
 
+		const std::map<std::string, Channel*>& getAllChannels() const;
+
 	private:
 		Server();
 		Server(const Server& obj);

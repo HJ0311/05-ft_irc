@@ -24,7 +24,7 @@ RED := "\033[31m"
 
 # Compiler Settings
 CXX := c++
-CXXFLAGS := -fsanitize=address#-Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+CXXFLAGS := -std=c++98 #-Wall -Wextra -Werror #-fsanitize=address
 
 #Clean up command
 RM := rm -rf

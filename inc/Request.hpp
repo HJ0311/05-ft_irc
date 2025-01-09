@@ -20,5 +20,5 @@ class Request
 		std::string execNick(Client *client, std::map<int, Client*> clients);
 		std::string execUser(Client *client, std::map<int, Client*> clients);
 
-		std::string execPrivmsg(int senderFd, const Server &server);
+		std::string execPrivmsg(Client *sender, const Server &server);
 };
