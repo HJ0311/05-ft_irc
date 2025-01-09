@@ -19,9 +19,9 @@ class Channel
 		time_t	creationTime;
 
 		// std::vector<std::string>	banned; // 밴 당한(KICK) 유저 목록
-
-	public:
 		Channel();
+	public:
+		Channel(const std::string& name);
 		Channel(const std::string& name, const std::string& topic, const std::string& key);
 		Channel(const Channel& obj);
 		Channel&	operator=(const Channel& obj);

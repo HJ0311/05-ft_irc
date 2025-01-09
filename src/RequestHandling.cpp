@@ -100,9 +100,9 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
 	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVMSG")
-		return ("PRIVMSG\n"); // 명령어 처리 함수로 바꿀 것
+		return (request.execPrivmsg(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
-		return ("PING\n");
+		return (":irc.local PONG irc.local :irc.local\n");
 	else if (request.command == "PONG")
 		return ("PONG\n");
 	else

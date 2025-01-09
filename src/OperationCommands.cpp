@@ -66,6 +66,7 @@ std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
                            << ":irc.local 003 " << client->getNickName() << " :This server was created " << Utils::getTime() + "\r\n";
 	return (RPL_CONNECTION_SUCCESS.str());
 }
+
 std::string Request::execPrivmsg(Client *sender, const Server &server)
 {
 	if (args.size() < 2)
@@ -109,6 +110,46 @@ std::string Request::execPrivmsg(Client *sender, const Server &server)
 		return (Utils::RPL_401); // 대상 유저 없음
 	}
 }
+
+std::string Request::execJoin(Client *client, const Server &server)
+{
+	if (args.empty())
+		return "ERROR: JOIN requires a channel name.\n";
+
+    const std::string &channelName = args[0];  // 채널 이름
+
+    // Step 2: Check if channel exists, if not, create it
+    Channel *channel;
+    if (server.getAllChannels().find(channelName) == server.getAllChannels().end()) {
+        // 채널이 존재하지 않으면 새로 생성
+        channel = new Channel(channelName);
+        server.getAllChannels()[channelName] = channel;
+    } else {
+        channel = server.getAllChannels().at(channelName);
+    }
+
+    // Step 3: Add client to the channel's client list
+    channel->addClient(client);
+
+    // Step 4: Notify other clients in the channel that a new client has joined
+    std::string joinMessage = ":" + client->getNickname() + "!" + client->getUsername() + "@"
+                              + client->getHostname() + " JOIN :" + channelName + "\r\n";
+
+    const std::map<int, Client*> &channelClients = channel->getClients();
+    for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it) {
+        int clientFd = it->first;
+        if (clientFd != client->getFd()) {
+            send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
+        }
+    }
+
+    // Step 5: Send a welcome message to the client who joined the channel
+    std::string welcomeMessage = "Welcome to the channel, " + client->getNickname() + "!\r\n";
+    send(client->getFd(), welcomeMessage.c_str(), welcomeMessage.length(), 0);
+
+    return "";  // 성공적으로 채널에 참가했음을 나타냄
+}
+
 //404 - 사용자가 채널에 메시지를 보낼 권한이 없음.
 
 // PASS <password> : 로컬 네트워크에 연결
