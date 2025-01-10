@@ -20,6 +20,6 @@ class Request
 		std::string execNick(Client *client, std::map<int, Client*> clients);
 		std::string execUser(Client *client, std::map<int, Client*> clients);
 
-		std::string execPrivmsg(Client *sender, const Server &server);
-		std::string Request::execJoin(Client *client, const Server &server);
+		std::string execPrivmsg(Client *sender, Server &server);
+		std::string execJoin(Client *client, Server &server);
 };

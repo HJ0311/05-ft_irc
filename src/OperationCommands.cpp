@@ -67,7 +67,7 @@ std::string Request::execUser(Client *client, std::map<int, Client*> clients) {
 	return (RPL_CONNECTION_SUCCESS.str());
 }
 
-std::string Request::execPrivmsg(Client *sender, const Server &server)
+std::string Request::execPrivmsg(Client *sender, Server &server)
 {
 	if (args.size() < 2)
 		return "ERROR: PRIVMSG requires a target and a message.\n";
@@ -111,7 +111,7 @@ std::string Request::execPrivmsg(Client *sender, const Server &server)
 	}
 }
 
-std::string Request::execJoin(Client *client, const Server &server)
+std::string Request::execJoin(Client *client, Server &server)
 {
 	if (args.empty())
 		return ("ERROR: JOIN requires a channel name.\n");
@@ -127,7 +127,7 @@ std::string Request::execJoin(Client *client, const Server &server)
 	else
 		channel = server.getAllChannels().at(channelName);
 
-	if (channel->isClientInChannel())
+	if (channel->isClientInChannel(client->getNickName()))
 		return ("");
 
 	if (channel->getIsInviteOnly())
