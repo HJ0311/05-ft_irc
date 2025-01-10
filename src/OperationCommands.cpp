@@ -46,7 +46,7 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 	
 	std::string result = "";
 	if (client->getUserName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
-		result = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " NICK :" + this->args[0];
+		result = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " NICK :" + this->args[0] + "\r\n";
 	client->setNickName(this->args[0]);
 	return (result);
 }

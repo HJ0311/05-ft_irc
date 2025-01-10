@@ -74,7 +74,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	(void)i;
 	// if (request.command.empty())
 	// 	return ("Invalid Command!\n"); //없어도 되지 않을까?
-	
+
 	if (request.command == "KILL")
 		return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "MODE")
@@ -82,7 +82,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "NICK")
 		return (request.execNick(it->second, this->clients));
 	else if (request.command == "JOIN")
-		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
+		return (request.execJoin(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "USER")
 		return (request.execUser(it->second, this->clients));
 	else if (request.command == "PART")
@@ -97,8 +97,6 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")
 		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
-	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVMSG")
 		return (request.execPrivmsg(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
@@ -107,6 +105,8 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("PONG\n");
 	else
 		return ("Invalid Command!\n");
+	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
+	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 }
 
 Request	Server::parsingCommand(const std::string& message) const
