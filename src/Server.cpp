@@ -172,7 +172,7 @@ std::string Server::getPassword() const {
 	return this->password;
 }
 
-const std::map<std::string, Channel*>& Server::getAllChannels() const
+std::map<std::string, Channel*>& Server::getAllChannels()
 {
-	return allChannels; // 읽기 전용으로 제공
+	return (this->allChannels);
 }
