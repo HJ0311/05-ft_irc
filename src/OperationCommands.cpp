@@ -71,6 +71,119 @@ std::string Request::execInvite(Client *client, std::map<int, Client*> clients)
 {
 
 }
+std::string Request::execPrivmsg(Client *sender, Server &server)
+{
+	if (args.size() < 2)
+		return "ERROR: PRIVMSG requires a target and a message.\n";
+
+	const std::string	&target = args[0]; // 대상 (채널명 또는 사용자 닉네임)
+	const std::string	&message = args[1]; // 메시지
+
+	std::string	senderNickname = sender->getNickName();
+	std::string	senderUsername = sender->getUserName();
+	std::string	senderHostname = sender->getHostName();
+
+	std::string outgoingMessage = ":" + senderNickname + "!" + senderUsername + "@" + senderHostname +
+								  " PRIVMSG " + target + " :" + message + "\r\n";
+
+	if (target[0] == '#')//messages to a channel
+	{
+		Channel *targetChannel = server.getAllChannels().at(target);
+		if (!targetChannel)
+			return (Utils::RPL_403);
+
+		const std::map<int, Client*> &channelClients = targetChannel->getClients();
+		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+		{
+			Client *channelClient = it->second;
+			if (channelClient != sender)
+				send(channelClient->getClntSockFd(), outgoingMessage.c_str(), outgoingMessage.size(), 0); // send to client
+		}
+		return (""); // 채널 전송은 직접 처리했으므로 빈 문자열 반환
+	}
+	else//messages to a client
+	{
+		for (std::map<int, Client*>::const_iterator it = server.clients.begin(); it != server.clients.end(); ++it)
+		{
+			Client *receiver = it->second;
+			if (receiver->getNickName() == target)
+				return (outgoingMessage); // 대상 유저에게 전송할 메시지 반환
+				// send(serverClient->getFd(), outgoingMessage.c_str(), outgoingMessage.size(), 0); // 전송
+			// return ""; // 메시지를 전송했으므로 빈 문자열 반환
+		}
+		return (Utils::RPL_401); // 대상 유저 없음
+	}
+}
+
+std::string Request::execJoin(Client *client, Server &server)
+{
+	if (args.empty())
+		return ("ERROR: JOIN requires a channel name.\n");
+
+	const std::string &channelName = args[0];
+
+	Channel *channel;
+	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())// 채널이 존재하지 않으면
+	{
+		channel = new Channel(channelName);
+		server.getAllChannels()[channelName] = channel;
+	}
+	else
+		channel = server.getAllChannels().at(channelName);
+
+	if (channel->isClientInChannel(client->getNickName()))
+		return ("");
+
+	if (channel->getIsInviteOnly())
+		return (Utils::RPL_473);
+
+	if (channel->getKey() != "")
+	{
+		const std::string &enteredKey = args[1];
+		if (enteredKey != channel->getKey())
+			return (Utils::RPL_475);
+	}
+
+	//127.000.000.001.47314-127.000.000.001.06667: JOIN :
+	//127.000.000.001.06667-127.000.000.001.47314: :irc.local 451 * JOIN :You have not registered.
+
+	//127.000.000.001.45176-127.000.000.001.06667: JOIN #1st 4242
+	//127.000.000.001.06667-127.000.000.001.45176: :student!root@127.0.0.1 JOIN :#1st
+	//:irc.local 353 student = #1st :@nnn student
+	//:irc.local 366 student #1st :End of /NAMES list.
+
+	//127.000.000.001.06667-127.000.000.001.45174: :student!root@127.0.0.1 JOIN :#1st
+	//127.000.000.001.45174-127.000.000.001.06667: WHO student %tna,745
+	//127.000.000.001.06667-127.000.000.001.45174: :irc.local 354 nnn 745 student :0
+	//:irc.local 315 nnn student :End of /WHO list.
+	//이거 뭔가 해야하는 건지
+
+	channel->addClient(client);
+
+	std::string joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
+							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
+
+	const std::map<int, Client*> &channelClients = channel->getClients();
+	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+	{
+		int clientFd = it->first;
+		if (clientFd == client->getClntSockFd())
+			send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
+	}
+	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+	{
+		int clientFd = it->first;
+		if (clientFd != client->getClntSockFd())
+			send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
+	}
+
+	return ("");
+}
+
+//404 - 사용자가 채널에 메시지를 보낼 권한이 없음.
+
+// PASS <password> : 로컬 네트워크에 연결
+
 // KILL <nickname> <nickname> ...: 네트워크에서 강제로 연결 해제
 
 // MODE <options>

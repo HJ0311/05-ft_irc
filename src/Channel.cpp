@@ -1,6 +1,6 @@
 #include "../inc/Define.hpp"
 
-Channel::Channel() : clients(), name(""), topic(""), key("") {}
+Channel::Channel(const std::string& name) : clients(), name(name), topic(""), key("") {}
 
 Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), name(name), topic(topic), key(key) {}
 
@@ -29,17 +29,29 @@ Channel::~Channel() {}
 
 void	Channel::addClient(Client* user)
 {
-
+	clients[user->getClntSockFd()] = user;
 }
 
 void	Channel::removeClient(const std::string& nickname)
 {
-
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second->getNickName() == nickname)
+		{
+			clients.erase(it);
+			break;
+		}
+	}
 }
 
 bool	Channel::isClientInChannel(const std::string& nickname)
 {
-
+	for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (it->second->getNickName() == nickname)
+			return (1);
+	}
+	return (0);
 }
 
 void	Channel::addOperator(const std::string& nickname)
@@ -54,10 +66,13 @@ void	Channel::removeOperator(const std::string& nickname)
 
 bool	Channel::isOperator(const std::string& nickname)
 {
-
+	if (operators.find(nickname) != operators.end())
+		return (1);
+	else
+		return (0);
 }
-
-void	Channel::broadcastMessage(const std::string& message, Client* sender)
+/*
+void	Channel::sendMessage(const std::string& message, Client* sender)
 {
 
 }
@@ -96,7 +111,7 @@ bool	Channel::isFull() const
 {
 
 }
-
+*/
 const std::string&	Channel::getName() const
 {
 	return (this->name);
@@ -105,4 +120,19 @@ const std::string&	Channel::getName() const
 const std::string&	Channel::getTopic() const
 {
 	return (this->topic);
+}
+
+const std::string&	Channel::getKey() const
+{
+	return (this->key);
+}
+
+const std::map<int, Client*>& Channel::getClients() const
+{
+	return (this->clients);
+}
+
+const bool&	Channel::getIsInviteOnly() const
+{
+	return (this->isInviteOnly);
 }

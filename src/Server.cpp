@@ -171,3 +171,8 @@ void	Server::removeFromPoll(int i)
 std::string Server::getPassword() const {
 	return this->password;
 }
+
+std::map<std::string, Channel*>& Server::getAllChannels()
+{
+	return (this->allChannels);
+}
