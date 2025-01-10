@@ -30,9 +30,12 @@ namespace Utils
 	std::string RPL_432 = ":irc.local 432 jungslee :Erroneus nickname\r\n";
 
 	std::string RPL_403 = ":irc.local 403 sender #nochannel :No such channel\r\n";
+	std::string RPL_404 = ":irc.local 404 nick #channel :You cannot send external messages to this channel.\r\n";
 	std::string RPL_401 = ":irc.local 401 sender nonick :No such nick\r\n";
 	std::string RPL_473 = ":irc.local 473 nick #channel :Cannot join channel (invite only)\r\n";
 	std::string RPL_475 = ":irc.local 475 nick #channel :Cannot join channel (incorrect channel key)\r\n";
+	std::string RPL_442 = ":irc.local 442 nick #channel :You're not on that channel\r\n";
+
 
 
     // std::cout << RPL_CONNECTION_SUCCESS.str();

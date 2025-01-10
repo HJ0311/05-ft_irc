@@ -87,10 +87,6 @@ void	Channel::setPassword(const std::string& password)
 
 }
 
-void	Channel::setClientLimit(size_t limit)
-{
-
-}
 
 void	Channel::setInviteOnly(bool inviteOnly)
 {
@@ -101,17 +97,13 @@ void	Channel::inviteClient(Client* inviter, const std::string& inviteeNickname)
 {
 
 }
+*/
 
 size_t	Channel::getClientCount() const
 {
-
+	return (this->clients.size());
 }
 
-bool	Channel::isFull() const
-{
-
-}
-*/
 const std::string&	Channel::getName() const
 {
 	return (this->name);

@@ -22,4 +22,5 @@ class Request
 
 		std::string execPrivmsg(Client *sender, Server &server);
 		std::string execJoin(Client *client, Server &server);
+		std::string execPart(Client *client, Server &server);
 };

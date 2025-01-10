@@ -82,11 +82,11 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "NICK")
 		return (request.execNick(it->second, this->clients));
 	else if (request.command == "JOIN")
-		return ("JOIN\n"); // 명령어 처리 함수로 바꿀 것
+		return (request.execJoin(it->second, *this));
 	else if (request.command == "USER")
 		return (request.execUser(it->second, this->clients));
 	else if (request.command == "PART")
-		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
+		return (request.execPart(it->second, *this));
 	else if (request.command == "NAMES")
 		return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "LIST")
