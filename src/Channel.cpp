@@ -122,7 +122,17 @@ const std::string&	Channel::getTopic() const
 	return (this->topic);
 }
 
+const std::string&	Channel::getKey() const
+{
+	return (this->key);
+}
+
 const std::map<int, Client*>& Channel::getClients() const
 {
 	return (this->clients);
+}
+
+const bool&	Channel::getIsInviteOnly() const
+{
+	return (this->isInviteOnly);
 }

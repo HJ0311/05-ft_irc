@@ -15,7 +15,7 @@ class Channel
 
 		bool	isPrivate;
 		bool	isInviteOnly;
-		size_t	ClientLimit;
+		// size_t	ClientLimit;
 		time_t	creationTime;
 
 		// std::vector<std::string>	banned; // 밴 당한(KICK) 유저 목록
@@ -29,7 +29,7 @@ class Channel
 
 		void	addClient(Client* user); // 유저를 채널에 추가
 		void	removeClient(const std::string& nickname); // 채널에서 제거
-		bool	isClientInChannel(const std::string& nickname); // 특정 유저가 채널에 있는지 확인
+		bool	isClientInChannel(const std::string& nickname); // 특정 유저가 채널에 있는지 확인//중복인 건데 필요한지
 
 		void	addOperator(const std::string& nickname); // 운영자를 추가
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
@@ -39,15 +39,17 @@ class Channel
 
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);
-		void	setClientLimit(size_t limit);
+		// void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
 
 		void	inviteClient(Client* inviter, const std::string& invitee);
 
 		size_t	getClientCount() const;
-		bool	isFull() const;
+		// bool	isFull() const;
 
 		const std::string&	getName() const;
 		const std::string&	getTopic() const;
-		const std::map<int, Client*>& getClients() const;
+		const std::string&	getKey() const;
+		const std::map<int, Client*>&	getClients() const;
+		const bool&	getIsInviteOnly() const;
 };

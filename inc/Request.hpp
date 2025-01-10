@@ -21,4 +21,5 @@ class Request
 		std::string execUser(Client *client, std::map<int, Client*> clients);
 
 		std::string execPrivmsg(Client *sender, const Server &server);
+		std::string Request::execJoin(Client *client, const Server &server);
 };

@@ -110,46 +110,71 @@ std::string Request::execPrivmsg(Client *sender, const Server &server)
 		return (Utils::RPL_401); // 대상 유저 없음
 	}
 }
-/*
+
 std::string Request::execJoin(Client *client, const Server &server)
 {
 	if (args.empty())
-		return "ERROR: JOIN requires a channel name.\n";
+		return ("ERROR: JOIN requires a channel name.\n");
 
-    const std::string &channelName = args[0];  // 채널 이름
+	const std::string &channelName = args[0];
 
-    // Step 2: Check if channel exists, if not, create it
-    Channel *channel;
-    if (server.getAllChannels().find(channelName) == server.getAllChannels().end()) {
-        // 채널이 존재하지 않으면 새로 생성
-        channel = new Channel(channelName);
-        server.getAllChannels()[channelName] = channel;
-    } else {
-        channel = server.getAllChannels().at(channelName);
-    }
+	Channel *channel;
+	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())// 채널이 존재하지 않으면
+	{
+		channel = new Channel(channelName);
+		server.getAllChannels()[channelName] = channel;
+	}
+	else
+		channel = server.getAllChannels().at(channelName);
 
-    // Step 3: Add client to the channel's client list
-    channel->addClient(client);
+	if (channel->isClientInChannel())
+		return ("");
 
-    // Step 4: Notify other clients in the channel that a new client has joined
-    std::string joinMessage = ":" + client->getNickname() + "!" + client->getUsername() + "@"
-                              + client->getHostname() + " JOIN :" + channelName + "\r\n";
+	if (channel->getIsInviteOnly())
+		return (Utils::RPL_473);
 
-    const std::map<int, Client*> &channelClients = channel->getClients();
-    for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it) {
-        int clientFd = it->first;
-        if (clientFd != client->getFd()) {
-            send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
-        }
-    }
+	if (channel->getKey() != "")
+	{
+		const std::string &enteredKey = args[1];
+		if (enteredKey != channel->getKey())
+			return (Utils::RPL_475);
+	}
 
-    // Step 5: Send a welcome message to the client who joined the channel
-    std::string welcomeMessage = "Welcome to the channel, " + client->getNickname() + "!\r\n";
-    send(client->getFd(), welcomeMessage.c_str(), welcomeMessage.length(), 0);
+	//127.000.000.001.47314-127.000.000.001.06667: JOIN :
+	//127.000.000.001.06667-127.000.000.001.47314: :irc.local 451 * JOIN :You have not registered.
 
-    return "";  // 성공적으로 채널에 참가했음을 나타냄
+	//127.000.000.001.45176-127.000.000.001.06667: JOIN #1st 4242
+	//127.000.000.001.06667-127.000.000.001.45176: :student!root@127.0.0.1 JOIN :#1st
+	//:irc.local 353 student = #1st :@nnn student
+	//:irc.local 366 student #1st :End of /NAMES list.
+
+	//127.000.000.001.06667-127.000.000.001.45174: :student!root@127.0.0.1 JOIN :#1st
+	//127.000.000.001.45174-127.000.000.001.06667: WHO student %tna,745
+	//127.000.000.001.06667-127.000.000.001.45174: :irc.local 354 nnn 745 student :0
+	//:irc.local 315 nnn student :End of /WHO list.
+	//이거 뭔가 해야하는 건지
+
+	channel->addClient(client);
+
+	std::string joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
+							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
+
+	const std::map<int, Client*> &channelClients = channel->getClients();
+	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+	{
+		int clientFd = it->first;
+		if (clientFd == client->getClntSockFd())
+			send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
+	}
+	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+	{
+		int clientFd = it->first;
+		if (clientFd != client->getClntSockFd())
+			send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
+	}
+
+	return ("");
 }
-*/
 
 //404 - 사용자가 채널에 메시지를 보낼 권한이 없음.
 

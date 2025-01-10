@@ -31,6 +31,9 @@ namespace Utils
 
 	std::string RPL_403 = ":irc.local 403 sender #nochannel :No such channel\r\n";
 	std::string RPL_401 = ":irc.local 401 sender nonick :No such nick\r\n";
+	std::string RPL_473 = ":irc.local 473 nick #channel :Cannot join channel (invite only)\r\n";
+	std::string RPL_473 = ":irc.local 475 nick #channel :Cannot join channel (incorrect channel key)\r\n";
+
 
     // std::cout << RPL_CONNECTION_SUCCESS.str();
 	// std::string RPL_CONNECTION_SUCCESS = ":irc.local 001 jungslee :Welcome to the Localnet IRC Network jungslee!root@127.0.0.1\r\n"
