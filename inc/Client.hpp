@@ -30,7 +30,6 @@ class Client
 
 		int	clntSockFd; // 클라이언트의 소켓 fd
 		bool	isOperator; // 관리자?
-		bool registerStatus;
 		bool inChannel;
 		std::string	nickName;
 		std::string	userName;

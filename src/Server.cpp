@@ -1,8 +1,8 @@
 #include "../inc/Define.hpp"
 
-Server::Server() : maxClientCnt(0),  onlineClient(0), servName("ircserv"), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
+Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
 
-Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), servName("ircserv"), password(password), servSockFd(-1), pfds(), clients(), allChannels()
+Server::Server(int maxClientCnt, const std::string& port, const std::string& password) : maxClientCnt(maxClientCnt), onlineClient(0), password(password), servSockFd(-1), pfds(), clients(), allChannels()
 {
 	try
 	{
@@ -42,7 +42,6 @@ Server&	Server::operator=(const Server& obj)
 	{
 		this->maxClientCnt = obj.maxClientCnt;
 		this->onlineClient = obj.onlineClient;
-		this->servName = obj.servName;
 		this->password = obj.password;
 		this->servSockFd = obj.servSockFd;
 		this->pfds = obj.pfds;
@@ -129,7 +128,7 @@ void	Server::newClient()
 	{
 		addToPoll(newFd);
 
-		if (send(newFd, Utils::RPL_451.c_str(), Utils::RPL_451.length(), 0) < 0)  
+		if (send(newFd, ERR_NOTREGISTERED().c_str(), ERR_NOTREGISTERED().length(), 0) < 0)  
 			throw std::runtime_error("send() error"); 
 		// std::string welcome = Utils::welcomeRPL();
 		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  

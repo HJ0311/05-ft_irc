@@ -18,7 +18,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 			result = commandHandler(line, i);
 		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
 			std::cerr << RED << "send() error" << RESET << std::endl;
-		if (result == Utils::RPL_464 || result == Utils::RPL_461) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
+		if (result == ERR_PASSWDMISMATCH() || result == ERR_NEEDMOREPARAMS("PASS")) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
 			close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
@@ -62,7 +62,7 @@ std::string Server::registerHandler(const std::string& message, int i)
 		return (request.execPass(*this, this->clients.find(senderFd)->second->getRegisterStatus()));
 
 	if (request.command == "NICK" || request.command == "USER") 
-		return Utils::RPL_461;
+		return ERR_NEEDMOREPARAMS("PASS");
 
 	return ("");
 }
@@ -80,7 +80,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "JOIN")
 		return (request.execJoin(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "USER")
-		return (request.execUser(it->second, this->servName));
+		return (request.execUser(it->second));
 	else if (request.command == "INVITE")
 		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")
@@ -100,7 +100,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "PRIVMSG")
 		return (request.execPrivmsg(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
-		return (":" + this->servName + " PONG " + this->servName + " :" + this->servName + "\r\n");
+		return (PONG());
 	else
 		return ("Invalid Command!\n");
 	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?

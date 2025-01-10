@@ -2,10 +2,10 @@
 
 std::string Request::execPass(const Server &server, bool &registerStatus) {
 	if (registerStatus) 
-		return Utils::RPL_462;
+		return ERR_ALREADYREGISTERED();
 
 	if (server.getPassword() != this->args[0]) 
-		return Utils::RPL_464;
+		return ERR_PASSWDMISMATCH();
 
 	registerStatus = true;
 	return ("");
@@ -31,17 +31,17 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 	//TODO 닉네임 변경을 막아놓았을 때 ERR_RESTRICTED (484)
 
 	if (this->args.size() == 0)
-		return (Utils::RPL_431);//ERR_NONICKNAMEGIVEN 
+		return (ERR_NONICKNAMEGIVEN());
 
 	if (this->args[0] == client->getNickName()) //이미 나의 닉네임일때
 		return ("");
 
 	if (!validateNick(this->args[0]))
-		return(Utils::RPL_432);
+		return(ERR_ERRONEUSNICKNAME(this->args[0]));
 
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
         if (this->args[0] == it->second->getNickName())
-			return (Utils::RPL_433);//ERR_NICKNAMEINUSE
+			return (ERR_NICKNAMEINUSE(this->args[0]));
     }
 	
 	std::string result = "";
@@ -51,20 +51,22 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 	return (result);
 }
 
-std::string Request::execUser(Client *client, const std::string &servName) {
+std::string Request::execUser(Client *client) {
 	if (this->args.size() != 4)
-		return Utils::RPL_461;
+		return ERR_NEEDMOREPARAMS("USER");
 
 	if (client->getUserName() != "")
-		return Utils::RPL_462;
+		return ERR_ALREADYREGISTERED();
 	
 	client->setUserName(this->args[0]);
 
-	std::stringstream RPL_CONNECTION_SUCCESS;
-    RPL_CONNECTION_SUCCESS << ":" << servName << " 001 " << client->getNickName() << " :Welcome to the Localnet IRC Network " << client->getNickName() << "!" << client->getUserName() << "@" << client->getHostName() << "\r\n"
-                           << ":" << servName << " 002 " << client->getNickName() << " :Your host is " << servName <<  ", running version V1\r\n"
-                           << ":" << servName << " 003 " << client->getNickName() << " :This server was created " << Utils::getTime() + "\r\n";
-	return (RPL_CONNECTION_SUCCESS.str());
+	std::string nick = client->getNickName();
+	std::string user = client->getUserName();
+	std::string host = client->getHostName();
+	return (RPL_WELCOME(nick, user, host)
+			+ RPL_YOURHOST(nick)
+			+ RPL_CREATED(nick, Utils::getTime())
+		);
 }
 
 std::string Request::execInvite(Client *client, std::map<int, Client*> clients)
@@ -90,7 +92,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 	{
 		Channel *targetChannel = server.getAllChannels().at(target);
 		if (!targetChannel)
-			return (Utils::RPL_403);
+			return (ERR_NOSUCHCHANNEL(target));
 
 		const std::map<int, Client*> &channelClients = targetChannel->getClients();
 		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
@@ -111,7 +113,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 				// send(serverClient->getFd(), outgoingMessage.c_str(), outgoingMessage.size(), 0); // 전송
 			// return ""; // 메시지를 전송했으므로 빈 문자열 반환
 		}
-		return (Utils::RPL_401); // 대상 유저 없음
+		return (ERR_NOSUCHNICK(target)); // 대상 유저 없음
 	}
 }
 
@@ -135,13 +137,13 @@ std::string Request::execJoin(Client *client, Server &server)
 		return ("");
 
 	if (channel->getIsInviteOnly())
-		return (Utils::RPL_473);
+		return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
 
 	if (channel->getKey() != "")
 	{
 		const std::string &enteredKey = args[1];
 		if (enteredKey != channel->getKey())
-			return (Utils::RPL_475);
+			return (ERR_BADCHANNELKEY(client->getNickName(), channelName));
 	}
 
 	//127.000.000.001.47314-127.000.000.001.06667: JOIN :

@@ -2,6 +2,8 @@
 
 #include "Define.hpp"
 
+#define SERVER_NAME "ircserv"
+
 class Client;
 class Request;
 class Channel;
@@ -44,7 +46,6 @@ class Server
 
 		int	maxClientCnt; // 최대 온라인 가능 유저 수
 		int	onlineClient; // 온라인 중인 유저 수
-		std::string servName; //TODO 이런식으로 이름을 놓아도 되는지?
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
