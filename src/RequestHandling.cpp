@@ -87,7 +87,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return (request.execUser(it->second, this->clients));
 	else if (request.command == "PART")
 		return ("PART\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "NANES")
+	else if (request.command == "NAMES")
 		return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "LIST")
 		return ("LIST\n"); // 명령어 처리 함수로 바꿀 것
@@ -97,12 +97,12 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")
 		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "NOTICE")
-		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
-	else if (request.command == "PRIVRPL")
-		return ("PRIVRPL\n"); // 명령어 처리 함수로 바꿀 것
+	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
+	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "PRIVMSG")
+		return (request.execPrivmsg(it->second, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
-		return ("PING\n");
+		return (":irc.local PONG irc.local :irc.local\n");
 	else if (request.command == "PONG")
 		return ("PONG\n");
 	else

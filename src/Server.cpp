@@ -171,3 +171,8 @@ void	Server::removeFromPoll(int i)
 std::string Server::getPassword() const {
 	return this->password;
 }
+
+const std::map<std::string, Channel*>& Server::getAllChannels() const
+{
+	return allChannels; // 읽기 전용으로 제공
+}

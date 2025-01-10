@@ -13,6 +13,12 @@ namespace Utils {
 	extern std::string RPL_431;
 	extern std::string RPL_432;
 	extern std::stringstream RPL_CONNECTION_SUCCESS;
+
+	extern std::string RPL_403;
+	extern std::string RPL_401;
+	extern std::string RPL_473;
+	extern std::string RPL_475;
+
 	std::string	getTime();
 	std::string formatString();
 }
