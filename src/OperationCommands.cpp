@@ -69,10 +69,6 @@ std::string Request::execUser(Client *client) {
 		);
 }
 
-std::string Request::execInvite(Client *client, std::map<int, Client*> clients)
-{
-
-}
 std::string Request::execPrivmsg(Client *sender, Server &server)
 {
 	if (args.size() < 2)
