@@ -34,7 +34,9 @@ namespace Utils
 	std::string RPL_401 = ":irc.local 401 sender nonick :No such nick\r\n";
 	std::string RPL_473 = ":irc.local 473 nick #channel :Cannot join channel (invite only)\r\n";
 	std::string RPL_475 = ":irc.local 475 nick #channel :Cannot join channel (incorrect channel key)\r\n";
+	std::string RPL_471 = ":irc.local 471 nick_ #bang :Cannot join channel (channel is full)\r\n";
 	std::string RPL_442 = ":irc.local 442 nick #channel :You're not on that channel\r\n";
+
 
 
 

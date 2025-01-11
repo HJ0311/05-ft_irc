@@ -11,16 +11,17 @@ class Channel
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
-		int	clientCnt; // 채널에 접속 중인 유저 수
+		// int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
 
 		bool	isPrivate;
 		bool	isInviteOnly;
+		size_t	clientLimit;
 		time_t	creationTime;
 
 		Channel();
 	public:
 		Channel(const std::string& name);
-		Channel(const std::string& name, const std::string& topic, const std::string& key);
+		// Channel(const std::string& name, const std::string& topic, const std::string& key);//InspIRC에선 생성 시 name외에 설정 불가
 		Channel(const Channel& obj);
 		Channel&	operator=(const Channel& obj);
 		~Channel();
@@ -35,11 +36,13 @@ class Channel
 
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);
+		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
 
 		void	inviteClient(Client* inviter, const std::string& invitee);
 
 		size_t	getClientCount() const;
+		bool	isFull() const;
 
 		const std::string&	getName() const;
 		const std::string&	getTopic() const;

@@ -126,6 +126,7 @@ std::string Request::execJoin(Client *client, Server &server)
 	{
 		channel = new Channel(channelName);
 		server.getAllChannels()[channelName] = channel;
+		channel->addOperator(client->getNickName());//channel operator에 현 client 넣기
 	}
 	else
 		channel = server.getAllChannels().at(channelName);
@@ -142,6 +143,9 @@ std::string Request::execJoin(Client *client, Server &server)
 		if (enteredKey != channel->getKey())
 			return (Utils::RPL_475);
 	}
+
+	if (channel->isFull())
+		return (Utils::RPL_471);
 
 	channel->addClient(client);
 

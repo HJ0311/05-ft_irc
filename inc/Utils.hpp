@@ -19,6 +19,7 @@ namespace Utils {
 	extern std::string RPL_401;
 	extern std::string RPL_473;
 	extern std::string RPL_475;
+	extern std::string RPL_471;
 	extern std::string RPL_442;
 
 	std::string	getTime();
