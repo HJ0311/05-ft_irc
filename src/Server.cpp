@@ -27,6 +27,7 @@ Server::~Server()
 		delete [] this->pfds;
 	for (std::map<int, Client*>::iterator it = this->clients.begin(); it != this->clients.end(); ++it)
 		delete it->second;
+	//TODO 여기에 Channel도 다 delete해줘야 할 듯
 	this->clients.clear();
 }
 

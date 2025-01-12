@@ -82,7 +82,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "USER")
 		return (request.execUser(it->second));
 	else if (request.command == "INVITE")
-		return ("INVITE\n"); // 명령어 처리 함수로 바꿀 것
+		return (request.execInvite(it->second, this->clients)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "TOPIC")
 		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "MODE")

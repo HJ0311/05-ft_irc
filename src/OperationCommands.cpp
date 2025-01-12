@@ -27,13 +27,11 @@ bool Request::validateNick(const std::string &nick) {
 }
 
 std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
-	//TODO 자원 부족으로 닉네임, 유저네임 설정할 수 없을 때 ERR_UNAVAILRESOURCE (437)
-	//TODO 닉네임 변경을 막아놓았을 때 ERR_RESTRICTED (484)
 
 	if (this->args.size() == 0)
 		return (ERR_NONICKNAMEGIVEN());
 
-	if (this->args[0] == client->getNickName()) //이미 나의 닉네임일때
+	if (this->args[0] == client->getNickName())
 		return ("");
 
 	if (!validateNick(this->args[0]))
@@ -45,8 +43,9 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
     }
 	
 	std::string result = "";
-	if (client->getUserName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
-		result = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " NICK :" + this->args[0] + "\r\n";
+	if (client->getNickName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
+		result = NICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0]);
+
 	client->setNickName(this->args[0]);
 	return (result);
 }
@@ -192,3 +191,13 @@ std::string Request::execJoin(Client *client, Server &server)
 // -l: 채널에 대한 사용자의 제한 설정/제거
 
 // USER <username> <unused> <unused> <realname> : 서버에 자신을 등록
+
+
+std::string Request::execInvite(Client *client, std::map<int, Client*> clients) { 
+	//args 개수 보고 ERR_NEEDMOREPARAMS
+	//nickname이 client list 안에 없으면 ERR_NOSUCHNICK
+	//Channel이 있으면 그 채널에, 없으면 새로 생성
+
+	//invite  -ONly 채널일때?? 
+		// 이 명령을 보내는 클라이언트가 자격이 있는지를 알아랴함.
+}

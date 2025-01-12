@@ -18,9 +18,10 @@ class Client;
 #define ERR_ERRONEUSNICKNAME(NICK)			(PREFIX() + (" 432 ") + NICK + " :Erroneus nickname\r\n")
 #define ERR_NOSUCHCHANNEL(CHANNEL)     		(PREFIX() + (" 403 ") + CHANNEL + " :No such channel\r\n")
 #define ERR_NOSUCHNICK(NICK) 				(PREFIX() + (" 401 ") + NICK + " :No such nick\r\n")
-#define ERR_INVITEONLYCHAN(NICK, CHANNEL)			(PREFIX() + (" 473 ") + NICK + " " + CHANNEL + " :Cannot join channel (invite only)\r\n")
-#define ERR_BADCHANNELKEY(NICK, CHANNEL)			(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " Cannot join channel (incorrect channel key)\r\n")
-#define PONG()					 					(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
+#define ERR_INVITEONLYCHAN(NICK, CHANNEL)	(PREFIX() + (" 473 ") + NICK + " " + CHANNEL + " :Cannot join channel (invite only)\r\n")
+#define ERR_BADCHANNELKEY(NICK, CHANNEL)	(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " Cannot join channel (incorrect channel key)\r\n")
+#define PONG()					 			(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
+#define NICK(OLDNICK, USER, HOST, NEWNICK)	(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
 
 namespace Utils {
 	std::string	getTime();
