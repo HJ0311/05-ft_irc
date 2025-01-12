@@ -20,8 +20,6 @@ class Client
 		void	setHostName(const std::string& hostname);
 		bool &getRegisterStatus();
 		void 	setRegisterStatus(const bool &status);
-		bool &IsInChannel();
-		void 	setInChannel(const bool &status);
 		const int&	getClntSockFd() const;
 		bool registerStatus;
 		
@@ -30,7 +28,6 @@ class Client
 
 		int	clntSockFd; // 클라이언트의 소켓 fd
 		bool	isOperator; // 관리자?
-		bool inChannel;
 		std::string	nickName;
 		std::string	userName;
 		std::string	hostName;

@@ -14,7 +14,6 @@ Client&	Client::operator=(const Client& obj)
 	if (this != &obj)
 	{
 		this->registerStatus = obj.registerStatus;
-		this->inChannel = obj.inChannel;
 		this->clntSockFd = obj.clntSockFd;
 		this->isOperator = obj.isOperator;
 		this->nickName = obj.nickName;
@@ -77,14 +76,4 @@ bool &Client::getRegisterStatus()
 void Client::setRegisterStatus(const bool &status)
 {
 	this->registerStatus = status;
-}
-
-bool &Client::IsInChannel()
-{
-	return this->inChannel;
-}
-
-void Client::setInChannel(const bool &status)
-{
-	this->inChannel = status;
 }

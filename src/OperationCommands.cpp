@@ -90,7 +90,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 			return (ERR_NOSUCHCHANNEL(target));
 
 		if (targetChannel->isClientInChannel(sender->getNickName()) == 0)
-			return (Utils::RPL_404);
+			return (ERR_CANNOTSENDTOCHAN(sender->getNickName(), target));
 
 		const std::map<int, Client*> &channelClients = targetChannel->getClients();
 		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
@@ -146,7 +146,7 @@ std::string Request::execJoin(Client *client, Server &server)
 	}
 
 	if (channel->isFull())
-		return (Utils::RPL_471);
+		return (ERR_CHANNELISFULL(client->getNickName(), channelName));
 
 	channel->addClient(client);
 
@@ -179,12 +179,12 @@ std::string Request::execPart(Client *client, Server &server)
 
 	Channel *channel;
 	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())
-		return (Utils::RPL_403);
+		return (ERR_NOSUCHCHANNEL(channelName));
 //127.000.000.001.37504-127.000.000.001.06667: PART #1st
 //127.000.000.001.06667-127.000.000.001.37504: :irc.local 403 nick #1st :No such channel
 
 	if (channel->isClientInChannel(client->getNickName()) == 0)
-		return (Utils::RPL_442);
+		return (ERR_NOMOTD(client->getNickName(), channelName));
 //127.000.000.001.37504-127.000.000.001.06667: PART #3rd
 //127.000.000.001.06667-127.000.000.001.37504: :irc.local 442 nick #3rd :You're not on that channel
 
