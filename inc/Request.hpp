@@ -16,9 +16,11 @@ class Request
 		
 		bool validateNick(const std::string &nick);
 
-		std::string execPass(const Server &server, bool &registerStatus);
+		std::string execPass(const Server &server, Client *client);
 		std::string execNick(Client *client, std::map<int, Client*> clients);
 		std::string execUser(Client *client);
+
+		std::string execWhois();
 
 		std::string execInvite(Client *client, std::map<int, Client*> clients);
 		// std::string exec(Client *client, std::map<int, Client*> clients);

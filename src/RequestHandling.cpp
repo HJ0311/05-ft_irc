@@ -4,6 +4,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 {
 	size_t idx = 0;
 	int	senderFd = this->pfds[i].fd;
+	Client *client = this->clients.find(senderFd)->second;
 
 	while (1) {//PASS password\r\nUSER user\r\n 이런식으로 여러번의 명령어가 붙어서 올 때를 고려하여 처리
 		size_t preIdx = idx;
@@ -12,13 +13,13 @@ void Server::execCommandByLine(int i, const std::string &message)
 			break;
 		std::string line = message.substr(preIdx, idx - preIdx);
 		std::string result;
-		if (!this->clients.find(senderFd)->second->getRegisterStatus()) 
+		if (!client->getRegisterStatus()) 
 			result = registerHandler(line, i);
 		else
 			result = commandHandler(line, i);
 		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
 			std::cerr << RED << "send() error" << RESET << std::endl;
-		if (result == ERR_PASSWDMISMATCH() || result == ERR_NEEDMOREPARAMS("PASS")) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
+		if (client->getErrorClose()) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
 			close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
@@ -49,9 +50,10 @@ void	Server::clientRequest(int i)
 }
 
 std::string Server::registerHandler(const std::string& message, int i)
-{//TODO 입력 타임아웃 처리?
+{
 	int	senderFd = this->pfds[i].fd;
 	Request	request(parsingCommand(message));
+	Client *client = this->clients.find(senderFd)->second;
 	(void)i;
 
 	if (request.command == "CAP")
@@ -59,10 +61,12 @@ std::string Server::registerHandler(const std::string& message, int i)
 	else if (request.command == "JOIN")
 		return (""); // 명령어 처리 함수로 바꿀 것
     else if (request.command == "PASS")
-		return (request.execPass(*this, this->clients.find(senderFd)->second->getRegisterStatus()));
+		return (request.execPass(*this, client));
 
-	if (request.command == "NICK" || request.command == "USER") 
+	if (request.command == "NICK" || request.command == "USER") {
+		client->setErrorClose(true);
 		return ERR_NEEDMOREPARAMS("PASS");
+	}
 
 	return ("");
 }
@@ -83,6 +87,8 @@ std::string	Server::commandHandler(const std::string& message, int i)
 		return (request.execUser(it->second));
 	else if (request.command == "INVITE")
 		return (request.execInvite(it->second, this->clients)); // 명령어 처리 함수로 바꿀 것
+	else if (request.command == "WHOIS")
+		return (request.execWhois())
 	else if (request.command == "TOPIC")
 		return ("TOPIC\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "MODE")
@@ -102,7 +108,7 @@ std::string	Server::commandHandler(const std::string& message, int i)
 	else if (request.command == "PING")
 		return (PONG());
 	else
-		return ("Invalid Command!\n");
+		return ("");
 	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
 	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 }

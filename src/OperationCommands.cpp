@@ -1,25 +1,28 @@
 #include "../inc/Define.hpp"
 
-std::string Request::execPass(const Server &server, bool &registerStatus) {
-	if (registerStatus) 
+std::string Request::execPass(const Server &server, Client *client) {
+	if (client->getRegisterStatus()) 
 		return ERR_ALREADYREGISTERED();
 
-	if (server.getPassword() != this->args[0]) 
+	if (server.getPassword() != this->args[0]){
+		client->setErrorClose(true);
 		return ERR_PASSWDMISMATCH();
+	}
 
-	registerStatus = true;
+	client->setRegisterStatus(true);
 	return ("");
 }
 
 bool Request::validateNick(const std::string &nick) {
 	
 	char special[] = {'-', '[', ']', '^', '{', '}'};
+	size_t size = sizeof(special) / sizeof(special[0]);
 
 	if (!isalpha(nick[0]) || nick.length() > 9)
 		return false;
 	for (std::string::const_iterator it = nick.begin(); it != nick.end(); ++it) {
-		char *p = std::find(special, special + 5, *it);
-        if (!isalnum(*it) && (p == special + 5)) {
+		char *p = std::find(special, special + size, *it);
+        if (!isalnum(*it) && (p == special + size)) {
 			return false;
         }
     }
@@ -27,22 +30,27 @@ bool Request::validateNick(const std::string &nick) {
 }
 
 std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
+	std::string result = "";
 
 	if (this->args.size() == 0)
-		return (ERR_NONICKNAMEGIVEN());
+		result = ERR_NONICKNAMEGIVEN();
 
 	if (this->args[0] == client->getNickName())
 		return ("");
 
 	if (!validateNick(this->args[0]))
-		return(ERR_ERRONEUSNICKNAME(this->args[0]));
+		result = ERR_ERRONEUSNICKNAME(this->args[0]);
 
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
         if (this->args[0] == it->second->getNickName())
-			return (ERR_NICKNAMEINUSE(this->args[0]));
+			result = ERR_NICKNAMEINUSE(this->args[0]);
     }
+
+	if (result != "" && client->getNickName() == "") {
+		client->setErrorClose(true);
+		return (result);
+	}
 	
-	std::string result = "";
 	if (client->getNickName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
 		result = NICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0]);
 
@@ -51,11 +59,15 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 }
 
 std::string Request::execUser(Client *client) {
-	if (this->args.size() != 4)
+	if (this->args.size() != 4) {
+		client->setErrorClose(true);
 		return ERR_NEEDMOREPARAMS("USER");
+	}
 
-	if (client->getUserName() != "")
+	if (client->getUserName() != "") {
+		client->setErrorClose(true);
 		return ERR_ALREADYREGISTERED();
+	}
 	
 	client->setUserName(this->args[0]);
 
@@ -66,6 +78,10 @@ std::string Request::execUser(Client *client) {
 			+ RPL_YOURHOST(nick)
 			+ RPL_CREATED(nick, Utils::getTime())
 		);
+}
+
+std::string Request::execWhois() {
+	
 }
 
 std::string Request::execPrivmsg(Client *sender, Server &server)
@@ -133,7 +149,7 @@ std::string Request::execJoin(Client *client, Server &server)
 		channel = server.getAllChannels().at(channelName);
 
 	if (channel->isClientInChannel(client->getNickName()))
-		return ("");
+		return ("");//여기서 초반에 채널 생성하면. 만든 client가 채널에 참여하고 있는 사람으로 추가되어야할 것 같다.
 
 	if (channel->getIsInviteOnly())
 		return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
@@ -217,7 +233,33 @@ std::string Request::execPart(Client *client, Server &server)
 // USER <username> <unused> <unused> <realname> : 서버에 자신을 등록
 
 
-std::string Request::execInvite(Client *client, std::map<int, Client*> clients) { 
+std::string Request::execInvite(Client *inviter, std::map<int, Client*> clients) { 
+
+// 	if (args.size() < 2)
+// 		return (ERR_NEEDMOREPARAMS("INVITE"));
+	
+
+// 	Client *invitee = NULL;
+// 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+// 		if (this->args[0] == it->second->getNickName())
+// 			invitee = it;
+//     }
+// 	if (invitee == NULL)
+// 		return (ERR_NOSUCHNICK(this->args[0]));
+
+// 	Channel *channel;
+// 	if (server.getAllChannels().find(this->args[1]) == server.getAllChannels().end())
+// 	{
+// 		channel = new Channel(this->args[1]);
+// 		server.getAllChannels()[this->args[1]] = channel;
+// 	}
+// 	else
+// 		channel = server.getAllChannels().at(channelName);
+
+// 	if (channel->isClientInChannel(client->getNickName()))
+// 		return ("");
+// 127.000.000.001.06667-127.000.000.001.45310: :irc.local 442 jungslee #1 :You're not on that channel!
+// 	if ()
 	//args 개수 보고 ERR_NEEDMOREPARAMS
 	//nickname이 client list 안에 없으면 ERR_NOSUCHNICK
 	//Channel이 있으면 그 채널에, 없으면 새로 생성
