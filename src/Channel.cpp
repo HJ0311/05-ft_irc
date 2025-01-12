@@ -1,8 +1,8 @@
 #include "../inc/Define.hpp"
 
-Channel::Channel(const std::string& name) : clients(), name(name), topic(""), key("") {}
+Channel::Channel(const std::string& name) : clients(), operators(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
 
-Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), name(name), topic(topic), key(key) {}
+// Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
 
 Channel::Channel(const Channel& obj)
 {
@@ -71,12 +71,8 @@ bool	Channel::isOperator(const std::string& nickname)
 	else
 		return (0);
 }
+
 /*
-void	Channel::sendMessage(const std::string& message, Client* sender)
-{
-
-}
-
 void	Channel::setTopic(const std::string& newTopic, const std::string& nickname)
 {
 
@@ -87,10 +83,6 @@ void	Channel::setPassword(const std::string& password)
 
 }
 
-void	Channel::setClientLimit(size_t limit)
-{
-
-}
 
 void	Channel::setInviteOnly(bool inviteOnly)
 {
@@ -101,17 +93,23 @@ void	Channel::inviteClient(Client* inviter, const std::string& inviteeNickname)
 {
 
 }
+*/
 
 size_t	Channel::getClientCount() const
 {
-
+	return (this->clients.size());
 }
 
 bool	Channel::isFull() const
 {
-
+	if (this->clientLimit == -1)
+		return (0);
+	if (this->clientLimit <= this->getClientCount())
+		return (1);
+	else
+		return (0);
 }
-*/
+
 const std::string&	Channel::getName() const
 {
 	return (this->name);

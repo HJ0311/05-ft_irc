@@ -89,6 +89,9 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 		if (!targetChannel)
 			return (ERR_NOSUCHCHANNEL(target));
 
+		if (targetChannel->isClientInChannel(sender->getNickName()) == 0)
+			return (Utils::RPL_404);
+
 		const std::map<int, Client*> &channelClients = targetChannel->getClients();
 		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
 		{
@@ -124,6 +127,7 @@ std::string Request::execJoin(Client *client, Server &server)
 	{
 		channel = new Channel(channelName);
 		server.getAllChannels()[channelName] = channel;
+		channel->addOperator(client->getNickName());//channel operator에 현 client 넣기
 	}
 	else
 		channel = server.getAllChannels().at(channelName);
@@ -141,23 +145,12 @@ std::string Request::execJoin(Client *client, Server &server)
 			return (ERR_BADCHANNELKEY(client->getNickName(), channelName));
 	}
 
-	//127.000.000.001.47314-127.000.000.001.06667: JOIN :
-	//127.000.000.001.06667-127.000.000.001.47314: :irc.local 451 * JOIN :You have not registered.
-
-	//127.000.000.001.45176-127.000.000.001.06667: JOIN #1st 4242
-	//127.000.000.001.06667-127.000.000.001.45176: :student!root@127.0.0.1 JOIN :#1st
-	//:irc.local 353 student = #1st :@nnn student
-	//:irc.local 366 student #1st :End of /NAMES list.
-
-	//127.000.000.001.06667-127.000.000.001.45174: :student!root@127.0.0.1 JOIN :#1st
-	//127.000.000.001.45174-127.000.000.001.06667: WHO student %tna,745
-	//127.000.000.001.06667-127.000.000.001.45174: :irc.local 354 nnn 745 student :0
-	//:irc.local 315 nnn student :End of /WHO list.
-	//이거 뭔가 해야하는 건지
+	if (channel->isFull())
+		return (Utils::RPL_471);
 
 	channel->addClient(client);
 
-	std::string joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
+	std::string	joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
 							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
 
 	const std::map<int, Client*> &channelClients = channel->getClients();
@@ -177,7 +170,38 @@ std::string Request::execJoin(Client *client, Server &server)
 	return ("");
 }
 
-//404 - 사용자가 채널에 메시지를 보낼 권한이 없음.
+std::string Request::execPart(Client *client, Server &server)
+{
+	if (args.empty())
+		return ("ERROR: PART requires a channel name.\n");
+
+	const std::string &channelName = args[0];
+
+	Channel *channel;
+	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())
+		return (Utils::RPL_403);
+//127.000.000.001.37504-127.000.000.001.06667: PART #1st
+//127.000.000.001.06667-127.000.000.001.37504: :irc.local 403 nick #1st :No such channel
+
+	if (channel->isClientInChannel(client->getNickName()) == 0)
+		return (Utils::RPL_442);
+//127.000.000.001.37504-127.000.000.001.06667: PART #3rd
+//127.000.000.001.06667-127.000.000.001.37504: :irc.local 442 nick #3rd :You're not on that channel
+
+	channel->removeClient(client->getNickName());
+	if (channel->getClientCount() == 0)
+	{
+		std::map<std::string, Channel*>::iterator	it = server.getAllChannels().find(channel->getName());
+		delete it->second;
+		server.getAllChannels().erase(it);
+	}
+
+	return (":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " PART :" + channelName + "\r\n");
+//127.000.000.001.37504-127.000.000.001.06667: PART #1st
+//127.000.000.001.06667-127.000.000.001.37504: :nick!root@127.0.0.1 PART :#1st
+//해당 channel에서 client를 빼면서 channel에 참여자가 0명이면 채널을 닫는다.
+}
+
 
 // PASS <password> : 로컬 네트워크에 연결
 

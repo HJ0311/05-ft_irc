@@ -6,23 +6,22 @@
 class Channel
 {
 	private:
-		std::map<int, Client*>	clients;//std::vector<Client>	clients; // 현재 채널에 소속된 유저들 목록
+		std::map<int, Client*>	clients;//현재 채널에 소속된 유저들 목록
 		std::set<std::string>	operators;
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
-		int	clientCnt; // 채널에 접속 중인 유저 수
+		// int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
 
 		bool	isPrivate;
 		bool	isInviteOnly;
-		// size_t	ClientLimit;
+		size_t	clientLimit;
 		time_t	creationTime;
 
-		// std::vector<std::string>	banned; // 밴 당한(KICK) 유저 목록
 		Channel();
 	public:
 		Channel(const std::string& name);
-		Channel(const std::string& name, const std::string& topic, const std::string& key);
+		// Channel(const std::string& name, const std::string& topic, const std::string& key);//InspIRC에선 생성 시 name외에 설정 불가
 		Channel(const Channel& obj);
 		Channel&	operator=(const Channel& obj);
 		~Channel();
@@ -35,17 +34,15 @@ class Channel
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
 		bool	isOperator(const std::string& nickname); // 얘가 운영자인지 확인
 
-		void	sendMessage(const std::string& message, Client* sender);
-
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);
-		// void	setClientLimit(size_t limit);
+		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
 
 		void	inviteClient(Client* inviter, const std::string& invitee);
 
 		size_t	getClientCount() const;
-		// bool	isFull() const;
+		bool	isFull() const;
 
 		const std::string&	getName() const;
 		const std::string&	getTopic() const;
