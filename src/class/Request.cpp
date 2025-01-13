@@ -1,4 +1,4 @@
-#include "../inc/Define.hpp"
+#include "../../inc/Define.hpp"
 
 Request::Request() : command(""), args() {}
 

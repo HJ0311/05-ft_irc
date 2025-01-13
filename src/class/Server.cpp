@@ -1,4 +1,4 @@
-#include "../inc/Define.hpp"
+#include "../../inc/Define.hpp"
 
 Server::Server() : maxClientCnt(0),  onlineClient(0), password(""), servSockFd(-1), pfds(), clients(), allChannels() {}
 

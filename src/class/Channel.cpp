@@ -1,4 +1,4 @@
-#include "../inc/Define.hpp"
+#include "../../inc/Define.hpp"
 
 Channel::Channel(const std::string& name) : clients(), operators(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
 

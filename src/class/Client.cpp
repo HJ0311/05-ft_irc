@@ -1,4 +1,4 @@
-#include "../inc/Define.hpp"
+#include "../../inc/Define.hpp"
 
 Client::Client() : errorClose(false), registerStatus(false), clntSockFd(0), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1") {}
 
@@ -13,7 +13,6 @@ Client&	Client::operator=(const Client& obj)
 {
 	if (this != &obj)
 	{
-		this->errorClose = obj.errorClose;
 		this->registerStatus = obj.registerStatus;
 		this->clntSockFd = obj.clntSockFd;
 		this->isOperator = obj.isOperator;

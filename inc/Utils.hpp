@@ -25,6 +25,7 @@ class Client;
 #define ERR_BADCHANNELKEY(NICK, CHANNEL)	(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define PONG()					 			(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)	(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
+#define KILL(NICK)							(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
 
 namespace Utils {
 	std::string	getTime();

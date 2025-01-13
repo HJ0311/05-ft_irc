@@ -27,8 +27,8 @@ class Server
 		void execCommandByLine(int i, const std::string &message);
 		Request	parsingCommand(const std::string& message) const;
 		// command 처리
-		std::string registerHandler(const std::string& message, int i);
-		std::string commandHandler(const std::string& message, int i);
+		std::string registerHandler(Request &request, int i);
+		std::string commandHandler(Request &request, int i);
 
 		std::string	commandJoin(Request request, int i);
 
