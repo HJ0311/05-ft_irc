@@ -35,7 +35,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 	}
 	else//messages to a client
 	{
-		for (std::map<int, Client*>::const_iterator it = server.clients.begin(); it != server.clients.end(); ++it)
+		for (std::map<int, Client*>::const_iterator it = server.getAllClients().begin(); it != server.getAllClients().end(); ++it)
 		{
 			Client *receiver = it->second;
 			if (receiver->getNickName() == target)

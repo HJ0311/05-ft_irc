@@ -17,12 +17,12 @@ class Request
 		bool validateNick(const std::string &nick);
 
 		std::string execPass(const Server &server, Client *client);
-		std::string execNick(Client *client, std::map<int, Client*> clients);
+		std::string execNick(Client *client, std::map<int, Client*> &clients);
 		std::string execUser(Client *client);
 
 		std::string execWhois();
 
-		std::string execInvite(Client *client, std::map<int, Client*> clients);
+		std::string execInvite(Client *client, Server &server);
 		// std::string exec(Client *client, std::map<int, Client*> clients);
 
 		std::string execPrivmsg(Client *sender, Server &server);

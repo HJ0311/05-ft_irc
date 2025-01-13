@@ -34,9 +34,8 @@ class Server
 
 		//TODO jungslee 추가
 		std::string getPassword() const;
-		std::map<int, Client*>	clients; // 현존 유저
 		// std::map<std::string, Channel*> allChannels; // 현존 채널
-
+		std::map<int, Client*>& getAllClients();
 		std::map<std::string, Channel*>& getAllChannels();
 
 	private:
@@ -49,6 +48,7 @@ class Server
 		std::string	password;
 		int	servSockFd;
 		struct pollfd	*pfds;
+		std::map<int, Client*>	clients; // 현존 유저
 		std::map<std::string, Channel*> allChannels; // 현존 채널
 };
 

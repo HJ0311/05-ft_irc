@@ -18,7 +18,7 @@ std::string Request::execJoin(Client *client, Server &server)
 		channel = server.getAllChannels().at(channelName);
 
 	if (channel->isClientInChannel(client->getNickName()))
-		return ("");//여기서 초반에 채널 생성하면. 만든 client가 채널에 참여하고 있는 사람으로 추가되어야할 것 같다.
+		return ("");
 
 	if (channel->getIsInviteOnly())
 		return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
@@ -54,5 +54,5 @@ std::string Request::execJoin(Client *client, Server &server)
 
 	return ("");
 }
-//Join 에러를 반환하는 경우를 먼저 걸러내고 new 로 채널을 생성해야할 것 같다.
-//send는 이 안에서 하지 않아도 된다! 해당 string을 리턴하면 됨
+//TODO Join 에러를 반환하는 경우를 먼저 걸러내고 new 로 채널을 생성해야할 것 같다.
+//TODO send는 이 안에서 하지 않아도 된다! 해당 string을 리턴하면 됨

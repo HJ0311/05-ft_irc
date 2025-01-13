@@ -167,7 +167,6 @@ void	Server::removeFromPoll(int i)
 	this->onlineClient--;
 }
 
-//TODO jungslee 추가
 std::string Server::getPassword() const {
 	return this->password;
 }
@@ -175,4 +174,9 @@ std::string Server::getPassword() const {
 std::map<std::string, Channel*>& Server::getAllChannels()
 {
 	return (this->allChannels);
+}
+
+std::map<int, Client*>& Server::getAllClients()
+{
+	return (this->clients);
 }

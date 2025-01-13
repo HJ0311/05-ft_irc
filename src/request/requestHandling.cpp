@@ -34,7 +34,7 @@ std::string	Server::commandHandler(const std::string &message, int i)
 	else if (request.command == "USER")
 		return (request.execUser(client));
 	else if (request.command == "INVITE")
-		return (request.execInvite(client, this->clients)); // 명령어 처리 함수로 바꿀 것
+		return (request.execInvite(client, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PRIVMSG")
 		return (request.execPrivmsg(client, *this)); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "WHOIS")

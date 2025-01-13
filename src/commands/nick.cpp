@@ -16,7 +16,7 @@ bool Request::validateNick(const std::string &nick) {
 	return true;
 }
 
-std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
+std::string Request::execNick(Client *client, std::map<int, Client*>& clients) {
 	std::string result = "";
 
 	if (this->args.size() == 0)
