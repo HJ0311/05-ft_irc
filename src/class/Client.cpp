@@ -13,6 +13,7 @@ Client&	Client::operator=(const Client& obj)
 {
 	if (this != &obj)
 	{
+		this->errorClose = obj.errorClose;
 		this->registerStatus = obj.registerStatus;
 		this->clntSockFd = obj.clntSockFd;
 		this->isOperator = obj.isOperator;

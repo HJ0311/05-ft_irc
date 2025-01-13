@@ -37,9 +37,17 @@ std::string Request::execNick(Client *client, std::map<int, Client*> clients) {
 		client->setErrorClose(true);
 		return (result);
 	}
-	
+
+	std::string nick = client->getNickName();
+	std::string user = client->getUserName();
+	std::string host = client->getHostName();
+
 	if (client->getNickName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
-		result = NICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0]);
+		result = NICK(nick, user, host, this->args[0]);
+	else if (client->getUserName() != "")
+			result =  RPL_WELCOME(nick, user, host)
+						+ RPL_YOURHOST(nick)
+						+ RPL_CREATED(nick, Utils::getTime());
 
 	client->setNickName(this->args[0]);
 	return (result);

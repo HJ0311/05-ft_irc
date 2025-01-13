@@ -16,8 +16,12 @@ std::string Request::execUser(Client *client) {
 	std::string nick = client->getNickName();
 	std::string user = client->getUserName();
 	std::string host = client->getHostName();
-	return (RPL_WELCOME(nick, user, host)
+	
+	if (client->getNickName() != "")
+		return (RPL_WELCOME(nick, user, host)
 			+ RPL_YOURHOST(nick)
 			+ RPL_CREATED(nick, Utils::getTime())
 		);
+	else 
+		return ("");
 }

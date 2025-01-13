@@ -33,14 +33,15 @@ void Server::execCommandByLine(int i, const std::string &message)
 			break;
 		std::string line = message.substr(preIdx, idx - preIdx);
 		std::string result;
-		Request	request(parsingCommand(message));
 		if (!client->getRegisterStatus()) 
-			result = registerHandler(request, i);
+			result = registerHandler(line, i);
 		else
-			result = commandHandler(request, i);
+			result = commandHandler(line, i);
 		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
 			std::cerr << RED << "send() error" << RESET << std::endl;
 		if (client->getErrorClose()) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
+			//KILL 날리기
+			send(senderFd, ERROR().c_str(), ERROR().length(), 0);
 			close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;

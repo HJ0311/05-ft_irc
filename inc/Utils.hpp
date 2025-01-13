@@ -26,7 +26,7 @@ class Client;
 #define PONG()					 			(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)	(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
 #define KILL(NICK)							(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
-
+#define ERROR()								(PREFIX() + " ERROR " + ":Connection closed with error")
 namespace Utils {
 	std::string	getTime();
 }

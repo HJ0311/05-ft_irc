@@ -1,16 +1,12 @@
 #include "../../inc/Define.hpp"
 
-std::string Server::registerHandler(Request& request, int i)
+std::string Server::registerHandler(const std::string &message, int i)
 {
 	int	senderFd = this->pfds[i].fd;
-	// Request	request(parsingCommand(message));
+	Request	request(parsingCommand(message));
 	Client *client = this->clients.find(senderFd)->second;
 	(void)i;
 
-	// if (request.command == "CAP")
-	// 	return ("");
-	// else if (request.command == "JOIN")
-	// 	return (""); // 명령어 처리 함수로 바꿀 것
     if (request.command == "PASS")
 		return (request.execPass(*this, client));
 
@@ -22,10 +18,10 @@ std::string Server::registerHandler(Request& request, int i)
 	return ("");
 }
 
-std::string	Server::commandHandler(Request& request, int i)
+std::string	Server::commandHandler(const std::string &message, int i)
 {
 	int	senderFd = this->pfds[i].fd;
-	// Request	request(parsingCommand(message));
+	Request	request(parsingCommand(message));
 	Client *client = this->clients.find(senderFd)->second;
 	(void)i;
 	
