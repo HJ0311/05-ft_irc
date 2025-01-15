@@ -14,7 +14,7 @@ std::string Request::execPart(Client *client, Server &server)
 //127.000.000.001.06667-127.000.000.001.37504: :irc.local 403 nick #1st :No such channel
 
 	if (channel->isClientInChannel(client->getNickName()) == 0)
-		return (ERR_NOMOTD(client->getNickName(), channelName));
+		return (ERR_NOTONCHANNEL(client->getNickName(), channelName));
 //127.000.000.001.37504-127.000.000.001.06667: PART #3rd
 //127.000.000.001.06667-127.000.000.001.37504: :irc.local 442 nick #3rd :You're not on that channel
 

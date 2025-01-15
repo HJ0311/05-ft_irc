@@ -10,7 +10,7 @@ class Client
 		Client&	operator=(const Client& obj);
 		~Client();
 		// getter
-		int	getSockFd() const;
+		int	getSockFd() const; //TODO ㅇㅣ게 뭐뭐지지?
 
 		const std::string&	getNickName() const;
 		void	setNickName(const std::string& nickname);

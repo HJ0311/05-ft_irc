@@ -1,39 +1,36 @@
 #include "../../inc/Define.hpp"
 
 std::string Request::execInvite(Client *inviter, Server &server) { 
-
-	std::map<int, Client*>& clients = server.getAllClients();
-	std::map<std::string, Channel*>& channels = server.getAllChannels();
-
+//RPL_AWAY
 	if (args.size() < 2)
 		return (ERR_NEEDMOREPARAMS("INVITE"));
-	
-	Client *invitee = NULL;
-	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-		if (this->args[0] == it->second->getNickName())
-			invitee = it->second;
-    }
-	if (invitee == NULL)
+
+	//invitee가 존재하는 사용자인지 확인
+	if (!server.isClientExist(this->args[0])) {
 		return (ERR_NOSUCHNICK(this->args[0]));
-
-	Channel *channel;
-	if (server.getAllChannels().find(this->args[1]) == server.getAllChannels().end())
-	{
-		channel = new Channel(this->args[1]);
-		channels[this->args[1]] = channel;
 	}
-	else
-		channel = channels.at(this->args[1]);
+	Client *invitee = server.getClient(this->args[0]);
 
-	// if (!channel->isClientInChannel(inviter->getNickName()))
-	// 	return ("");
-	return ("");
-// 127.000.000.001.06667-127.000.000.001.45310: :irc.local 442 jungslee #1 :You're not on that channel!
-	// if ()
-	//args 개수 보고 ERR_NEEDMOREPARAMS
-	//nickname이 client list 안에 없으면 ERR_NOSUCHNICK
-	//Channel이 있으면 그 채널에, 없으면 새로 생성
+	//채널의 존재 유무에 따라 분기
+	Channel *channel;
+	if (!server.isChannelExist(this->args[1]))
+		return (ERR_NOSUCHCHANNEL(this->args[1]));
+	
+	channel = server.getChannel(this->args[1]);
 
-	//invite  -ONly 채널일때?? 
-		// 이 명령을 보내는 클라이언트가 자격이 있는지를 알아랴함.
+	if (!channel->isClientInChannel(inviter->getNickName()))
+		return (ERR_NOTONCHANNEL(inviter->getNickName(), this->args[1]));
+	if (!channel->isOperator(inviter->getNickName()))
+		return (ERR_CHANOPRIVSNEEDED(inviter->getNickName(), this->args[1]));
+	if (channel->isClientInChannel(invitee->getNickName()))
+		return (ERR_USERONCHANNEL(inviter->getNickName(), this->args[1], this->args[0]));
+
+	channel->inviteClient(invitee->getNickName());
+	std::string message =  INVITE(inviter->getNickName(), inviter->getUserName(), inviter->getHostName(), invitee->getNickName(), this->args[1]);
+	send(inviter->getClntSockFd(), message.c_str(), message.length(), 0);
+
+	return (RPL_INVITING(inviter->getNickName(), invitee->getNickName(), this->args[1]));
 }
+
+
+//TODO 본인이 본인을 인바이트 할 때??

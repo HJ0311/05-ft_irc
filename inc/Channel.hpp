@@ -35,14 +35,17 @@ class Channel
 		void	addOperator(const std::string& nickname); // 운영자를 추가
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
 		bool	isOperator(const std::string& nickname); // 얘가 운영자인지 확인
+		
+		void	inviteClient(const std::string& invitee);
 		bool    isInvited(const std::string& nickname);
+		void 	removeInvitee(const std::string& nickname);
+		// void	addInvitee(const std::string& nickname);
 
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);
 		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
 
-		void	inviteClient(Client* inviter, const std::string& invitee);
 
 		size_t	getClientCount() const;
 		bool	isFull() const;

@@ -74,6 +74,15 @@ bool	Channel::isOperator(const std::string& nickname)
 		return (0);
 }
 
+bool	Channel::isInvited(const std::string& nickname)
+{
+	if (invitees.find(nickname) != invitees.end())
+		return (1);
+	else
+		return (0);
+}
+
+
 /*
 void	Channel::setTopic(const std::string& newTopic, const std::string& nickname)
 {
@@ -90,12 +99,16 @@ void	Channel::setInviteOnly(bool inviteOnly)
 {
 
 }
-
-void	Channel::inviteClient(Client* inviter, const std::string& inviteeNickname)
-{
-
-}
 */
+void	Channel::inviteClient(const std::string& invitee)
+{
+	invitees.insert(invitee);
+}
+
+void	Channel::removeInvitee(const std::string& nickname)
+{
+	invitees.erase(nickname);
+}
 
 size_t	Channel::getClientCount() const
 {
