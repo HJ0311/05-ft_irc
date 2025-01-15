@@ -8,8 +8,11 @@ std::string Request::execPart(Client *client, Server &server)
 	const std::string &channelName = args[0];
 
 	Channel *channel;
-	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())
+	std::map<std::string, Channel*>::iterator it = server.getAllChannels().find(channelName);
+
+	if (it == server.getAllChannels().end())
 		return (ERR_NOSUCHCHANNEL(channelName));
+	channel = it->second;
 //127.000.000.001.37504-127.000.000.001.06667: PART #1st
 //127.000.000.001.06667-127.000.000.001.37504: :irc.local 403 nick #1st :No such channel
 
