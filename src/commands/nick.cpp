@@ -47,7 +47,8 @@ std::string Request::execNick(Client *client, std::map<int, Client*>& clients) {
 	else if (client->getUserName() != "")
 			result =  RPL_WELCOME(nick, user, host)
 						+ RPL_YOURHOST(nick)
-						+ RPL_CREATED(nick, Utils::getTime());
+						+ RPL_CREATED(nick, Utils::getTime())
+						+ START_IRC();
 
 	client->setNickName(this->args[0]);
 	return (result);

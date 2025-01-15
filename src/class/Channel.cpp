@@ -1,6 +1,6 @@
 #include "../../inc/Define.hpp"
 
-Channel::Channel(const std::string& name) : clients(), operators(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
+Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
 
 // Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
 
@@ -14,6 +14,8 @@ Channel&	Channel::operator=(const Channel& obj)
 	if (this != &obj)
 	{
 		this->clients = obj.clients;
+		this->operators = obj.operators;
+		this->invitees = obj.invitees;
 		this->name = obj.name;
 		this->topic = obj.topic;
 		this->key = obj.key;

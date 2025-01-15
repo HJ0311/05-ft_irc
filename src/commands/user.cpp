@@ -21,6 +21,7 @@ std::string Request::execUser(Client *client) {
 		return (RPL_WELCOME(nick, user, host)
 			+ RPL_YOURHOST(nick)
 			+ RPL_CREATED(nick, Utils::getTime())
+			+ START_IRC()
 		);
 	else 
 		return ("");

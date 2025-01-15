@@ -8,6 +8,8 @@ class Channel
 	private:
 		std::map<int, Client*>	clients;//현재 채널에 소속된 유저들 목록
 		std::set<std::string>	operators;
+		std::set<std::string>   invitees;
+
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
@@ -33,6 +35,7 @@ class Channel
 		void	addOperator(const std::string& nickname); // 운영자를 추가
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
 		bool	isOperator(const std::string& nickname); // 얘가 운영자인지 확인
+		bool    isInvited(const std::string& nickname);
 
 		void	setTopic(const std::string& newTopic, const std::string& nickname);
 		void	setPassword(const std::string& password);
