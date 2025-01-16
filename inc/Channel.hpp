@@ -13,6 +13,7 @@ class Channel
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
+		std::string mode; //현재 채널에 추가된 모드 (i, t, k, o, l)
 		// int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
 
 		bool	isPrivate;
@@ -41,7 +42,7 @@ class Channel
 		void 	removeInvitee(const std::string& nickname);
 		// void	addInvitee(const std::string& nickname);
 
-		void	setTopic(const std::string& newTopic, const std::string& nickname);
+		void	setTopic(const std::string& newTopic);
 		void	setPassword(const std::string& password);
 		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);

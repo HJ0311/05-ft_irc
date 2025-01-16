@@ -83,12 +83,11 @@ bool	Channel::isInvited(const std::string& nickname)
 }
 
 
-/*
-void	Channel::setTopic(const std::string& newTopic, const std::string& nickname)
+void	Channel::setTopic(const std::string& newTopic)
 {
-
+	this->topic = newTopic;
 }
-
+/*
 void	Channel::setPassword(const std::string& password)
 {
 

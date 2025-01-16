@@ -12,11 +12,11 @@ std::string Request::execInvite(Client *inviter, Server &server) {
 	Client *invitee = server.getClient(this->args[0]);
 
 	//채널의 존재 유무에 따라 분기
-	Channel *channel;
+	
 	if (!server.isChannelExist(this->args[1]))
 		return (ERR_NOSUCHCHANNEL(this->args[1]));
 	
-	channel = server.getChannel(this->args[1]);
+	Channel *channel = server.getChannel(this->args[1]);
 
 	if (!channel->isClientInChannel(inviter->getNickName()))
 		return (ERR_NOTONCHANNEL(inviter->getNickName(), this->args[1]));
@@ -28,9 +28,7 @@ std::string Request::execInvite(Client *inviter, Server &server) {
 	channel->inviteClient(invitee->getNickName());
 	std::string message =  INVITE(inviter->getNickName(), inviter->getUserName(), inviter->getHostName(), invitee->getNickName(), this->args[1]);
 	send(invitee->getClntSockFd(), message.c_str(), message.length(), 0);
+	//TODO 이것도 모든 채널의 사용자에게??
 
 	return (RPL_INVITING(inviter->getNickName(), invitee->getNickName(), this->args[1]));
 }
-
-
-//TODO 본인이 본인을 인바이트 할 때??

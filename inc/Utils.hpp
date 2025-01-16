@@ -9,6 +9,8 @@ class Client;
 #define RPL_WELCOME(NICK, USER, HOST)       		(PREFIX() + (" 001 ") + NICK + " :Welcome to the Internet Relay Network " + NICK + "!" + USER + "@" + HOST + "\r\n")
 #define RPL_YOURHOST(NICK)							(PREFIX() + (" 002 ") + NICK + " :Your host is " + SERVER_NAME + ", running version V1\r\n")
 #define RPL_CREATED(NICK, TIME)						(PREFIX() + (" 003 ") + NICK + " :This server was created " + TIME + "\r\n")
+#define RPL_NOTOPIC(CHANNEL)						(PREFIX() + (" 331 ") + CHANNEL + " :No topic is set")
+#define RPL_TOPIC(CHANNEL, TOPIC)					(PREFIX() + (" 332 ") + CHANNEL + " :" + TOPIC)
 #define RPL_INVITING(INVITER, INVITEE, CHANNEL)		(PREFIX() + (" 341 ") + INVITER + " " + INVITEE + " " + CHANNEL + " :" + INVITER + " is inviting " + INVITEE + " to " + CHANNEL + "\r\n")
 #define RPL_MOTDSTART()                    	 		(PREFIX() + (" 375 ") + ":- " + SERVER_NAME + " Message of the day - \r\n")
 #define RPL_MOTD(STRING)                   	 		(PREFIX() + (" 372 ") + ":" + STRING + "\r\n")
@@ -34,6 +36,9 @@ class Client;
 #define KILL(NICK)									(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
 #define ERROR()										(PREFIX() + " ERROR " + ":Connection closed with error\r\n")
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  (std::string(":") + NICK  + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
+
+#define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + NEWTOPIC + "\r\n")
+
 #define START_IRC()                         		(RPL_MOTDSTART() \
 														+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 														+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \
