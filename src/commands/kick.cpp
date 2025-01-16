@@ -19,6 +19,8 @@ std::string Request::execKick(Client *client, Server &server) {
 	if (client->getNickName() == this->args[1])
 		return ("");
 
+	channel->broadcastMessage(KICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0], this->args[1], content));
+	
 	channel->removeClient(this->args[1]);
 	if (channel->isOperator(this->args[1]))
 		channel->removeOperator(this->args[1]);
@@ -27,7 +29,7 @@ std::string Request::execKick(Client *client, Server &server) {
 	if (args.size() == 3)
 		content = this->args[2];
 
-	return (KICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0], this->args[1], content));
+	return ("");
 }
 
 //자기자신을 킥하는 경우??

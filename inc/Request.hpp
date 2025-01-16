@@ -30,5 +30,6 @@ class Request
 		std::string execPart(Client *client, Server &server);
 		std::string execKick(Client *client, Server &server);
 		std::string execTopic(Client *client, Server &server);
+		std::string execMode(Client *client, Server &server);
 };
 

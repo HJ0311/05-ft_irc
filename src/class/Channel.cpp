@@ -85,7 +85,6 @@ bool	Channel::isInvited(const std::string& nickname)
 		return (0);
 }
 
-
 void	Channel::setTopic(const std::string& newTopic)
 {
 	this->topic = newTopic;
@@ -150,4 +149,10 @@ const std::map<int, Client*>& Channel::getClients() const
 const bool&	Channel::getIsInviteOnly() const
 {
 	return (this->isInviteOnly);
+}
+
+void Channel::broadcastMessage(const std::string &message)
+{	
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+		send(it->second->getClntSockFd(), message.c_str(), message.length(), 0);
 }

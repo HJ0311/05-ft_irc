@@ -52,7 +52,8 @@ class Channel
 		void	setPassword(const std::string& password);
 		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
-
+		
+		void 	broadcastMessage(const std::string &message);
 
 		size_t	getClientCount() const;
 		bool	isFull() const;
