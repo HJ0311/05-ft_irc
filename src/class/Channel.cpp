@@ -1,6 +1,6 @@
 #include "../../inc/Define.hpp"
 
-Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
+Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
 
 // Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
 
@@ -16,6 +16,7 @@ Channel&	Channel::operator=(const Channel& obj)
 		this->clients = obj.clients;
 		this->operators = obj.operators;
 		this->invitees = obj.invitees;
+		this->clientCnt = obj.clientCnt;
 		this->name = obj.name;
 		this->topic = obj.topic;
 		this->key = obj.key;
@@ -31,6 +32,7 @@ Channel::~Channel() {}
 
 void	Channel::addClient(Client* user)
 {
+	++this->clientCnt;
 	clients[user->getClntSockFd()] = user;
 }
 
@@ -44,6 +46,7 @@ void	Channel::removeClient(const std::string& nickname)
 			break;
 		}
 	}
+	this->clientCnt--;
 }
 
 bool	Channel::isClientInChannel(const std::string& nickname)

@@ -1,8 +1,8 @@
 #include "../../inc/Define.hpp"
 
-Client::Client() : errorClose(false), registerStatus(false), clntSockFd(0), isOperator(false), nickName(""), userName(""), hostName("127.0.0.1") {}
+Client::Client() : errorClose(false), registerStatus(false), clntSockFd(0), nickName(""), userName(""), hostName("127.0.0.1") {}
 
-Client::Client(int newFd) : errorClose(false), registerStatus(false), clntSockFd(newFd), isOperator(false), nickName(""), hostName("127.0.0.1") {}
+Client::Client(int newFd) : errorClose(false), registerStatus(false), clntSockFd(newFd), nickName(""), hostName("127.0.0.1") {}
 //TODO hostname 어떻게 할지.
 Client::Client(const Client& obj)
 {
@@ -16,7 +16,7 @@ Client&	Client::operator=(const Client& obj)
 		this->errorClose = obj.errorClose;
 		this->registerStatus = obj.registerStatus;
 		this->clntSockFd = obj.clntSockFd;
-		this->isOperator = obj.isOperator;
+		// this->isOperator = obj.isOperator;
 		this->nickName = obj.nickName;
 		this->userName = obj.userName;
 	}
