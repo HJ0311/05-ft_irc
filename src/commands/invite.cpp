@@ -27,7 +27,7 @@ std::string Request::execInvite(Client *inviter, Server &server) {
 
 	channel->inviteClient(invitee->getNickName());
 	std::string message =  INVITE(inviter->getNickName(), inviter->getUserName(), inviter->getHostName(), invitee->getNickName(), this->args[1]);
-	send(inviter->getClntSockFd(), message.c_str(), message.length(), 0);
+	send(invitee->getClntSockFd(), message.c_str(), message.length(), 0);
 
 	return (RPL_INVITING(inviter->getNickName(), invitee->getNickName(), this->args[1]));
 }
