@@ -24,6 +24,8 @@ class Client
 		void setErrorClose(const bool &status);
 		const int&	getClntSockFd() const;
 		
+		void	addChannel(const std::string& channelName);
+		void	removeChannel(const std::string& channelName);
 	private:
 		Client();
 
@@ -34,4 +36,5 @@ class Client
 		std::string	nickName;
 		std::string	userName;
 		std::string	hostName;
+		std::set<std::string>	joinedChannels;
 };

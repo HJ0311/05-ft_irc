@@ -15,6 +15,7 @@
 #include <sstream>
 #include <cctype>
 #include <algorithm>
+#include <set>
 
 #include "Client.hpp"
 #include "Server.hpp"

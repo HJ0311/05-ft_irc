@@ -34,6 +34,7 @@ std::string Request::execJoin(Client *client, Server &server)
 		return (ERR_CHANNELISFULL(client->getNickName(), channelName));
 
 	channel->addClient(client);
+	client->addChannel(channelName);
 
 	std::string	joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
 							  + client->getHostName() + " JOIN :" + channelName + "\r\n";

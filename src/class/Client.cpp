@@ -19,11 +19,18 @@ Client&	Client::operator=(const Client& obj)
 		this->isOperator = obj.isOperator;
 		this->nickName = obj.nickName;
 		this->userName = obj.userName;
+		this->joinedChannels = obj.joinedChannels;
 	}
 	return *this;
 }
 
-Client::~Client() {}
+Client::~Client()
+{
+	for (std::set<std::string>::iterator it = joinedChannels.begin(); it != joinedChannels.end(); ++it)
+	{
+		std::cout << *it << "\n";
+	}
+}
 
 // =================================================================================================================
 // member function
@@ -87,4 +94,14 @@ bool &Client::getErrorClose()
 void Client::setErrorClose(const bool &status)
 {
 	this->errorClose = status;
+}
+
+void	Client::addChannel(const std::string& channelName)
+{
+	this->joinedChannels.insert(channelName);
+}
+
+void	Client::removeChannel(const std::string& channelName)
+{
+	this->joinedChannels.erase(channelName);
 }
