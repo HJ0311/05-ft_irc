@@ -105,3 +105,8 @@ void	Client::removeChannel(const std::string& channelName)
 {
 	this->joinedChannels.erase(channelName);
 }
+
+std::set<std::string>&	Client::getJoinedChannels()
+{
+	return (this->joinedChannels);
+}

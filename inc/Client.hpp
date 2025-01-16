@@ -26,6 +26,7 @@ class Client
 		
 		void	addChannel(const std::string& channelName);
 		void	removeChannel(const std::string& channelName);
+		std::set<std::string>&	getJoinedChannels();
 	private:
 		Client();
 
