@@ -55,8 +55,6 @@ std::string	Server::commandHandler(const std::string &message, int i)
 		return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
 		return (PONG());
-	else if (request.command == "EXIT")
-		return ("EXIT\n");
 	else
 		return ("");
 	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
