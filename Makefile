@@ -28,11 +28,8 @@ RED := "\033[31m"
 
 # Compiler Settings
 CXX := c++
-<<<<<<< HEAD
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
-=======
+
 CXXFLAGS := #-std=c++98 #-Wall -Wextra -Werror #-fsanitize=address
->>>>>>> test
 
 #Clean up command
 RM := rm -rf
@@ -90,14 +87,6 @@ fclean: clean
 # Rebuild everything
 re: fclean all
 
-run-script:
-	./ubuntu_exe.sh
-
-rm-docker:
-	@docker container rm ubuntu-irc-container
-	@docker rmi ubuntu-irc
-
-
 # -----------------------------------------
 # Include Dependencies
 # -----------------------------------------
@@ -105,8 +94,5 @@ rm-docker:
 # Include automatically generated dependency files
 -include $(DEP_DIR)/*.d
 
-<<<<<<< HEAD
-.PHONY: all clean fclean re run-script rm-docker
-=======
 .PHONY: all clean fclean re
->>>>>>> test
+
