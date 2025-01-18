@@ -10,8 +10,12 @@ OBJ_DIR := obj
 DEP_DIR := dep
 INC_DIR := inc
 
+CLASS_DIR := class 
+COMMAND_DIR := commands
+REQUEST_DIR := request
+
 # Files
-SRC := $(wildcard $(SRC_DIR)/*.cpp)
+SRC := $(shell find $(SRC_DIR) -name "*.cpp")
 OBJ := $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 DEP := $(SRC:%.cpp=$(DEP_DIR)/%.d)
 INC := -I$(INC_DIR)
@@ -24,7 +28,11 @@ RED := "\033[31m"
 
 # Compiler Settings
 CXX := c++
+<<<<<<< HEAD
 CXXFLAGS := -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+=======
+CXXFLAGS := #-std=c++98 #-Wall -Wextra -Werror #-fsanitize=address
+>>>>>>> test
 
 #Clean up command
 RM := rm -rf
@@ -50,9 +58,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR) $(DEP_DIR)
 # Directories creation (obj and dep)
 $(OBJ_DIR):
 	@mkdir -p $@
+	@mkdir -p $(OBJ_DIR)/$(CLASS_DIR)
+	@mkdir -p $(OBJ_DIR)/$(REQUEST_DIR)
+	@mkdir -p $(OBJ_DIR)/$(COMMAND_DIR)
 
 $(DEP_DIR):
 	@mkdir -p $@
+	@mkdir -p $(OBJ_DIR)/$(CLASS_DIR)
+	@mkdir -p $(OBJ_DIR)/$(REQUEST_DIR)
+	@mkdir -p $(OBJ_DIR)/$(COMMAND_DIR)
 
 # -----------------------------------------
 # Clean Targets
@@ -89,6 +103,10 @@ rm-docker:
 # -----------------------------------------
 
 # Include automatically generated dependency files
--include $(DEP)
+-include $(DEP_DIR)/*.d
 
+<<<<<<< HEAD
 .PHONY: all clean fclean re run-script rm-docker
+=======
+.PHONY: all clean fclean re
+>>>>>>> test

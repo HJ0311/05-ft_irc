@@ -13,6 +13,8 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <cctype>
+#include <algorithm>
 
 #include "Client.hpp"
 #include "Server.hpp"
