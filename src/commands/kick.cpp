@@ -19,15 +19,16 @@ std::string Request::execKick(Client *client, Server &server) {
 	if (client->getNickName() == this->args[1])
 		return ("");
 
+
+	std::string content = "";
+	if (args.size() >= 3)
+		content = this->args[2];
+
 	channel->broadcastMessage(KICK(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0], this->args[1], content));
 	
 	channel->removeClient(this->args[1]);
 	if (channel->isOperator(this->args[1]))
 		channel->removeOperator(this->args[1]);
-
-	std::string content = "";
-	if (args.size() == 3)
-		content = this->args[2];
 
 	return ("");
 }
