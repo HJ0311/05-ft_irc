@@ -25,7 +25,8 @@ class Channel
 		bool	isInviteOnly; //기본값 false
 		bool	topicLimit; 
 		bool	isPrivate; //기본값 false
-		size_t	clientLimit; //기본값 -1
+		int		clientLimit; //기본값 -1
+		time_t	creationTime;
 
 		Channel();
 	public:

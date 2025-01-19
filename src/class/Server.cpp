@@ -6,18 +6,21 @@ Server::Server(int maxClientCnt, const std::string& port, const std::string& pas
 {
 	try
 	{
-		if (stoi(port) < 0 || stoi(port) > 65535)
-			throw (std::string) "Invalid port";
-		this->pfds = new struct pollfd[this->maxClientCnt];
-		initSocket(port);
-		this->onlineClient++;
-		this->pfds[0].fd = this->servSockFd;
-		this->pfds[0].events = POLLIN;
+		char	*endptr;
+		long	portNum = strtol(port.c_str(), &endptr, 10);
+
+		if (*endptr != '\0' || portNum < 0 || portNum > 65535)
+			throw std::runtime_error("Invalid port");
+        this->pfds = new struct pollfd[this->maxClientCnt];
+        initSocket(port);
+        this->onlineClient++;
+        this->pfds[0].fd = this->servSockFd;
+        this->pfds[0].events = POLLIN;
 	}
-	catch(const std::string& e)
-	{
-		std::cout << RED << e << RESET << std::endl;
-		exit(1);
+    catch (const std::exception& e)
+    {
+        std::cout << RED << e.what() << RESET << std::endl;
+        exit(1);
 	}
 }
 
