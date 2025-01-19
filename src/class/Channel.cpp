@@ -160,5 +160,5 @@ const bool&	Channel::getIsInviteOnly() const
 void Channel::broadcastMessage(const std::string &message)
 {	
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
-		send(it->second->getClntSockFd(), message.c_str(), message.length(), 0);
+		send(it->first, message.c_str(), message.length(), 0);
 }

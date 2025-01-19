@@ -2,11 +2,12 @@
 
 std::string Request::execQuit(Client *client, Server &server)
 {
-	std::string	quitMessage = "ERROR :Closing link: (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]\r\n";
+	// std::string	quitMessage = ERROR("Closing link  (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]");
+	// std::string	quitMessage = "ERROR :Closing link: (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]\r\n";
 
-	send(client->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
+	// send(client->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
 
-	quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
+	std::string quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
 
 	std::set<int> clientsToNotify;
 	std::set<std::string>	channels = client->getJoinedChannels();
@@ -28,6 +29,6 @@ std::string Request::execQuit(Client *client, Server &server)
 	{
 		send(*it, quitMessage.c_str(), quitMessage.size(), 0);
 	}
-
+	client->setErrorClose(true);
 	return ("");
 }

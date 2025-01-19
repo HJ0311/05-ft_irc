@@ -35,7 +35,7 @@ class Client;
 #define PONG()					 							(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)					(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
 #define KILL(NICK)											(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
-#define ERROR()												(PREFIX() + " ERROR " + ":Connection closed with error\r\n")
+#define ERROR(CONTENT)												(PREFIX() + " ERROR " + ":" + CONTENT + "\r\n")
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK  + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
 #define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK  + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
 #define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 

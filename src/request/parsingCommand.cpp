@@ -13,7 +13,7 @@ void	Server::clientRequest(int i)
 		else
 			std::cerr << RED << "recv() error" << RESET << std::endl;
 		// std::cout << "close 3" << std::endl;
-		send(senderFd, ERROR().c_str(), ERROR().length(), 0);
+		send(senderFd, ERROR("Connection closed with error").c_str(), ERROR("Connection closed with error").length(), 0);
 		removeFromChannels(this->clients[senderFd]);
 		close(senderFd);
 		removeFromPoll(i);
@@ -45,7 +45,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 		if (client->getErrorClose()) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
 			//KILL 날리기
 			// std::cout << "close 4" << std::endl;
-			send(senderFd, ERROR().c_str(), ERROR().length(), 0);
+			send(senderFd, ERROR("Connection closed").c_str(), ERROR("Connection closed").length(), 0);
 			// close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
