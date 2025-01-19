@@ -23,10 +23,7 @@ Channel&	Channel::operator=(const Channel& obj)
 	return *this;
 }
 
-Channel::~Channel()
-{
-	std::cout << this->name << "is closing\n";
-}
+Channel::~Channel() {}
 
 // =================================================================================================================
 // member function

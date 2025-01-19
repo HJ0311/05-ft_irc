@@ -8,6 +8,7 @@ std::string Request::execQuit(Client *client, Server &server)
 
 	quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
 
+	std::set<int> clientsToNotify;
 	std::set<std::string>	channels = client->getJoinedChannels();
 	for (std::set<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
@@ -19,9 +20,16 @@ std::string Request::execQuit(Client *client, Server &server)
 		{
 			Client *channelClient = it->second;
 			if (channelClient != client)
-				send(channelClient->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
+				clientsToNotify.insert(channelClient->getClntSockFd());
 		}
 	}
+
+	for (std::set<int>::iterator it = clientsToNotify.begin(); it != clientsToNotify.end(); ++it)
+	{
+		send(*it, quitMessage.c_str(), quitMessage.size(), 0);
+	}
+
+	server.removeFromChannels(client);
 
 	return ("");
 }

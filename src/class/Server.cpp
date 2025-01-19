@@ -164,7 +164,7 @@ void	Server::removeFromPoll(int i)
 	close(this->pfds[i].fd);
 	delete this->clients[this->pfds[i].fd];//inryu 추가
 	this->clients.erase(this->pfds[i].fd);
-	if (i != this->onlineClient - 1)
+	if (i != this->onlineClient - 1)//inryu 추가
 		this->pfds[i] = this->pfds[this->onlineClient - 1];
 	this->onlineClient--;
 }
