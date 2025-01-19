@@ -28,7 +28,7 @@ std::string	Server::commandHandler(const std::string &message, int i)
 	// if (request.command == "KILL")
 	// 	return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
 	if (request.command == "NICK")
-		return (request.execNick(client, this->clients));
+		return (request.execNick(client, *this));
 	else if (request.command == "JOIN")
 		return (request.execJoin(client, *this));
 	else if (request.command == "USER")

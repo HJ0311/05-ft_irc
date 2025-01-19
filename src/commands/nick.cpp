@@ -16,22 +16,17 @@ bool Request::validateNick(const std::string &nick) {
 	return true;
 }
 
-std::string Request::execNick(Client *client, std::map<int, Client*>& clients) {
+std::string Request::execNick(Client *client, Server &server) {
 	std::string result = "";
 
 	if (this->args.size() == 0)
 		result = ERR_NONICKNAMEGIVEN();
-
-	if (this->args[0] == client->getNickName())
+	else if (this->args[0] == client->getNickName())
 		return ("");
-
-	if (!validateNick(this->args[0]))
+	else if (!validateNick(this->args[0]))
 		result = ERR_ERRONEUSNICKNAME(this->args[0]);
-
-	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
-        if (this->args[0] == it->second->getNickName())
-			result = ERR_NICKNAMEINUSE(this->args[0]);
-    }
+	else if (server.isClientExist(this->args[0]))
+		result = ERR_NICKNAMEINUSE(this->args[0]);
 
 	if (result != "") {
 		if (client->getNickName() == "")

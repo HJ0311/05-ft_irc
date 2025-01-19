@@ -81,12 +81,15 @@ void	Server::initSocket(const std::string& port)
 		this->servSockFd = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol);
 		if (this->servSockFd < 0)
 			continue;
-		if (fcntl(this->servSockFd, F_SETFL, O_NONBLOCK) < 0)
+		if (fcntl(this->servSockFd, F_SETFL, O_NONBLOCK) < 0) {
+		// std::cout << "close 5" << std::endl;
 			throw std::runtime_error("Fcntl error");
+		}
 		setsockopt(this->servSockFd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
 		if (bind(this->servSockFd, tmp->ai_addr, tmp->ai_addrlen) < 0)
 		{
+			// std::cout << "close 1" << std::endl;
 			close(this->servSockFd);
 			continue;
 		}
@@ -96,8 +99,10 @@ void	Server::initSocket(const std::string& port)
 
 	if (tmp == NULL)
 		throw std::runtime_error("Bind error");
-	if (listen(this->servSockFd, this->maxClientCnt) < 0)
+	if (listen(this->servSockFd, this->maxClientCnt) < 0) {
+		// std::cout << "close 6" << std::endl;
 		throw std::runtime_error("Listen error");
+	}
 }
 
 void	Server::startServer()
@@ -163,6 +168,7 @@ void	Server::addToPoll(int newFd)
 
 void	Server::removeFromPoll(int i)
 {
+	// std::cout << "close 2" << std::endl;
 	close(this->pfds[i].fd);
 	delete this->clients[this->pfds[i].fd];//inryu 추가
 	this->clients.erase(this->pfds[i].fd);
