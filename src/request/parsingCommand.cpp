@@ -12,6 +12,8 @@ void	Server::clientRequest(int i)
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
 		else
 			std::cerr << RED << "recv() error" << RESET << std::endl;
+		
+		removeFromChannels(this->clients[senderFd]);
 		close(senderFd);
 		removeFromPoll(i);
 	}

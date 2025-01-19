@@ -29,7 +29,5 @@ std::string Request::execQuit(Client *client, Server &server)
 		send(*it, quitMessage.c_str(), quitMessage.size(), 0);
 	}
 
-	server.removeFromChannels(client);
-
 	return ("");
 }
