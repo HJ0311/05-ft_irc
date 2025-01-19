@@ -82,7 +82,10 @@ void	Server::initSocket(const std::string& port)
 		if (this->servSockFd < 0)
 			continue;
 		if (fcntl(this->servSockFd, F_SETFL, O_NONBLOCK) < 0)
+		{
+			close(this->servSockFd);
 			throw std::runtime_error("Fcntl error");
+		}
 		setsockopt(this->servSockFd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
 		if (bind(this->servSockFd, tmp->ai_addr, tmp->ai_addrlen) < 0)
@@ -97,7 +100,10 @@ void	Server::initSocket(const std::string& port)
 	if (tmp == NULL)
 		throw std::runtime_error("Bind error");
 	if (listen(this->servSockFd, this->maxClientCnt) < 0)
+	{
+		close(servSockFd);
 		throw std::runtime_error("Listen error");
+	}
 }
 
 void	Server::startServer()
