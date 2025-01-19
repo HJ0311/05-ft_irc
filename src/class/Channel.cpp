@@ -106,7 +106,7 @@ bool	Channel::isFull() const
 {
 	if (this->clientLimit == -1)
 		return (0);
-	if (this->clientLimit <= this->getClientCount())
+	if (this->clientLimit <= static_cast<int>(this->getClientCount()))
 		return (1);
 	else
 		return (0);

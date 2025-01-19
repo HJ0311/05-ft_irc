@@ -17,7 +17,7 @@ class Channel
 
 		bool	isPrivate;
 		bool	isInviteOnly;
-		size_t	clientLimit;
+		int		clientLimit;
 		time_t	creationTime;
 
 		Channel();
