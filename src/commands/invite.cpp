@@ -2,6 +2,7 @@
 
 std::string Request::execInvite(Client *inviter, Server &server) { 
 
+	(void)inviter;
 	std::map<int, Client*>& clients = server.getAllClients();
 	std::map<std::string, Channel*>& channels = server.getAllChannels();
 

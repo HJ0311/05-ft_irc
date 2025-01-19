@@ -7,7 +7,7 @@ std::string Request::execPart(Client *client, Server &server)
 
 	const std::string &channelName = args[0];
 
-	Channel *channel;
+	Channel *channel = NULL;
 	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())
 		return (ERR_NOSUCHCHANNEL(channelName));
 //127.000.000.001.37504-127.000.000.001.06667: PART #1st
