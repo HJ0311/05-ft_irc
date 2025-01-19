@@ -11,14 +11,21 @@ class Channel
 		std::set<std::string>	invitees;
 
 		std::string	name; // 채널 이름
+		std::string mode; //현재 채널에 추가된 모드 (i, t, k, o, l)
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
-		// int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
+		int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
 
-		bool	isPrivate;
-		bool	isInviteOnly;
-		size_t	clientLimit;
-		time_t	creationTime;
+		//i - invite only 모드 주기 / 풀기
+		//t - topic 을 operator만 사용할 수 있게 제한 두기 / 제한 풀기
+		//k - 채널 비번 제한 설정 / 풀기
+		//o - 운영자 자격 추가 부여
+		//l - 채널 인원 제한 설정 / 풀기
+
+		bool	isInviteOnly; //기본값 false
+		bool	topicLimit; 
+		bool	isPrivate; //기본값 false
+		size_t	clientLimit; //기본값 -1
 
 		Channel();
 	public:
@@ -35,14 +42,18 @@ class Channel
 		void	addOperator(const std::string& nickname); // 운영자를 추가
 		void	removeOperator(const std::string& nickname); // 운영자를 제거
 		bool	isOperator(const std::string& nickname); // 얘가 운영자인지 확인
-		bool	isInvited(const std::string& nickname);
+		
+		void	inviteClient(const std::string& invitee);
+		bool    isInvited(const std::string& nickname);
+		void 	removeInvitee(const std::string& nickname);
+		// void	addInvitee(const std::string& nickname);
 
-		void	setTopic(const std::string& newTopic, const std::string& nickname);
+		void	setTopic(const std::string& newTopic);
 		void	setPassword(const std::string& password);
 		void	setClientLimit(size_t limit);
 		void	setInviteOnly(bool inviteOnly);
-
-		void	inviteClient(Client* inviter, const std::string& invitee);
+		
+		void 	broadcastMessage(const std::string &message);
 
 		size_t	getClientCount() const;
 		bool	isFull() const;

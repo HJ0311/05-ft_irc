@@ -39,6 +39,15 @@ class Server
 		std::map<int, Client*>& getAllClients();
 		std::map<std::string, Channel*>& getAllChannels();
 
+		bool isChannelExist(const std::string &channelname);
+		bool isClientExist(const std::string &nickname);
+
+		void addChannel(const std::string &channelname, Channel *channel);
+		void addClient(Client *user);
+
+		Channel *getChannel(const std::string &channelname);
+		Client	*getClient(const std::string &nickname);
+
 	private:
 		Server();
 		Server(const Server& obj);

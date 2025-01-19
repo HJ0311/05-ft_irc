@@ -22,11 +22,14 @@ class Request
 
 		std::string execWhois();
 
-		std::string execInvite(Client *client, Server &server);
+		std::string execInvite(Client *inviter, Server &server);
 		// std::string exec(Client *client, std::map<int, Client*> clients);
 
 		std::string execPrivmsg(Client *sender, Server &server);
 		std::string execJoin(Client *client, Server &server);
 		std::string execPart(Client *client, Server &server);
 		std::string execQuit(Client *client, Server &server);
+		std::string execKick(Client *client, Server &server);
+		std::string execTopic(Client *client, Server &server);
+		std::string execMode(Client *client, Server &server);
 };

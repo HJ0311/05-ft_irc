@@ -31,7 +31,6 @@ Server::~Server()
 	this->clients.clear();
 }
 
-
 Server::Server(const Server& obj)
 {
 	*this = obj;
@@ -198,4 +197,46 @@ std::map<std::string, Channel*>& Server::getAllChannels()
 std::map<int, Client*>& Server::getAllClients()
 {
 	return (this->clients);
+}
+
+bool Server::isChannelExist(const std::string &channelname)
+{
+	if (allChannels.find(channelname) == allChannels.end())
+		return false;
+	return true;
+}
+
+bool Server::isClientExist(const std::string &nickname)
+{
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+		if (nickname == it->second->getNickName())
+			return true;
+    }
+	return false;
+}
+
+void	Server::addClient(Client* user)
+{
+	clients[user->getClntSockFd()] = user;
+}
+
+void	Server::addChannel(const std::string &channelname, Channel *channel)
+{
+	allChannels[channelname] = channel;
+}
+
+Channel	*Server::getChannel(const std::string &channelname)
+{
+	if (!this->isChannelExist(channelname))
+		return NULL;
+	return allChannels.at(channelname);
+}
+
+Client *Server::getClient(const std::string &nickname)
+{
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it) {
+		if (nickname == it->second->getNickName())
+			return it->second;
+    }
+	return NULL;
 }

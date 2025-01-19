@@ -32,6 +32,7 @@ std::string Request::execJoin(Client *client, Server &server)
 
 	if (channel->isFull())
 		return (ERR_CHANNELISFULL(client->getNickName(), channelName));
+	//TODO 에러인 경우 new로 할당한 채널을 free를해ㅔ주어야 한다.
 
 	channel->addClient(client);
 	client->addChannel(channelName);
@@ -53,3 +54,4 @@ std::string Request::execJoin(Client *client, Server &server)
 }
 //TODO Join 에러를 반환하는 경우를 먼저 걸러내고 new 로 채널을 생성해야할 것 같다.
 //TODO send는 이 안에서 하지 않아도 된다! 해당 string을 리턴하면 됨
+//TODO invitee를 지워주는 작업도 해야함

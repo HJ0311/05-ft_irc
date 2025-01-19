@@ -1,6 +1,6 @@
 #include "../../inc/Define.hpp"
 
-Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
+Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), isPrivate(0), isInviteOnly(0), clientLimit(-1) {}
 
 // Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
 
@@ -16,6 +16,7 @@ Channel&	Channel::operator=(const Channel& obj)
 		this->clients = obj.clients;
 		this->operators = obj.operators;
 		this->invitees = obj.invitees;
+		this->clientCnt = obj.clientCnt;
 		this->name = obj.name;
 		this->topic = obj.topic;
 		this->key = obj.key;
@@ -31,6 +32,7 @@ Channel::~Channel() {}
 
 void	Channel::addClient(Client* user)
 {
+	++this->clientCnt;
 	clients[user->getClntSockFd()] = user;
 }
 
@@ -44,6 +46,7 @@ void	Channel::removeClient(const std::string& nickname)
 			return ;
 		}
 	}
+	this->clientCnt--;
 }
 
 bool	Channel::isClientInChannel(const std::string& nickname)
@@ -74,12 +77,19 @@ bool	Channel::isOperator(const std::string& nickname)
 		return (0);
 }
 
-/*
-void	Channel::setTopic(const std::string& newTopic, const std::string& nickname)
+bool	Channel::isInvited(const std::string& nickname)
 {
-
+	if (invitees.find(nickname) != invitees.end())
+		return (1);
+	else
+		return (0);
 }
 
+void	Channel::setTopic(const std::string& newTopic)
+{
+	this->topic = newTopic;
+}
+/*
 void	Channel::setPassword(const std::string& password)
 {
 
@@ -90,12 +100,16 @@ void	Channel::setInviteOnly(bool inviteOnly)
 {
 
 }
-
-void	Channel::inviteClient(Client* inviter, const std::string& inviteeNickname)
-{
-
-}
 */
+void	Channel::inviteClient(const std::string& invitee)
+{
+	invitees.insert(invitee);
+}
+
+void	Channel::removeInvitee(const std::string& nickname)
+{
+	invitees.erase(nickname);
+}
 
 size_t	Channel::getClientCount() const
 {
@@ -135,4 +149,10 @@ const std::map<int, Client*>& Channel::getClients() const
 const bool&	Channel::getIsInviteOnly() const
 {
 	return (this->isInviteOnly);
+}
+
+void Channel::broadcastMessage(const std::string &message)
+{	
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+		send(it->second->getClntSockFd(), message.c_str(), message.length(), 0);
 }

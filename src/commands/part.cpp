@@ -14,7 +14,7 @@ std::string Request::execPart(Client *client, Server &server)
 
 	channel = it->second;
 	if (channel->isClientInChannel(client->getNickName()) == 0)
-		return (ERR_NOMOTD(client->getNickName(), channelName));
+		return (ERR_NOTONCHANNEL(client->getNickName(), channelName));
 
 	std::string	partMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " PART :" + channelName + "\r\n";
 
