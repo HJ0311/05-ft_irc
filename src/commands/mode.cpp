@@ -1,13 +1,13 @@
 #include "../../inc/Define.hpp"
 
 std::string Request::execMode(Client *client, Server &server) {
-	if (args.size() <= 1)
-		return ("");
+	// if (args.size() <= 1)
+	// 	return ("");
 	
-	if (!server.isChannelExist(args[0]))
-		return (ERR_NOSUCHCHANNEL(args[0]));
+	// if (!server.isChannelExist(args[0]))
+	// 	return (ERR_NOSUCHCHANNEL(args[0]));
 	
-	Channel *channel = server.getChannel(args[0]);
+	// Channel *channel = server.getChannel(args[0]);
 
 	// //mode 옵션은 무조건 붙여서 써야하는 것으로
 	// for (int i = 0; i < args[0].size(); i++) {
