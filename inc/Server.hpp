@@ -20,6 +20,7 @@ class Server
 		void	addToPoll(int newFd);
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
+		void	removeFromChannels(Client *client);
 		// getter
 		
 		// request 처리
@@ -51,4 +52,3 @@ class Server
 		std::map<int, Client*>	clients; // 현존 유저
 		std::map<std::string, Channel*> allChannels; // 현존 채널
 };
-

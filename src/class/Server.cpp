@@ -162,9 +162,28 @@ void	Server::addToPoll(int newFd)
 void	Server::removeFromPoll(int i)
 {
 	close(this->pfds[i].fd);
-	this->pfds[i] = this->pfds[this->onlineClient - 1];
+	delete this->clients[this->pfds[i].fd];//inryu 추가
 	this->clients.erase(this->pfds[i].fd);
+	if (i != this->onlineClient - 1)
+		this->pfds[i] = this->pfds[this->onlineClient - 1];
 	this->onlineClient--;
+}
+
+void	Server::removeFromChannels(Client *client)
+{
+	std::set<std::string>	channels = client->getJoinedChannels();
+	for (std::set<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		std::map<std::string, Channel*>::iterator channelIt = this->allChannels.find(*it);
+		Channel* channel = channelIt->second;
+
+		channel->removeClient(client->getNickName());
+		if (channel->getClientCount() == 0)
+		{
+			delete channel;
+			this->allChannels.erase(channelIt);
+		}
+	}
 }
 
 std::string Server::getPassword() const {

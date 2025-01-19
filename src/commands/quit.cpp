@@ -2,7 +2,11 @@
 
 std::string Request::execQuit(Client *client, Server &server)
 {
-	std::string	quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
+	std::string	quitMessage = "ERROR :Closing link: (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]\r\n";
+
+	send(client->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
+
+	quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
 
 	std::set<std::string>	channels = client->getJoinedChannels();
 	for (std::set<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
@@ -10,17 +14,14 @@ std::string Request::execQuit(Client *client, Server &server)
 		std::map<std::string, Channel*>::iterator channelIt = server.getAllChannels().find(*it);
 		Channel* channel = channelIt->second;
 
-		channel->removeClient(client->getNickName());
-		if (channel->getClientCount() == 0)
+		const std::map<int, Client*> &channelClients = channel->getClients();
+		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
 		{
-			delete channel;
-			server.getAllChannels().erase(channelIt);
+			Client *channelClient = it->second;
+			if (channelClient != client)
+				send(channelClient->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
 		}
 	}
 
-	//server.clients에서 delete 해야하는지?
-	//kill의 경우 벌어지는 일?
-	//겹치는 게 있는 경우 참여 채널에서 클라이언트 지우면서 채널 참여자 0이면 채널 지우는 걸 소멸자로 옮긴다
-
-	return (quitMessage);
+	return ("");
 }

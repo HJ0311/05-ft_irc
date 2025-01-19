@@ -26,6 +26,16 @@ void Server::execCommandByLine(int i, const std::string &message)
 	int	senderFd = this->pfds[i].fd;
 	Client *client = this->clients.find(senderFd)->second;
 
+	if (this->pfds[i].revents & (POLLHUP | POLLERR | POLLNVAL))//클라이언트가 접속 끊으면 POLLHUP, kill -9로 강제 종료 시 POLLNVAL || POLLERR
+	{
+		send(senderFd, ERROR().c_str(), ERROR().length(), 0);
+		removeFromChannels(this->clients[this->pfds[i].fd]);
+		close(this->pfds[i].fd);
+		removeFromPoll(i);
+		std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
+		return;  // 이 함수 종료, 더 이상 처리할 필요 없음
+	}
+
 	while (1) {//PASS password\r\nUSER user\r\n 이런식으로 여러번의 명령어가 붙어서 올 때를 고려하여 처리
 		size_t preIdx = idx;
 		idx = message.find("\r\n", idx);
@@ -50,7 +60,6 @@ void Server::execCommandByLine(int i, const std::string &message)
 		idx += 2;
 	}
 }
-
 
 Request	Server::parsingCommand(const std::string& message) const
 {

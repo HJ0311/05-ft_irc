@@ -23,7 +23,10 @@ Channel&	Channel::operator=(const Channel& obj)
 	return *this;
 }
 
-Channel::~Channel() {}
+Channel::~Channel()
+{
+	std::cout << this->name << "is closing\n";
+}
 
 // =================================================================================================================
 // member function
@@ -41,7 +44,7 @@ void	Channel::removeClient(const std::string& nickname)
 		if (it->second->getNickName() == nickname)
 		{
 			clients.erase(it);
-			break;
+			return ;
 		}
 	}
 }

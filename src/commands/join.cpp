@@ -39,13 +39,9 @@ std::string Request::execJoin(Client *client, Server &server)
 	std::string	joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
 							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
 
+	send(client->getClntSockFd(), joinMessage.c_str(), joinMessage.length(), 0);
+
 	const std::map<int, Client*> &channelClients = channel->getClients();
-	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
-	{
-		int clientFd = it->first;
-		if (clientFd == client->getClntSockFd())
-			send(clientFd, joinMessage.c_str(), joinMessage.length(), 0);
-	}
 	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
 	{
 		int clientFd = it->first;

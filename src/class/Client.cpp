@@ -24,13 +24,7 @@ Client&	Client::operator=(const Client& obj)
 	return *this;
 }
 
-Client::~Client()
-{
-	for (std::set<std::string>::iterator it = joinedChannels.begin(); it != joinedChannels.end(); ++it)
-	{
-		std::cout << *it << "\n";
-	}
-}
+Client::~Client() {}
 
 // =================================================================================================================
 // member function

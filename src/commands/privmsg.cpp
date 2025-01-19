@@ -40,8 +40,6 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 			Client *receiver = it->second;
 			if (receiver->getNickName() == target)
 				return (outgoingMessage); // 대상 유저에게 전송할 메시지 반환
-				// send(serverClient->getFd(), outgoingMessage.c_str(), outgoingMessage.size(), 0); // 전송
-			// return ""; // 메시지를 전송했으므로 빈 문자열 반환
 		}
 		return (ERR_NOSUCHNICK(target)); // 대상 유저 없음
 	}
