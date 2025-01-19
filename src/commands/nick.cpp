@@ -33,8 +33,9 @@ std::string Request::execNick(Client *client, std::map<int, Client*>& clients) {
 			result = ERR_NICKNAMEINUSE(this->args[0]);
     }
 
-	if (result != "" && client->getNickName() == "") {
-		client->setErrorClose(true);
+	if (result != "") {
+		if (client->getNickName() == "")
+			client->setErrorClose(true);
 		return (result);
 	}
 
