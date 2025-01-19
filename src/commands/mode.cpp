@@ -3,7 +3,8 @@
 std::string Request::execMode(Client *client, Server &server) {
 	// if (args.size() <= 1)
 	// 	return ("");
-	
+	(void)client;
+	(void)server;
 	// if (!server.isChannelExist(args[0]))
 	// 	return (ERR_NOSUCHCHANNEL(args[0]));
 	

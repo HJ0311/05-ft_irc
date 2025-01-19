@@ -82,7 +82,7 @@ Request	Server::parsingCommand(const std::string& message) const
 		return request;
 	}
 	request.command = splitStr[0];
-	for (std::vector<std::string>::iterator it = std::next(splitStr.begin(), 1); it != splitStr.end(); ++it)
+	for (std::vector<std::string>::iterator it = splitStr.begin() + 1; it != splitStr.end(); ++it)
 	{
 		request.args.push_back(*it);
 	}
