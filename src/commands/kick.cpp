@@ -30,6 +30,8 @@ std::string Request::execKick(Client *client, Server &server) {
 	if (channel->isOperator(this->args[1]))
 		channel->removeOperator(this->args[1]);
 
+	client->removeChannel(this->args[0]);
+
 	return ("");
 }
 
