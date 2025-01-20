@@ -13,7 +13,13 @@ std::string Request::execMode(Client *client, Server &server) {
 	// if (!channel->isOperator(client->getNickName()))
 	// 	return (ERR_CHANOPRIVSNEEDED(client->getNickName(), this->args[0]));
 
+<<<<<<< Updated upstream
 	// if (args.size() == 1)
+=======
+	if (args.size() == 1)
+		return ()
+
+>>>>>>> Stashed changes
 
 
 	// int sign = 0;

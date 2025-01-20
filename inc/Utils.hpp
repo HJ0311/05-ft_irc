@@ -9,6 +9,7 @@ class Client;
 #define RPL_WELCOME(NICK, USER, HOST)       				(PREFIX() + (" 001 ") + NICK + " :Welcome to the Internet Relay Network " + NICK + "!" + USER + "@" + HOST + "\r\n")
 #define RPL_YOURHOST(NICK)									(PREFIX() + (" 002 ") + NICK + " :Your host is " + SERVER_NAME + ", running version V1\r\n")
 #define RPL_CREATED(NICK, TIME)								(PREFIX() + (" 003 ") + NICK + " :This server was created " + TIME + "\r\n")
+#define RPL_CHANNELMODEIS(NICK, CHANNEL, MODE, MODEPARAMS) 	(PREFIX() + (" 324 ") + NICK + " " + CHANNEL + " " + MODE + " " + 				)
 #define RPL_NOTOPIC(CHANNEL)								(PREFIX() + (" 331 ") + CHANNEL + " :No topic is set\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC)							(PREFIX() + (" 332 ") + CHANNEL + " :" + TOPIC + "\r\n")
 #define RPL_INVITING(INVITER, INVITEE, CHANNEL)				(PREFIX() + (" 341 ") + INVITER + " " + INVITEE + " " + CHANNEL + " :" + INVITER + " is inviting " + INVITEE + " to " + CHANNEL + "\r\n")
@@ -39,6 +40,7 @@ class Client;
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK  + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
 #define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK  + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
 #define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
+#define MODE()
 #define START_IRC()                         				(RPL_MOTDSTART() \
 																+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 																+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \
