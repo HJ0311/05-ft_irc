@@ -2,14 +2,14 @@
 
 Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), maxClient(-1), creationTime(0) {
         channelModes = {
-            {"isInviteOnly", false},
-            {"isTopicLimited", false},
-            {"isPrivate", false},
-            {"isClientLimited", false}
+            {"i", false},
+            {"t", false},
+            {"k", false},
+            {"l", false}
         };
 }
 
-// Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
+// Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) k(0), i(0), clientLimit(-1){}
 
 Channel::Channel(const Channel& obj)
 {
@@ -161,13 +161,25 @@ const std::map<int, Client*>& Channel::getClients() const
 	return (this->clients);
 }
 
-const int& Channel::getClientLimit() const
-{
-	return (this->clientLimit);
-}
-
 void Channel::broadcastMessage(const std::string &message)
 {	
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 		send(it->first, message.c_str(), message.length(), 0);
+}
+
+void Channel::setChannelModes(const std::string &modeName, const bool &mode)
+{
+	this->channelModes[modeName] = mode;
+}
+
+std::map<std::string, bool> &Channel::getChannelModes(){
+	return this->channelModes;
+}
+
+void	Channel::setMaxClient(const int &max) {
+	this->maxClient = max;
+}
+
+int &Channel::getMaxClient() {
+	return this->maxClient;
 }

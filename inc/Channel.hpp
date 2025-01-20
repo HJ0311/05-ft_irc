@@ -62,8 +62,11 @@ class Channel
 		const std::string&	getKey() const;
 
 		void	setChannelModes(const std::string &modeName, const bool &mode);
-		std::map<std::string, bool> getChannelModes() const;
-		
+		std::map<std::string, bool> &getChannelModes();
+
+		void	setMaxClient(const int &max);
+		int		&getMaxClient();
+
 		void 	broadcastMessage(const std::string &message);
 
 		const std::map<int, Client*>&	getClients() const;

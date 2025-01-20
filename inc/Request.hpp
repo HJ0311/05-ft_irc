@@ -15,7 +15,7 @@ class Request
 		Request&	operator=(const Request& obj);
 		
 		bool validateNick(const std::string &nick);
-		std::string prepareModeParams(Channel *channel);
+		
 
 		std::string execPass(const Server &server, Client *client);
 		std::string execNick(Client *client, Server &server);
@@ -33,4 +33,13 @@ class Request
 		std::string execKick(Client *client, Server &server);
 		std::string execTopic(Client *client, Server &server);
 		std::string execMode(Client *client, Server &server);
+		std::string prepareNowParams(std::vector<std::string> &args);
+		std::string prepareModeParams(Channel *channel);
+		std::string validateModeFlag(Client *client, std::vector<std::string> &args);
+		void handleMode(std::vector<std::string>	&args, Channel *channel);
+		void changeTopicMode(const char &sign, std::vector<std::string>	&args, Channel *channel);
+		void changeInviteMode(const char &sign, std::vector<std::string> &args, Channel *channel);
+		void changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
+		void changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
+		void changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
 };

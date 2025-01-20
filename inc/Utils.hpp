@@ -28,7 +28,9 @@ class Client;
 #define ERR_NEEDMOREPARAMS(COMMAND)							(PREFIX() + (" 461 ") + COMMAND + " :Not enough parameters.\r\n")
 #define ERR_ALREADYREGISTERED()								(PREFIX() + (" 462 ") + " :You may not register.\r\n")
 #define ERR_PASSWDMISMATCH() 								(PREFIX() + (" 464 ") + " :Incorrect password.\r\n")
+#define ERR_KEYSET(NICK, CHANNEl)							(PREFIX() + (" 467 ") + NICK + " " + CHANNEL + " :Channel key already set\r\n")									
 #define ERR_CHANNELISFULL(NICK, CHANNEL) 					(PREFIX() + (" 471 ") + NICK + " " + CHANNEL + " :Cannot join channel (channel is full)\r\n")
+#define ERR_UNKNOWNMODE(NICK, UNKNOWN)						(PREFIX() + (" 472 ") + NICK + " " + UNKNOWN + " :is unknown mode char to me\r\n")
 #define ERR_INVITEONLYCHAN(NICK, CHANNEL)					(PREFIX() + (" 473 ") + NICK + " " + CHANNEL + " :Cannot join channel (invite only)\r\n")
 #define ERR_BADCHANNELKEY(NICK, CHANNEL)					(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define ERR_CHANOPRIVSNEEDED(NICK, CHANNEL)					(PREFIX() + (" 482 ") + NICK + " " + CHANNEL + " :You're not a channel operator\r\n")
@@ -37,10 +39,10 @@ class Client;
 #define NICK(OLDNICK, USER, HOST, NEWNICK)					(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
 #define KILL(NICK)											(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
 #define ERROR(CONTENT)												(PREFIX() + " ERROR " + ":" + CONTENT + "\r\n")
-#define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK  + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
-#define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK  + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
-#define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
-#define MODE()
+#define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
+#define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
+#define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
+#define MODE(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + MODE + " :" + MODEPARAMS)
 #define START_IRC()                         				(RPL_MOTDSTART() \
 																+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 																+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \

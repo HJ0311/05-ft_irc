@@ -12,7 +12,7 @@ std::string Request::execTopic(Client *client, Server &server) {
 	if (!channel->isClientInChannel(client->getNickName()))
 		return (ERR_NOTONCHANNEL(client->getNickName(), this->args[0]));
 
-	if (!channel->isOperator(client->getNickName()))
+	if (channel->getChannelModes().at("t") && !channel->isOperator(client->getNickName()))
 		return (ERR_CHANOPRIVSNEEDED(client->getNickName(), this->args[0]));
 	
 	if (this->args.size() >= 2) {
