@@ -2,11 +2,13 @@
 
 std::string Request::execPass(const Server &server, Client *client) {
 
-	if (this->args.size() < 1)
-		return ERR_NEEDMOREPARAMS("PASS");
-
 	if (client->getRegisterStatus()) 
 		return ERR_ALREADYREGISTERED();
+
+	if (this->args.size() < 1) {
+		client->setErrorClose(true);
+		return ERR_NEEDMOREPARAMS("PASS");
+	}
 
 	if (server.getPassword() != this->args[0]){
 		client->setErrorClose(true);
