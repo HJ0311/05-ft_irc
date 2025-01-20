@@ -22,8 +22,9 @@ std::string Request::execMode(Client *client, Server &server) {
 	handleMode(args, channel);
 
 	channel->broadcastMessage(MODE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], args[1], prepareNowParams(args)));
-	// return result;
-	return "";//TODO 여기 고쳐주기
+	return "";
+	// return MODE(client->getNickName(), client->getUserName(), client->getHostName(), client->getNi)
+	// :root!root@127.0.0.1 MODE root :+i;//TODO 여기 고쳐주기
 }
 
 void Request::handleMode(std::vector<std::string> &args, Channel *channel)
@@ -33,11 +34,11 @@ void Request::handleMode(std::vector<std::string> &args, Channel *channel)
 	int	paramIdx = 2;
 
 	//mode 옵션은 무조건 붙여서 써야하는 것으로
-	for (int i = 0; i < flags.size(); i++) {
+	for (size_t i = 0; i < flags.size(); i++) {
 		if (flags[i] == 't')
-			changeTopicMode(sign, args, channel); //파라미터 불필요
+			changeTopicMode(sign, channel); //파라미터 불필요
 		else if (flags[i] == 'i')
-			changeInviteMode(sign, args, channel); // 파라미터 불필요
+			changeInviteMode(sign, channel); // 파라미터 불필요
 		else if (flags[i] == 'o')
 			changeOperatorMode(sign, args, channel, paramIdx); // 파라미터 필요 -> 표시 불필요
 		else if (flags[i] == 'l')
@@ -52,7 +53,7 @@ void Request::handleMode(std::vector<std::string> &args, Channel *channel)
 std::string Request::prepareNowParams(std::vector<std::string> &args) {
 	std::ostringstream params;
 
-	for (int i = 2; i < args.size(); ++i) {
+	for (size_t i = 2; i < args.size(); ++i) {
 		params << args[i] << " ";
 	}
 	return params.str();
@@ -64,7 +65,7 @@ std::string Request::prepareModeParams(Channel *channel)
 		
 	if (channel->getChannelModes().at("k"))
 		modeParams << "key(" << channel->getKey() << ") ";
-	if (channel->getChannelModes().at("l") >= 0)
+	if (channel->getChannelModes().at("l"))
 		modeParams << "limit(" << channel->getMaxClient() << ") ";
 	
 	return (modeParams.str());
@@ -74,10 +75,10 @@ std::string Request::validateModeFlag(Client *client, std::vector<std::string> &
 	
 	char available[] = {'+', '-', 't', 'i', 'k', 'o', 'l'};
 	size_t size = sizeof(available) / sizeof(available[0]);
-	int	paramSize = 0;
+	size_t	paramSize = 0;
 	std::string flags = args[1];
 
-	for (int i = 0; i < flags.size(); ++i){
+	for (size_t i = 0; i < flags.size(); ++i){
 		char *p = std::find(available, available + size, flags[i]);
 		if (p == available + size) {
 			return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
@@ -92,7 +93,7 @@ std::string Request::validateModeFlag(Client *client, std::vector<std::string> &
 	return "";
 }
 
-void Request::changeTopicMode(const char &sign, std::vector<std::string> &args, Channel *channel) {
+void Request::changeTopicMode(const char &sign, Channel *channel) {
 	if (sign == '+') {
 		if (channel->getChannelModes().at("t"))
 			return ;
@@ -104,7 +105,7 @@ void Request::changeTopicMode(const char &sign, std::vector<std::string> &args, 
 	}
 }
 
-void Request::changeInviteMode(const char &sign, std::vector<std::string> &args, Channel *channel) {//TODO join 확인 해야함
+void Request::changeInviteMode(const char &sign, Channel *channel) {//TODO join 확인 해야함
 	if (sign == '+') {
 		if (channel->getChannelModes().at("i"))
 			return ;

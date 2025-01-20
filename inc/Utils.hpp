@@ -42,7 +42,8 @@ class Client;
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
 #define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
 #define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
-#define MODE(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + MODE + " :" + MODEPARAMS)
+#define MODE_FOR_SENDER(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS)
+#define MODE_FOR_EVERYONE(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS)
 #define START_IRC()                         				(RPL_MOTDSTART() \
 																+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 																+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \

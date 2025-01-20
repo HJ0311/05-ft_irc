@@ -1,12 +1,10 @@
 #include "../../inc/Define.hpp"
 
 Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), maxClient(-1), creationTime(0) {
-        channelModes = {
-            {"i", false},
-            {"t", false},
-            {"k", false},
-            {"l", false}
-        };
+        channelModes["i"] = false;
+		channelModes["t"] = false;
+		channelModes["k"] = false;
+		channelModes["l"] = false;
 }
 
 // Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) k(0), i(0), clientLimit(-1){}

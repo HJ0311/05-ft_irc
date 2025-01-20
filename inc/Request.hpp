@@ -37,8 +37,8 @@ class Request
 		std::string prepareModeParams(Channel *channel);
 		std::string validateModeFlag(Client *client, std::vector<std::string> &args);
 		void handleMode(std::vector<std::string>	&args, Channel *channel);
-		void changeTopicMode(const char &sign, std::vector<std::string>	&args, Channel *channel);
-		void changeInviteMode(const char &sign, std::vector<std::string> &args, Channel *channel);
+		void changeTopicMode(const char &sign, Channel *channel);
+		void changeInviteMode(const char &sign, Channel *channel);
 		void changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
 		void changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
 		void changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
