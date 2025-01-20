@@ -15,6 +15,7 @@ class Request
 		Request&	operator=(const Request& obj);
 		
 		bool validateNick(const std::string &nick);
+		std::string prepareModeParams(Channel *channel);
 
 		std::string execPass(const Server &server, Client *client);
 		std::string execNick(Client *client, Server &server);
