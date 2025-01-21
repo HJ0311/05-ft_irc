@@ -38,7 +38,7 @@ class Client;
 #define ERROR(CONTENT)												(PREFIX() + " ERROR " + ":" + CONTENT + "\r\n")
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK  + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
 #define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK  + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
-#define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
+#define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK  + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n")
 #define START_IRC()                         				(RPL_MOTDSTART() \
 																+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 																+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \
@@ -48,6 +48,7 @@ class Client;
 																+ RPL_MOTD("     \\ `\\___x___/   \\ \\____/   \\ \\____/   \\ \\____/   \\ \\_____\\  \\ \\_\\\\ \\_\\   \\ \\____/ ") \
 																+ RPL_MOTD("      '\\/__//__/     \\/___/     \\/___/     \\/___/     \\/_____/   \\/_/ \\/_/    \\/___/  ") \
 																+ RPL_ENDOFMOTD())
+#define ERR_BADCHANMASK(NICK, CHANNEL)						(PREFIX() + " 476 " + NICK + " " + CHANNEL + " :Invalid channel name")
 
 namespace Utils {
 	std::string	getTime();
