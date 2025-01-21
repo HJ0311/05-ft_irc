@@ -2,11 +2,15 @@
 
 std::string Request::execUser(Client *client) {
 	if (this->args.size() != 4) {
+		std::cout << "errorClose 5" << std::endl;
+
 		client->setErrorClose(true);
 		return ERR_NEEDMOREPARAMS("USER");
 	}
 
 	if (client->getUserName() != "") {
+		std::cout << "errorClose 6" << std::endl;
+
 		client->setErrorClose(true);
 		return ERR_ALREADYREGISTERED();
 	}

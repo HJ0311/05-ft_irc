@@ -30,5 +30,6 @@ std::string Request::execQuit(Client *client, Server &server)
 		send(*it, quitMessage.c_str(), quitMessage.size(), 0);
 	}
 	client->setErrorClose(true);
+	std::cout << "errorClose 4" << std::endl;
 	return ("");
 }

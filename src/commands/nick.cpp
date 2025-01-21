@@ -31,6 +31,7 @@ std::string Request::execNick(Client *client, Server &server) {
 	if (result != "") {
 		if (client->getNickName() == "")
 			client->setErrorClose(true);
+		std::cout << "errorClose 1" << std::endl;
 		return (result);
 	}
 

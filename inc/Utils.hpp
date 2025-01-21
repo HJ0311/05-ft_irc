@@ -36,15 +36,15 @@ class Client;
 #define ERR_BADCHANNELKEY(NICK, CHANNEL)					(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define ERR_CHANOPRIVSNEEDED(NICK, CHANNEL)					(PREFIX() + (" 482 ") + NICK + " " + CHANNEL + " :You're not a channel operator\r\n")
 
-#define PONG(NICK, USER, HOST)					 			(std::string(":") + NICK + "!" + USER + "@" + HOST + " PONG " + SERVER_NAME + "\r\n")
+#define PONG()					 							(PREFIX() + " PONG " + ":" + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)					(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
-#define KILL(NICK)											(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
-#define ERROR(CONTENT)										(PREFIX() + " ERROR " + ":" + CONTENT + "\r\n")
+#define KILL(NICK)											(PREFIX() + " KILL " + NICK + " :Connection killed by server.\r\n")
+#define ERROR(CONTENT)										(PREFIX() + " ERROR " + CONTENT + "\r\n")
 #define INVITE(NICK, USER, HOST, INVITEE, CHANNEL)  		(std::string(":") + NICK + "!" + USER + "@" + HOST + " INVITE " + INVITEE + " " + ":" + CHANNEL + "\r\n")
 #define TOPIC(NICK, USER, HOST, CHANNEL, NEWTOPIC)			(std::string(":") + NICK + "!" + USER + "@" + HOST + " TOPIC " + CHANNEL + " " + NEWTOPIC + "\r\n")
 #define KICK(NICK, USER, HOST, CHANNEL, KICKED, CONTENT)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " KICK " + CHANNEL + " " + KICKED + " " + CONTENT + "\r\n") 
-#define MODE_FOR_SENDER(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS)
-#define MODE_FOR_EVERYONE(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS)
+#define MODE_FOR_SENDER(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS + "\r\n")
+#define MODE_FOR_EVERYONE(NICK, USER, HOST, CHANNEL, MODE, MODEPARAMS)	(std::string(":") + NICK + "!" + USER + "@" + HOST + " MODE " + CHANNEL + " " + MODE + " :" + MODEPARAMS + "\r\n")
 #define START_IRC()                         				(RPL_MOTDSTART() \
 																+ RPL_MOTD("   __      __     ____       __         ____       _____                   ____       ") \
 																+ RPL_MOTD("  /\\ \\  __/\\ \\   /\\  _`\\    /\\ \\       /\\  _`\\    /\\  __`\\     /'\\_/`\\    /\\  _`\\     ") \
