@@ -52,7 +52,7 @@ std::string	Server::commandHandler(const std::string &message, int i)
 	// else if (request.command == "NOTICE")
 	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
-		return (PONG());
+		return (PONG(client->getNickName(), client->getUserName(), client->getHostName()));
 	else if (request.command == "QUIT")
 		return (request.execQuit(client, *this));
 	else

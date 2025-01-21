@@ -13,7 +13,6 @@ class Channel
 		std::map<std::string, bool> channelModes;
 
 		std::string	name; // 채널 이름
-		std::string mode; //현재 채널에 추가된 모드 (i, t, k, o, l)
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
 		int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
@@ -36,8 +35,7 @@ class Channel
 
 		const std::string&	getName() const;
 
-		const std::string& getMode() const;
-		void setMode(const std::string &mode);
+		std::string getMode() const;
 
 		void	addClient(Client* user); // 유저를 채널에 추가
 		void	removeClient(const std::string& nickname); // 채널에서 제거

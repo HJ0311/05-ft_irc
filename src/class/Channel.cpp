@@ -26,7 +26,6 @@ Channel&	Channel::operator=(const Channel& obj)
 		this->topic = obj.topic;
 		this->key = obj.key;
 		this->maxClient = obj.maxClient;
-		this->mode = obj.mode;
 		this->channelModes = obj.channelModes;
 		this->creationTime = obj.creationTime;
 	}
@@ -86,14 +85,16 @@ bool	Channel::isOperator(const std::string& nickname)
 		return (0);
 }
 
-const std::string &Channel::getMode() const
+std::string Channel::getMode() const
 {
-	return this->mode;
-}
+	std::ostringstream oss;
 
-void Channel::setMode(const std::string &mode)
-{
-	this->mode = mode;
+	for (std::map<std::string, bool>::const_iterator it = channelModes.begin(); it != channelModes.end(); ++it)
+	{
+		if (it->second != false)
+			oss << it->first;
+	}
+	return (oss.str());
 }
 
 bool	Channel::isInvited(const std::string& nickname)

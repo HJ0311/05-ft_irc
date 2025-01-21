@@ -45,7 +45,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 		if (client->getErrorClose()) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
 			//KILL 날리기
 			// std::cout << "close 4" << std::endl;
-			send(senderFd, ERROR("Connection closed").c_str(), ERROR("Connection closed").length(), 0);
+			send(senderFd, KILL(client->getNickName()).c_str(), KILL(client->getNickName()).length(), 0);
 			// close(this->pfds[i].fd);
 			removeFromPoll(i);
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
