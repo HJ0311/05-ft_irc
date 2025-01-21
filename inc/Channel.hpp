@@ -10,22 +10,20 @@ class Channel
 		std::set<std::string>	operators;
 		std::set<std::string>	invitees;
 
+		std::map<std::string, bool> channelModes;
+
 		std::string	name; // 채널 이름
 		std::string mode; //현재 채널에 추가된 모드 (i, t, k, o, l)
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
 		int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
+		int maxClient;
 
 		//i - invite only 모드 주기 / 풀기
 		//t - topic 을 operator만 사용할 수 있게 제한 두기 / 제한 풀기
 		//k - 채널 비번 제한 설정 / 풀기
 		//o - 운영자 자격 추가 부여
 		//l - 채널 인원 제한 설정 / 풀기
-
-		bool	isInviteOnly; //기본값 false
-		bool	topicLimit; 
-		bool	isPrivate; //기본값 false
-		int		clientLimit; //기본값 -1
 		time_t	creationTime;
 
 		Channel();
@@ -35,6 +33,11 @@ class Channel
 		Channel(const Channel& obj);
 		Channel&	operator=(const Channel& obj);
 		~Channel();
+
+		const std::string&	getName() const;
+
+		const std::string& getMode() const;
+		void setMode(const std::string &mode);
 
 		void	addClient(Client* user); // 유저를 채널에 추가
 		void	removeClient(const std::string& nickname); // 채널에서 제거
@@ -48,20 +51,23 @@ class Channel
 		bool    isInvited(const std::string& nickname);
 		void 	removeInvitee(const std::string& nickname);
 		// void	addInvitee(const std::string& nickname);
-
-		void	setTopic(const std::string& newTopic);
-		void	setPassword(const std::string& password);
-		void	setClientLimit(size_t limit);
-		void	setInviteOnly(bool inviteOnly);
 		
-		void 	broadcastMessage(const std::string &message);
-
-		size_t	getClientCount() const;
+		size_t		getClientCount() const;
 		bool	isFull() const;
 
-		const std::string&	getName() const;
+		void	setTopic(const std::string& newTopic);
 		const std::string&	getTopic() const;
+
+		void	setKey(const std::string &newkey);
 		const std::string&	getKey() const;
-		const std::map<int, Client*>&	getClients() const;
-		const bool&	getIsInviteOnly() const;
+
+		void	setChannelModes(const std::string &modeName, const bool &mode);
+		std::map<std::string, bool> &getChannelModes();
+
+		void	setMaxClient(const int &max);
+		int		&getMaxClient();
+
+		void 	broadcastMessage(const std::string &message);
+
+		std::map<int, Client*>&	getClients();
 };

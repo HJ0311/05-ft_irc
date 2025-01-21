@@ -44,6 +44,7 @@ std::string Request::execNick(Client *client, Server &server) {
 			result =  RPL_WELCOME(nick, user, host)
 						+ RPL_YOURHOST(nick)
 						+ RPL_CREATED(nick, Utils::getTime())
+						+ RPL_MYINFO(nick)
 						+ START_IRC();
 
 	client->setNickName(this->args[0]);

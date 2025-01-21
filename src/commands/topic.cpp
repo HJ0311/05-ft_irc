@@ -12,17 +12,15 @@ std::string Request::execTopic(Client *client, Server &server) {
 	if (!channel->isClientInChannel(client->getNickName()))
 		return (ERR_NOTONCHANNEL(client->getNickName(), this->args[0]));
 
-	if (!channel->isOperator(client->getNickName()))
+	if (channel->getChannelModes().at("t") && !channel->isOperator(client->getNickName()))
 		return (ERR_CHANOPRIVSNEEDED(client->getNickName(), this->args[0]));
 	
 	if (this->args.size() >= 2) {
-		std::ostringstream ss;  // 문자열 스트림 객체
-		for (size_t i = 0; i < args.size(); ++i) {
+		std::ostringstream ss;
+		for (size_t i = 1; i < args.size(); ++i) {
 			ss << args[i] << " ";
 		}
 		channel->setTopic(ss.str());
-		std::cout << ss.str() << std::endl;
-
 		channel->broadcastMessage(TOPIC(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0], ss.str()));
 		return ("");
 	}

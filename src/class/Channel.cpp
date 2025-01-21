@@ -1,8 +1,13 @@
 #include "../../inc/Define.hpp"
 
-Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), isInviteOnly(0), topicLimit(0), isPrivate(0), clientLimit(-1), creationTime(0) {}
+Channel::Channel(const std::string& name) : clients(), operators(), invitees(), name(name), topic(""), key(""), clientCnt(0), maxClient(-1), creationTime(0) {
+        channelModes["i"] = false;
+		channelModes["t"] = false;
+		channelModes["k"] = false;
+		channelModes["l"] = false;
+}
 
-// Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) isPrivate(0), isInviteOnly(0), clientLimit(-1){}
+// Channel::Channel(const std::string& name, const std::string& topic, const std::string& key): clients(), operators(), name(name), topic(topic), key(key) k(0), i(0), clientLimit(-1){}
 
 Channel::Channel(const Channel& obj)
 {
@@ -20,11 +25,9 @@ Channel&	Channel::operator=(const Channel& obj)
 		this->name = obj.name;
 		this->topic = obj.topic;
 		this->key = obj.key;
+		this->maxClient = obj.maxClient;
 		this->mode = obj.mode;
-		this->isInviteOnly = obj.isInviteOnly;
-		this->topicLimit = obj. topicLimit;
-		this->isPrivate = obj.isPrivate;
-		this->clientLimit = obj.clientLimit;
+		this->channelModes = obj.channelModes;
 		this->creationTime = obj.creationTime;
 	}
 	return *this;
@@ -83,6 +86,16 @@ bool	Channel::isOperator(const std::string& nickname)
 		return (0);
 }
 
+const std::string &Channel::getMode() const
+{
+	return this->mode;
+}
+
+void Channel::setMode(const std::string &mode)
+{
+	this->mode = mode;
+}
+
 bool	Channel::isInvited(const std::string& nickname)
 {
 	if (invitees.find(nickname) != invitees.end())
@@ -95,18 +108,7 @@ void	Channel::setTopic(const std::string& newTopic)
 {
 	this->topic = newTopic;
 }
-/*
-void	Channel::setPassword(const std::string& password)
-{
 
-}
-
-
-void	Channel::setInviteOnly(bool inviteOnly)
-{
-
-}
-*/
 void	Channel::inviteClient(const std::string& invitee)
 {
 	invitees.insert(invitee);
@@ -124,9 +126,9 @@ size_t	Channel::getClientCount() const
 
 bool	Channel::isFull() const
 {
-	if (this->clientLimit == -1)
+	if (this->maxClient == -1)
 		return (0);
-	if (this->clientLimit <= static_cast<int>(this->getClientCount()))
+	if (this->maxClient <= static_cast<int>(this->getClientCount()))
 		return (1);
 	else
 		return (0);
@@ -147,18 +149,35 @@ const std::string&	Channel::getKey() const
 	return (this->key);
 }
 
-const std::map<int, Client*>& Channel::getClients() const
+void	Channel::setKey(const std::string &newkey)
 {
-	return (this->clients);
+	this->key = newkey;
 }
 
-const bool&	Channel::getIsInviteOnly() const
+std::map<int, Client*>& Channel::getClients()
 {
-	return (this->isInviteOnly);
+	return (this->clients);
 }
 
 void Channel::broadcastMessage(const std::string &message)
 {	
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 		send(it->first, message.c_str(), message.length(), 0);
+}
+
+void Channel::setChannelModes(const std::string &modeName, const bool &mode)
+{
+	this->channelModes[modeName] = mode;
+}
+
+std::map<std::string, bool> &Channel::getChannelModes(){
+	return this->channelModes;
+}
+
+void	Channel::setMaxClient(const int &max) {
+	this->maxClient = max;
+}
+
+int &Channel::getMaxClient() {
+	return this->maxClient;
 }

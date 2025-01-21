@@ -23,7 +23,7 @@ std::string Request::execJoin(Client *client, Server &server)
 	if (channel->isClientInChannel(client->getNickName()))
 		return ("");
 
-	if (channel->getIsInviteOnly())
+	if (channel->getChannelModes().at("i"))
 		return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
 
 	if (channel->getKey() != "")
