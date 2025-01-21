@@ -54,6 +54,7 @@ class Client;
 																+ RPL_MOTD("     \\ `\\___x___/   \\ \\____/   \\ \\____/   \\ \\____/   \\ \\_____\\  \\ \\_\\\\ \\_\\   \\ \\____/ ") \
 																+ RPL_MOTD("      '\\/__//__/     \\/___/     \\/___/     \\/___/     \\/_____/   \\/_/ \\/_/    \\/___/  ") \
 																+ RPL_ENDOFMOTD())
+#define ERR_BADCHANMASK(NICK, CHANNEL)						(PREFIX() + " 476 " + NICK + " " + CHANNEL + " :Invalid channel name")
 
 namespace Utils {
 	std::string	getTime();

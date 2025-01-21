@@ -155,7 +155,7 @@ void	Channel::setKey(const std::string &newkey)
 	this->key = newkey;
 }
 
-const std::map<int, Client*>& Channel::getClients() const
+std::map<int, Client*>& Channel::getClients()
 {
 	return (this->clients);
 }

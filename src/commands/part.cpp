@@ -3,7 +3,7 @@
 std::string Request::execPart(Client *client, Server &server)
 {
 	if (args.empty())
-		return ("ERROR: PART requires a channel name.\n");
+		return (ERR_NEEDMOREPARAMS("PART"));
 
 	const std::string&	channelName = args[0];
 
