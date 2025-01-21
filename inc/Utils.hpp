@@ -9,6 +9,7 @@ class Client;
 #define RPL_WELCOME(NICK, USER, HOST)       				(PREFIX() + (" 001 ") + NICK + " :Welcome to the Internet Relay Network " + NICK + "!" + USER + "@" + HOST + "\r\n")
 #define RPL_YOURHOST(NICK)									(PREFIX() + (" 002 ") + NICK + " :Your host is " + SERVER_NAME + ", running version V1\r\n")
 #define RPL_CREATED(NICK, TIME)								(PREFIX() + (" 003 ") + NICK + " :This server was created " + TIME + "\r\n")
+#define RPL_MYINFO(NICK)									(PREFIX() + (" 004 ") + NICK + " " + SERVER_NAME + " V1 none itkol\r\n")
 #define RPL_CHANNELMODEIS(NICK, CHANNEL, MODE, MODEPARAMS) 	(PREFIX() + (" 324 ") + NICK + " " + CHANNEL + " " + MODE + " :" + MODEPARAMS + "\r\n")
 #define RPL_NOTOPIC(CHANNEL)								(PREFIX() + (" 331 ") + CHANNEL + " :No topic is set\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC)							(PREFIX() + (" 332 ") + CHANNEL + " :" + TOPIC + "\r\n")
@@ -35,7 +36,7 @@ class Client;
 #define ERR_BADCHANNELKEY(NICK, CHANNEL)					(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define ERR_CHANOPRIVSNEEDED(NICK, CHANNEL)					(PREFIX() + (" 482 ") + NICK + " " + CHANNEL + " :You're not a channel operator\r\n")
 
-#define PONG()					 							(PREFIX() + " PONG " + SERVER_NAME + " :" + SERVER_NAME + "\r\n")
+#define PONG()					 							(PREFIX() + " PONG " + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)					(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
 #define KILL(NICK)											(PREFIX() + " KILL " + NICK + ":Abusive behavior detected\r\n")
 #define ERROR(CONTENT)												(PREFIX() + " ERROR " + ":" + CONTENT + "\r\n")

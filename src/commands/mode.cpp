@@ -4,6 +4,8 @@ std::string Request::execMode(Client *client, Server &server) {
 	if (args.size() < 1)
 		return (ERR_NEEDMOREPARAMS("MODE"));
 
+	if (server.isClientExist(args[0]))
+		return ("");
 	if (!server.isChannelExist(args[0]))
 		return (ERR_NOSUCHCHANNEL(args[0]));
 	
@@ -21,7 +23,7 @@ std::string Request::execMode(Client *client, Server &server) {
 		
 	handleMode(args, channel);
 
-	channel->broadcastMessage(MODE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], args[1], prepareNowParams(args)));
+	// channel->broadcastMessage(MODE_FOR_EVERYONE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], args[1], prepareNowParams(args)));
 	return "";
 	// return MODE(client->getNickName(), client->getUserName(), client->getHostName(), client->getNi)
 	// :root!root@127.0.0.1 MODE root :+i;//TODO 여기 고쳐주기
@@ -34,7 +36,7 @@ void Request::handleMode(std::vector<std::string> &args, Channel *channel)
 	int	paramIdx = 2;
 
 	//mode 옵션은 무조건 붙여서 써야하는 것으로
-	for (size_t i = 0; i < flags.size(); i++) {
+	for (size_t i = 0; i < flags.size(); ++i) {
 		if (flags[i] == 't')
 			changeTopicMode(sign, channel); //파라미터 불필요
 		else if (flags[i] == 'i')
