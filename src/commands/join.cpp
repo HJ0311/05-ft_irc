@@ -1,8 +1,13 @@
 #include "../../inc/Define.hpp"
 
-void	execNames(Client *client, Channel *channel, std::string joinMessage)
+void	joinOpt(Client *client, Channel *channel, std::string joinMessage)
 {
-	std::string	namesMessage = joinMessage + ":ircserv 353 " + client->getNickName() + " = #1 :";
+	std::string	namesMessage = joinMessage;
+	
+	if (channel->getTopic() != "")
+		namesMessage += RPL_TOPIC(channel->getName(), channel->getTopic());
+	
+	namesMessage += ":ircserv 353 " + client->getNickName() + " = " + channel->getName() + " :";
 
 	std::map<int, Client*>	clients = channel->getClients();
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
@@ -13,7 +18,7 @@ void	execNames(Client *client, Channel *channel, std::string joinMessage)
 		namesMessage += " ";
 	}
 	namesMessage += "\r\n";
-	namesMessage += RPL_ENDOFNAMES(client->getNickName());
+	namesMessage += RPL_ENDOFNAMES(client->getNickName(), channel->getName());
 
 	send(client->getClntSockFd(), namesMessage.c_str(), namesMessage.length(), 0);
 }
@@ -62,7 +67,7 @@ std::string Request::execJoin(Client *client, Server &server)
 
 	std::string	joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
 							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
-
+	joinOpt(client, channel, joinMessage);
 	// send(client->getClntSockFd(), joinMessage.c_str(), joinMessage.length(), 0);
 
 

@@ -14,7 +14,7 @@ class Client;
 #define RPL_NOTOPIC(CHANNEL)								(PREFIX() + (" 331 ") + CHANNEL + " :No topic is set\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC)							(PREFIX() + (" 332 ") + CHANNEL + " " + TOPIC + "\r\n")
 #define RPL_INVITING(INVITER, INVITEE, CHANNEL)				(PREFIX() + (" 341 ") + INVITER + " " + INVITEE + " " + CHANNEL + " :" + INVITER + " is inviting " + INVITEE + " to " + CHANNEL + "\r\n")
-#define RPL_ENDOFNAMES(NICK)								(PREFIX() + (" 366 ") + NICK + " #1 :End of /NAMES list.\r\n")
+#define RPL_ENDOFNAMES(NICK, CHANNEL)						(PREFIX() + (" 366 ") + NICK + " " + CHANNEL + " :End of /NAMES list.\r\n")
 #define RPL_MOTDSTART()                    	 				(PREFIX() + (" 375 ") + ":- " + SERVER_NAME + " Message of the day - \r\n")
 #define RPL_MOTD(STRING)                   	 				(PREFIX() + (" 372 ") + ":" + STRING + "\r\n")
 #define RPL_ENDOFMOTD()                     				(PREFIX() + (" 376 ") + ":End of /MOTD command.\r\n")
