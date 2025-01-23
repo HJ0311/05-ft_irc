@@ -56,7 +56,7 @@ std::string Request::handleMode(Client *client, std::vector<std::string> &args, 
 		else if (flags[i] == 'l')
 			changeClientLimitMode(client, sign, args, channel, paramIdx ,changedMode, changedParam);// 파라미터 필요
 		else if (flags[i] == 'k') 
-			changePasswordMode(client, sign, args, channel, paramIdx, changedMode, changedParam); // 필요
+			changePasswordMode(sign, args, channel, paramIdx, changedMode, changedParam); // 필요
 		else
 			sign = flags[i];
 	}
@@ -83,14 +83,23 @@ std::string Request::validateModeFlag(Client *client, std::vector<std::string> &
 	size_t size = sizeof(available) / sizeof(available[0]);
 	size_t	paramSize = 0;
 	std::string flags = args[1];
+	int		sign = 1;
 
 	for (size_t i = 0; i < flags.size(); ++i){
 		char *p = std::find(available, available + size, flags[i]);
 		if (p == available + size) {
 			return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
 		}
-		if (flags[i] == 'o' || flags[i] == 'l' || flags[i] == 'k')
+		if (flags[i] == '+')
+			sign = 1;
+		if (flags[i] == '-')
+			sign = -1;
+		if (flags[i] == 'o')
 			paramSize++;
+		else if (flags[i] == 'l' || flags[i] == 'k') {
+			if (sign == 1)
+				paramSize++;
+		}
 	}
 
 	if (args.size() != paramSize + 2)
@@ -127,10 +136,11 @@ void Request::changeInviteMode(const char &sign, Channel *channel, std::ostrings
 	}
 }
 
-void Request::changePasswordMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
-	int i = paramIdx;
-	paramIdx++;
+void Request::changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
+
 	if (sign == '+') {
+		int i = paramIdx;
+		paramIdx++;
 		if (channel->getChannelModes().at("k"))
 			return ;
 		channel->setChannelModes("k", true);
@@ -140,10 +150,10 @@ void Request::changePasswordMode(Client *client, const char &sign, std::vector<s
 	} else {
 		if (!channel->getChannelModes().at("k"))
 			return ;
-		if (channel->getKey() != args[i]) {
-			send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).length(), 0);
-			return ;
-		}
+		// if (channel->getKey() != args[i]) {
+		// 	send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).length(), 0);
+		// 	return ;
+		// }
 		channel->setChannelModes("k", false);
 		channel->setKey("");
 		modes << "-k";
@@ -173,23 +183,24 @@ void Request::changeOperatorMode(Client *client, const char &sign, std::vector<s
 }
 
 void Request::changeClientLimitMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {//JOIN 확인 필요
-	int i = paramIdx;
-	paramIdx++;
+	
+	if (sign == '+') {
+		int i = paramIdx;
+		paramIdx++;
 
-	for (int j = 0; j <  static_cast<int>(args[i].size()); ++j) {
-		if (!isdigit(args[i][j])) {
+		for (int j = 0; j <  static_cast<int>(args[i].size()); ++j) {
+			if (!isdigit(args[i][j])) {
+				send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
+				return ;
+			}
+		}
+		std::istringstream iss(args[i]);
+		int limit;
+		iss >> limit;
+		if (limit < 0 || 100 < limit) {
 			send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
 			return ;
 		}
-	}
-	std::istringstream iss(args[i]);
-	int limit;
-	iss >> limit;
-	if (limit < 0 || 100 < limit) {
-		send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
-		return ;
-	}
-	if (sign == '+') {
 		channel->setChannelModes("l", true);
 		channel->setMaxClient(limit);
 		modes << "+l";
