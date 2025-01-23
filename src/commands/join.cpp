@@ -20,10 +20,13 @@ std::string Request::execJoin(Client *client, Server &server)
 	if (channel->isClientInChannel(client->getNickName()))
 		return ("");
 
-	if (channel->getChannelModes().at("i"))
-		return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
+	if (channel->getChannelModes().at("i")) {
+		if (!channel->isInvited(client->getNickName()))
+			return (ERR_INVITEONLYCHAN(client->getNickName(), channelName));
+		channel->removeInvitee(client->getNickName());
+	}
 
-	if (channel->getKey() != "")
+	if (channel->getChannelModes().at("k"))
 	{
 		const std::string &enteredKey = args[1];
 		if (enteredKey != channel->getKey())
@@ -32,7 +35,6 @@ std::string Request::execJoin(Client *client, Server &server)
 
 	if (channel->isFull())
 		return (ERR_CHANNELISFULL(client->getNickName(), channelName));
-	//TODO 에러인 경우 new로 할당한 채널을 free를해ㅔ주어야 한다.
 
 	channel->addClient(client);
 	client->addChannel(channelName);

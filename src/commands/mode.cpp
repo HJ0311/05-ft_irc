@@ -11,11 +11,11 @@ std::string Request::execMode(Client *client, Server &server) {
 	
 	Channel *channel = server.getChannel(args[0]);
 
-	if (!channel->isOperator(client->getNickName()))
-		return (ERR_CHANOPRIVSNEEDED(client->getNickName(), this->args[0]));
-
 	if (args.size() == 1)
 		return (RPL_CHANNELMODEIS(client->getNickName(), this->args[0], channel->getMode(), prepareModeParams(channel)));
+
+	if (!channel->isOperator(client->getNickName()))
+		return (ERR_CHANOPRIVSNEEDED(client->getNickName(), this->args[0]));
 
 	std::string err = validateModeFlag(client, args);
 	if (err != "")
@@ -23,7 +23,7 @@ std::string Request::execMode(Client *client, Server &server) {
 		
 	handleMode(args, channel);
 
-	// channel->broadcastMessage(MODE_FOR_EVERYONE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], args[1], prepareNowParams(args)));
+	channel->broadcastMessage(MODE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], args[1], prepareNowParams(args)));
 	return "";
 	// return MODE(client->getNickName(), client->getUserName(), client->getHostName(), client->getNi)
 	// :root!root@127.0.0.1 MODE root :+i;//TODO 여기 고쳐주기

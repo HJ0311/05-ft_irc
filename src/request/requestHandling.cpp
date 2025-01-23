@@ -11,8 +11,6 @@ std::string Server::registerHandler(const std::string &message, int i)
 		return (request.execPass(*this, client));
 
 	if (request.command == "NICK" || request.command == "USER") {
-		std::cout << "errorClose 7" << std::endl;
-
 		client->setErrorClose(true);
 		return ERR_NEEDMOREPARAMS("PASS");
 	}
