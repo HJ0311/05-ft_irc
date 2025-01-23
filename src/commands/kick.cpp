@@ -1,7 +1,7 @@
 #include "../../inc/Define.hpp"
 
 std::string Request::execKick(Client *client, Server &server) { 
-	//TODO BADCHANMASK...
+
 	if (args.size() < 2)
 		return (ERR_NEEDMOREPARAMS("KICK"));
 	

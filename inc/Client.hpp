@@ -9,8 +9,8 @@ class Client
 		Client(const Client& obj);
 		Client&	operator=(const Client& obj);
 		~Client();
-		// getter
-		int	getSockFd() const; //TODO ㅇㅣ게 뭐뭐지지?
+
+		int	getSockFd() const;
 
 		const std::string&	getNickName() const;
 		void	setNickName(const std::string& nickname);
@@ -32,8 +32,8 @@ class Client
 
 		bool 	errorClose;
 		bool 	registerStatus;
-		int		clntSockFd; // 클라이언트의 소켓 fd
-		// bool	isOperator; // 관리자?
+		int		clntSockFd;
+
 		std::string	nickName;
 		std::string	userName;
 		std::string	hostName;

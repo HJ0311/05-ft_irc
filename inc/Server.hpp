@@ -33,7 +33,6 @@ class Server
 
 		std::string	commandJoin(Request  request, int i);
 
-		//TODO jungslee 추가
 		std::string getPassword() const;
 		// std::map<std::string, Channel*> allChannels; // 현존 채널
 		std::map<int, Client*>& getAllClients();
