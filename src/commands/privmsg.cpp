@@ -39,7 +39,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 		{
 			Client *receiver = server.getClient(target);
 			send(receiver->getClntSockFd(), outgoingMessage.c_str(), outgoingMessage.size(),  0);
-			return (outgoingMessage);
+			return ("");
 		}
 
 		// for (std::map<int, Client*>::const_iterator it = server.getAllClients().begin(); it != server.getAllClients().end(); ++it)
