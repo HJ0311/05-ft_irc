@@ -21,12 +21,15 @@ std::string Request::execTopic(Client *client, Server &server) {
 			ss << args[i] << " ";
 		}
 		channel->setTopic(ss.str());
+		std::cout << channel->getTopic() << "            " << ss.str() << std::endl;
 		channel->broadcastMessage(TOPIC(client->getNickName(), client->getUserName(), client->getHostName(), this->args[0], ss.str()));
 		return ("");
 	}
 
-	if (channel->getTopic() == "")
+	if (channel->getTopic() == "") {
+		std::cout << channel->getTopic() << std::endl;
 		return (RPL_NOTOPIC(this->args[0]));
+	}
 	
 	return (RPL_TOPIC(this->args[0], channel->getTopic()));
 }

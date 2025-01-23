@@ -33,7 +33,7 @@ class Request
 		std::string handleMode(Client *client, std::vector<std::string>	&args, Channel *channel);
 		void changeTopicMode(const char &sign, Channel *channel, std::ostringstream &modes);
 		void changeInviteMode(const char &sign, Channel *channel, std::ostringstream &modes);
-		void changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
-		void changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
-		void changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
+		void changePasswordMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
+		void changeOperatorMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
+		void changeClientLimitMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
 };

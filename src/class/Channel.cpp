@@ -74,7 +74,8 @@ void	Channel::addOperator(const std::string& nickname)
 
 void	Channel::removeOperator(const std::string& nickname)
 {
-	operators.erase(nickname);
+	if (this->isOperator(nickname))
+		operators.erase(nickname);
 }
 
 bool	Channel::isOperator(const std::string& nickname)

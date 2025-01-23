@@ -176,6 +176,7 @@ void	Server::removeFromChannels(Client *client)
 		Channel* channel = channelIt->second;
 
 		channel->removeClient(client->getNickName());
+		channel->removeOperator(client->getNickName());
 		if (channel->getClientCount() == 0)
 		{
 			delete channel;

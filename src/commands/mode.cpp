@@ -50,83 +50,18 @@ std::string Request::handleMode(Client *client, std::vector<std::string> &args, 
 		else if (flags[i] == 'i')
 			changeInviteMode(sign, channel, changedMode); // 파라미터 불필요
 		else if (flags[i] == 'o')
-			changeOperatorMode(sign, args, channel, paramIdx, changedMode, changedParam); // 파라미터 필요 -> 표시 불필요
+			changeOperatorMode(client, sign, args, channel, paramIdx, changedMode, changedParam); // 파라미터 필요 -> 표시 불필요
 		else if (flags[i] == 'l')
-			changeClientLimitMode(sign, args, channel, paramIdx ,changedMode, changedParam);// 파라미터 필요
+			changeClientLimitMode(client, sign, args, channel, paramIdx ,changedMode, changedParam);// 파라미터 필요
 		else if (flags[i] == 'k') 
-			changePasswordMode(sign, args, channel, paramIdx, changedMode, changedParam); // 필요
+			changePasswordMode(client, sign, args, channel, paramIdx, changedMode, changedParam); // 필요
 		else
 			sign = flags[i];
 	}
 	
 	std::string result = MODE(client->getNickName(), client->getUserName(), client->getHostName(), args[0], changedMode.str(), changedParam.str());
 	return result;
-	// getChangedMode(changedMode, changedParam, earlyLimit, earlyModes, channel);
 }
-
-// void Request::getChangedMode(std::ostringstream &modes, std::ostringstream &params, const int &earlyLimit, std::map<std::string, bool> early, Channel *channel) {
-	
-// 	std::map<std::string, bool> after = channel->getChannelModes();
-
-// 	if (early.at("i") != after.at("i")) {
-// 		if (after.at("i") == false)
-// 			modes << "-i";
-// 		else
-// 			modes << "+i";
-// 	}
-
-// 	if (early.at("t") != after.at("t")) {
-// 		if (after.at("t") == false)
-// 			modes << "-t";
-// 		else
-// 			modes << "+t";
-// 	}
-
-// 	if (early.at("k") != after.at("k")) {
-// 		if (after.at("k") == false)
-// 			modes << "-k";
-// 		else
-// 			modes << "+k";
-// 		params << "key(" << channel->getKey() << ") ";
-// 	}
-
-// 	if (earlyLimit != channel->getMaxClient()) {
-// 		modes << "+l";
-// 		params << "limit(" << channel->getMaxClient() << ") ";
-// 	}
-
-// }
-
-// void Request::getChangedOperator(std::ostringstream &modes, std::ostringstream &params, Channel *channel, std::vector<std::string> &args) {
-
-// 	for (std::vector<std::string>::iterator it = args.begin(); it != args.end(); ++it) {
-// 		if (channel->isClientInChannel(args[]))
-// 	}
-// 	while (it1 != early.end() && it2 != after.end() && *it1 == *it2) {
-// 		++it1;
-// 		++it2;
-// 	}
-
-// 	while (it1 != early.end()) {
-// 		modes << "-o";
-// 		params << *it1 << " ";
-// 		++it1;
-// 	}
-// 	while (it2 != after.end()) {
-// 		modes << "+o";
-// 		params << *it2 << " ";
-// 		++it2;
-// 	}
-// }
-
-// std::string Request::prepareNowParams(std::vector<std::string> &args) {
-// 	std::ostringstream params;
-
-// 	for (size_t i = 2; i < args.size(); ++i) {
-// 		params << args[i] << " ";
-// 	}
-// 	return params.str();
-// }
 
 std::string Request::prepareModeParams(Channel *channel)
 {
@@ -190,7 +125,7 @@ void Request::changeInviteMode(const char &sign, Channel *channel, std::ostrings
 	}
 }
 
-void Request::changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
+void Request::changePasswordMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
 	int i = paramIdx;
 	paramIdx++;
 	if (sign == '+') {
@@ -203,8 +138,10 @@ void Request::changePasswordMode(const char &sign, std::vector<std::string> &arg
 	} else {
 		if (!channel->getChannelModes().at("k"))
 			return ;
-		if (channel->getKey() != args[i])
+		if (channel->getKey() != args[i]) {
+			send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "k", args[i]).length(), 0);
 			return ;
+		}
 		channel->setChannelModes("k", false);
 		channel->setKey("");
 		modes << "-k";
@@ -212,12 +149,14 @@ void Request::changePasswordMode(const char &sign, std::vector<std::string> &arg
 	}
 }
 
-void Request::changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
+void Request::changeOperatorMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {
 	int i = paramIdx;
 	paramIdx++;
 	if (sign == '+') {
-		if (!channel->isClientInChannel(args[i]))
+		if (!channel->isClientInChannel(args[i])) {
+			send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "o", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "o", args[i]).length(), 0);
 			return ;
+		}
 		if (channel->isOperator(args[i]))
 			return ;
 		channel->addOperator(args[i]);
@@ -231,18 +170,28 @@ void Request::changeOperatorMode(const char &sign, std::vector<std::string> &arg
 	}
 }
 
-void Request::changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {//JOIN 확인 필요
+void Request::changeClientLimitMode(Client *client, const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params) {//JOIN 확인 필요
 	int i = paramIdx;
 	paramIdx++;
 
+	for (int j = 0; j <  static_cast<int>(args[i].size()); ++j) {
+		if (!isdigit(args[i][j])) {
+			send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
+			return ;
+		}
+	}
 	std::istringstream iss(args[i]);
 	int limit;
 	iss >> limit;
+	if (limit < 0 || 100 < limit) {
+		send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
+		return ;
+	}
 	if (sign == '+') {
 		channel->setChannelModes("l", true);
 		channel->setMaxClient(limit);
 		modes << "+l";
-		params << "limit(" << args[i] << ") ";
+		params << "limit(" << limit << ") ";
 	} else {
 		if (!channel->getChannelModes().at("l"))
 			return ;

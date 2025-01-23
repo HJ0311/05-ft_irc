@@ -12,7 +12,7 @@ class Client;
 #define RPL_MYINFO(NICK)									(PREFIX() + (" 004 ") + NICK + " " + SERVER_NAME + " V1 none itkol\r\n")
 #define RPL_CHANNELMODEIS(NICK, CHANNEL, MODE, MODEPARAMS) 	(PREFIX() + (" 324 ") + NICK + " " + CHANNEL + " " + MODE + " :" + MODEPARAMS + "\r\n")
 #define RPL_NOTOPIC(CHANNEL)								(PREFIX() + (" 331 ") + CHANNEL + " :No topic is set\r\n")
-#define RPL_TOPIC(CHANNEL, TOPIC)							(PREFIX() + (" 332 ") + CHANNEL + " :" + TOPIC + "\r\n")
+#define RPL_TOPIC(CHANNEL, TOPIC)							(PREFIX() + (" 332 ") + CHANNEL + " " + TOPIC + "\r\n")
 #define RPL_INVITING(INVITER, INVITEE, CHANNEL)				(PREFIX() + (" 341 ") + INVITER + " " + INVITEE + " " + CHANNEL + " :" + INVITER + " is inviting " + INVITEE + " to " + CHANNEL + "\r\n")
 #define RPL_MOTDSTART()                    	 				(PREFIX() + (" 375 ") + ":- " + SERVER_NAME + " Message of the day - \r\n")
 #define RPL_MOTD(STRING)                   	 				(PREFIX() + (" 372 ") + ":" + STRING + "\r\n")
@@ -36,7 +36,7 @@ class Client;
 #define ERR_BADCHANNELKEY(NICK, CHANNEL)					(PREFIX() + (" 475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define ERR_BADCHANMASK(NICK, CHANNEL)						(PREFIX() + (" 476 ") + NICK + " " + CHANNEL + " :Invalid channel name\r\n")
 #define ERR_CHANOPRIVSNEEDED(NICK, CHANNEL)					(PREFIX() + (" 482 ") + NICK + " " + CHANNEL + " :You're not a channel operator\r\n")
-#define ERR_WRONGCHANKEY(CHANNEL)							(PREFIX() + (" 999 "))						
+#define ERR_INVALIDMODEPARAM(NICK, CHANNEL, MODECHAR, PARAM)	(PREFIX() + (" 696 ") + NICK + " " + CHANNEL + " " + MODECHAR + " " + PARAM + " :Invalid mode param\r\n")						
 
 #define PONG()					 							(PREFIX() + " PONG " + ":" + SERVER_NAME + "\r\n")
 #define NICK(OLDNICK, USER, HOST, NEWNICK)					(std::string(":") + OLDNICK + "!" + USER + "@" + HOST + " NICK :" + NEWNICK + "\r\n")
