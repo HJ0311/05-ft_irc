@@ -31,7 +31,7 @@ class Server
 		std::string registerHandler(const std::string &message, int i);
 		std::string commandHandler(const std::string &message, int i);
 
-		std::string	commandJoin(Request request, int i);
+		std::string	commandJoin(Request  request, int i);
 
 		//TODO jungslee 추가
 		std::string getPassword() const;

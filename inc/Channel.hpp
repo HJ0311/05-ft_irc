@@ -67,5 +67,5 @@ class Channel
 
 		void 	broadcastMessage(const std::string &message);
 
-		const std::map<int, Client*>&	getClients() const;
+		std::map<int, Client*>&	getClients();
 };

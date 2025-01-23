@@ -3,9 +3,12 @@
 std::string Request::execJoin(Client *client, Server &server)
 {
 	if (args.empty())
-		return ("ERROR: JOIN requires a channel name.\n");
+		return (ERR_NEEDMOREPARAMS("JOIN"));
 
 	const std::string &channelName = args[0];
+
+	if (channelName[0] != '#' || channelName.length() > 200)
+		return (ERR_BADCHANMASK(client->getNickName(), channelName));
 
 	Channel *channel;
 	if (server.getAllChannels().find(channelName) == server.getAllChannels().end())// 채널이 존재하지 않으면
