@@ -1,5 +1,23 @@
 #include "../../inc/Define.hpp"
 
+void	execNames(Client *client, Channel *channel, std::string joinMessage)
+{
+	std::string	namesMessage = joinMessage + ":ircserv 353 " + client->getNickName() + " = #1 :";
+
+	std::map<int, Client*>	clients = channel->getClients();
+	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if (channel->isOperator(it->second->getNickName()))
+			namesMessage += "@";
+		namesMessage += it->second->getNickName();
+		namesMessage += " ";
+	}
+	namesMessage += "\r\n";
+	namesMessage += RPL_ENDOFNAMES(client->getNickName());
+
+	send(client->getClntSockFd(), namesMessage.c_str(), namesMessage.length(), 0);
+}
+
 std::string Request::execJoin(Client *client, Server &server)
 {
 	if (args.empty())
@@ -45,7 +63,8 @@ std::string Request::execJoin(Client *client, Server &server)
 	std::string	joinMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@"
 							  + client->getHostName() + " JOIN :" + channelName + "\r\n";
 
-	send(client->getClntSockFd(), joinMessage.c_str(), joinMessage.length(), 0);
+	// send(client->getClntSockFd(), joinMessage.c_str(), joinMessage.length(), 0);
+
 
 	const std::map<int, Client*> &channelClients = channel->getClients();
 	for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
