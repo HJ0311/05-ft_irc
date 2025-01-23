@@ -30,7 +30,8 @@ Server::~Server()
 		delete [] this->pfds;
 	for (std::map<int, Client*>::iterator it = this->clients.begin(); it != this->clients.end(); ++it)
 		delete it->second;
-	//TODO 여기에 Channel도 다 delete해줘야 할 듯
+	for (std::map<std::string, Channel *>::iterator it = this->allChannels.begin(); it != this->allChannels.end(); ++it)
+		delete it->second;
 	this->clients.clear();
 }
 
@@ -82,14 +83,12 @@ void	Server::initSocket(const std::string& port)
 		if (this->servSockFd < 0)
 			continue;
 		if (fcntl(this->servSockFd, F_SETFL, O_NONBLOCK) < 0) {
-		// std::cout << "close 5" << std::endl;
 			throw std::runtime_error("Fcntl error");
 		}
 		setsockopt(this->servSockFd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
 
 		if (bind(this->servSockFd, tmp->ai_addr, tmp->ai_addrlen) < 0)
 		{
-			// std::cout << "close 1" << std::endl;
 			close(this->servSockFd);
 			continue;
 		}
@@ -100,7 +99,6 @@ void	Server::initSocket(const std::string& port)
 	if (tmp == NULL)
 		throw std::runtime_error("Bind error");
 	if (listen(this->servSockFd, this->maxClientCnt) < 0) {
-		// std::cout << "close 6" << std::endl;
 		throw std::runtime_error("Listen error");
 	}
 }
@@ -138,14 +136,7 @@ void	Server::newClient()
 
 		if (send(newFd, ERR_NOTREGISTERED().c_str(), ERR_NOTREGISTERED().length(), 0) < 0)  
 			throw std::runtime_error("send() error"); 
-		// std::string welcome = Utils::welcomeRPL();
-		// if (send(newFd, welcome.c_str(), welcome.length(), 0) < 0)  
-		// 	throw std::runtime_error("send() error");
-		// std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
-		// 		<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
-		// addToPoll(newFd);
 
-		/*인증 완료 전에 소켓이 연결된 메세지를 띄우는 것이 좋을까??*/
 		std::cout << YELLOW << "[" << Utils::getTime() << "] new connection from "
 				<< inet_ntoa(((struct sockaddr_in*) &clientAddr)->sin_addr) << " on socket " << newFd << RESET << std::endl;
 	}
@@ -168,11 +159,10 @@ void	Server::addToPoll(int newFd)
 
 void	Server::removeFromPoll(int i)
 {
-	// std::cout << "close 2" << std::endl;
 	close(this->pfds[i].fd);
-	delete this->clients[this->pfds[i].fd];//inryu 추가
+	delete this->clients[this->pfds[i].fd];
 	this->clients.erase(this->pfds[i].fd);
-	if (i != this->onlineClient - 1)//inryu 추가
+	if (i != this->onlineClient - 1)
 		this->pfds[i] = this->pfds[this->onlineClient - 1];
 	this->onlineClient--;
 }

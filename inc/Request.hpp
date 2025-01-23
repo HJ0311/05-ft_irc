@@ -13,19 +13,13 @@ class Request
 
 		Request();
 		Request&	operator=(const Request& obj);
-		
-		bool validateNick(const std::string &nick);
-		
 
+		bool validateNick(const std::string &nick);
 		std::string execPass(const Server &server, Client *client);
 		std::string execNick(Client *client, Server &server);
 		std::string execUser(Client *client);
 
-		std::string execWhois();
-
 		std::string execInvite(Client *inviter, Server &server);
-		// std::string exec(Client *client, std::map<int, Client*> clients);
-
 		std::string execPrivmsg(Client *sender, Server &server);
 		std::string execJoin(Client *client, Server &server);
 		std::string execPart(Client *client, Server &server);
@@ -36,10 +30,10 @@ class Request
 		std::string prepareNowParams(std::vector<std::string> &args);
 		std::string prepareModeParams(Channel *channel);
 		std::string validateModeFlag(Client *client, std::vector<std::string> &args);
-		void handleMode(std::vector<std::string>	&args, Channel *channel);
-		void changeTopicMode(const char &sign, Channel *channel);
-		void changeInviteMode(const char &sign, Channel *channel);
-		void changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
-		void changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
-		void changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx);
+		std::string handleMode(Client *client, std::vector<std::string>	&args, Channel *channel);
+		void changeTopicMode(const char &sign, Channel *channel, std::ostringstream &modes);
+		void changeInviteMode(const char &sign, Channel *channel, std::ostringstream &modes);
+		void changePasswordMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
+		void changeOperatorMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
+		void changeClientLimitMode(const char &sign, std::vector<std::string> &args, Channel *channel, int &paramIdx, std::ostringstream &modes, std::ostringstream &params);
 };

@@ -41,13 +41,6 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 			send(receiver->getClntSockFd(), outgoingMessage.c_str(), outgoingMessage.size(),  0);
 			return (outgoingMessage);
 		}
-
-		// for (std::map<int, Client*>::const_iterator it = server.getAllClients().begin(); it != server.getAllClients().end(); ++it)
-		// {
-		// 	Client *receiver = it->second;
-		// 	if (receiver->getNickName() == target)
-		// 		return (outgoingMessage); // 대상 유저에게 전송할 메시지 반환
-		// }
 		return (ERR_NOSUCHNICK(target)); // 대상 유저 없음
 	}
 }

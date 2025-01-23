@@ -13,7 +13,6 @@ void	Server::clientRequest(int i)
 			std::cerr << RED << "[" << Utils::getTime() << "] socket" << senderFd << ": disconnected" << RESET << std::endl;
 		else
 			std::cerr << RED << "recv() error" << RESET << std::endl;
-		// std::cout << "close 3" << std::endl;
 		send(senderFd, ERROR(client->getUserName(), client->getHostName()).c_str(), ERROR(client->getUserName(), client->getHostName()).length(), 0);
 		removeFromChannels(this->clients[senderFd]);
 		close(senderFd);
@@ -30,7 +29,7 @@ void Server::execCommandByLine(int i, const std::string &message)
 	int	senderFd = this->pfds[i].fd;
 	Client *client = this->clients.find(senderFd)->second;
 
-	while (1) {//PASS password\r\nUSER user\r\n 이런식으로 여러번의 명령어가 붙어서 올 때를 고려하여 처리
+	while (1) {
 		size_t preIdx = idx;
 		idx = message.find("\r\n", idx);
 		if (idx == std::string::npos)
@@ -41,10 +40,9 @@ void Server::execCommandByLine(int i, const std::string &message)
 			result = registerHandler(line, i);
 		else
 			result = commandHandler(line, i);
-		if (send(senderFd, result.c_str(), result.length(), 0) < 0) // 명령어를 파싱한 뒤 그 결과물을 다시 클라이언트에게 전송
+		if (send(senderFd, result.c_str(), result.length(), 0) < 0)
 			std::cerr << RED << "send() error" << RESET << std::endl;
-		if (client->getErrorClose()) {//TODO 여기에 연결을 끊어야 하는 경우 다 넣기
-			//KILL 날리기
+		if (client->getErrorClose()) {
 			send(senderFd, ERROR(client->getUserName(), client->getHostName()).c_str(), ERROR(client->getUserName(), client->getHostName()).length(), 0);
 			close(senderFd);
 			removeFromPoll(i);
