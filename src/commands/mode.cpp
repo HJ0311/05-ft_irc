@@ -201,7 +201,7 @@ void Request::changePasswordMode(const char &sign, std::vector<std::string> &arg
 		modes << "+k";
 		params << "key(" << args[i] << ") ";
 	} else {
-		if (!channel->getChannelModes().at("t"))
+		if (!channel->getChannelModes().at("k"))
 			return ;
 		if (channel->getKey() != args[i])
 			return ;
