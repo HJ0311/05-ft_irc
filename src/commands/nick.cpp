@@ -48,5 +48,19 @@ std::string Request::execNick(Client *client, Server &server) {
 						+ START_IRC();
 
 	client->setNickName(this->args[0]);
+
+	std::set<std::string>	channels = client->getJoinedChannels();//닉첸 할 때 오퍼레이터set에서도 업데이트
+	for (std::set<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
+	{
+		std::map<std::string, Channel*>::iterator channelIt = server.getAllChannels().find(*it);
+		Channel* channel = channelIt->second;
+
+		if (channel->isOperator(nick))
+		{
+			channel->removeOperator(nick);
+			channel->addOperator(this->args[0]);
+		}
+	}
+
 	return (result);
 }
