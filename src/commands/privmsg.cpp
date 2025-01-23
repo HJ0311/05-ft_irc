@@ -15,7 +15,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 	std::string outgoingMessage = ":" + senderNickname + "!" + senderUsername + "@" + senderHostname +
 								  " PRIVMSG " + target + " :" + message + "\r\n";
 
-	if (target[0] == '#')//messages to a channel
+	if (target[0] == '#')
 	{
 		Channel *targetChannel = server.getAllChannels().at(target);
 		if (!targetChannel)
@@ -33,7 +33,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 		}
 		return (""); // 채널 전송은 직접 처리했으므로 빈 문자열 반환
 	}
-	else//messages to a client
+	else
 	{
 		if (server.isClientExist(target))
 		{

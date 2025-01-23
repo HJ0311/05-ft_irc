@@ -2,11 +2,6 @@
 
 std::string Request::execQuit(Client *client, Server &server)
 {
-	// std::string	quitMessage = ERROR("Closing link  (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]");
-	// std::string	quitMessage = "ERROR :Closing link: (" + client->getUserName() + "@" + client->getHostName() + ") [Quit: leaving]\r\n";
-
-	// send(client->getClntSockFd(), quitMessage.c_str(), quitMessage.size(), 0);
-
 	std::string quitMessage = ":" + client->getNickName() + "!" + client->getUserName() + "@" + client->getHostName() + " QUIT :Quit: leaving\r\n";
 
 	std::set<int> clientsToNotify;

@@ -1,27 +1,27 @@
 #include "../../inc/Define.hpp"
 
 std::string Request::execInvite(Client *inviter, Server &server) { 
-//RPL_AWAY
+
 	if (args.size() < 2)
 		return (ERR_NEEDMOREPARAMS("INVITE"));
 
-	//invitee가 존재하는 사용자인지 확인
 	if (!server.isClientExist(this->args[0])) {
 		return (ERR_NOSUCHNICK(this->args[0]));
 	}
 	Client *invitee = server.getClient(this->args[0]);
 
-	//채널의 존재 유무에 따라 분기
-	
 	if (!server.isChannelExist(this->args[1]))
 		return (ERR_NOSUCHCHANNEL(this->args[1]));
 	
 	Channel *channel = server.getChannel(this->args[1]);
 
+	//초대한 사람이 채널에 있는지, 운영자인지
 	if (!channel->isClientInChannel(inviter->getNickName()))
 		return (ERR_NOTONCHANNEL(inviter->getNickName(), this->args[1]));
 	if (!channel->isOperator(inviter->getNickName()))
 		return (ERR_CHANOPRIVSNEEDED(inviter->getNickName(), this->args[1]));
+	
+	//초대 받은 사람이 채널에 있는지
 	if (channel->isClientInChannel(invitee->getNickName()))
 		return (ERR_USERONCHANNEL(inviter->getNickName(), this->args[1], this->args[0]));
 

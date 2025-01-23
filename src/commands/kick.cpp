@@ -34,5 +34,3 @@ std::string Request::execKick(Client *client, Server &server) {
 
 	return ("");
 }
-
-//자기자신을 킥하는 경우??

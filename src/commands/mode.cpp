@@ -8,6 +8,7 @@ std::string Request::execMode(Client *client, Server &server) {
 	if (server.isClientExist(args[0]))
 		return ("");
 
+	//입력한 채널에 대한 유효성 검사
 	if (args[0][0] != '#' || args[0].length() > 200)
 		return (ERR_BADCHANMASK(client->getNickName(), args[0]));
 
@@ -16,6 +17,7 @@ std::string Request::execMode(Client *client, Server &server) {
 	
 	Channel *channel = server.getChannel(args[0]);
 
+	//따로 플래그에 대한 파라미터가 없을때 현재의 설정된 모드를 반환
 	if (args.size() == 1)
 		return (RPL_CHANNELMODEIS(client->getNickName(), this->args[0], channel->getMode(), prepareModeParams(channel)));
 
@@ -43,7 +45,7 @@ std::string Request::handleMode(Client *client, std::vector<std::string> &args, 
 	std::ostringstream changedMode;
 	std::ostringstream changedParam;
 
-	//mode 옵션은 무조건 붙여서 써야하는 것으로
+	//mode 옵션은 무조건 붙여서 써야 함. (+i +o (X) +i+o (O))
 	for (size_t i = 0; i < flags.size(); ++i) {
 		if (flags[i] == 't')
 			changeTopicMode(sign, channel, changedMode); //파라미터 불필요

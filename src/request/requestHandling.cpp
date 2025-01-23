@@ -25,8 +25,6 @@ std::string	Server::commandHandler(const std::string &message, int i)
 	Client *client = this->clients.find(senderFd)->second;
 	(void)i;
 	
-	// if (request.command == "KILL")
-	// 	return ("KILL\n"); // 명령어 처리 함수로 바꿀 것
 	if (request.command == "NICK")
 		return (request.execNick(client, *this));
 	else if (request.command == "JOIN")
@@ -34,29 +32,21 @@ std::string	Server::commandHandler(const std::string &message, int i)
 	else if (request.command == "USER")
 		return (request.execUser(client));
 	else if (request.command == "INVITE")
-		return (request.execInvite(client, *this)); // 명령어 처리 함수로 바꿀 것
+		return (request.execInvite(client, *this));
 	else if (request.command == "PRIVMSG")
-		return (request.execPrivmsg(client, *this)); // 명령어 처리 함수로 바꿀 것
+		return (request.execPrivmsg(client, *this));
 	else if (request.command == "TOPIC")
 		return (request.execTopic(client, *this));
 	else if (request.command == "MODE")
-		return (request.execMode(client, *this)); // 명령어 처리 함수로 바꿀 것
+		return (request.execMode(client, *this));
 	else if (request.command == "PART")
 		return (request.execPart(client, *this));
-	// else if (request.command == "NAMES")
-	// 	return ("NAMES\n"); // 명령어 처리 함수로 바꿀 것
-	// else if (request.command == "LIST")
-	// 	return ("LIST\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "KICK")
 		return (request.execKick(client, *this));
-	// else if (request.command == "NOTICE")
-	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 	else if (request.command == "PING")
 		return (PONG());
 	else if (request.command == "QUIT")
 		return (request.execQuit(client, *this));
 	else
 		return ("");
-	// else if (request.command == "NOTICE")//NOTICE는 자동 응답을 방지하는 특수한 용도로 필요, 필요한가?
-	// 	return ("NOTICE\n"); // 명령어 처리 함수로 바꿀 것
 }

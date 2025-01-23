@@ -21,10 +21,7 @@ class Server
 		void	removeFromPoll(int i);
 		void	clientRequest(int i);
 		void	removeFromChannels(Client *client);
-		// getter
-		
-		// request 처리
-		// std::string	parsing(const std::string& message, int i);
+
 		void execCommandByLine(int i, const std::string &message);
 		Request	parsingCommand(const std::string& message) const;
 		// command 처리
@@ -34,7 +31,6 @@ class Server
 		std::string	commandJoin(Request  request, int i);
 
 		std::string getPassword() const;
-		// std::map<std::string, Channel*> allChannels; // 현존 채널
 		std::map<int, Client*>& getAllClients();
 		std::map<std::string, Channel*>& getAllChannels();
 

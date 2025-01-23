@@ -38,7 +38,7 @@ std::string Request::execNick(Client *client, Server &server) {
 	std::string user = client->getUserName();
 	std::string host = client->getHostName();
 
-	if (client->getNickName() != "")//서버 연결 시 인증과정에서의 NICK이 아닐 때는 변경에 대한 성공 메세지를 보내야 함.
+	if (client->getNickName() != "")
 		result = NICK(nick, user, host, this->args[0]);
 	else if (client->getUserName() != "")
 			result =  RPL_WELCOME(nick, user, host)
@@ -49,7 +49,7 @@ std::string Request::execNick(Client *client, Server &server) {
 
 	client->setNickName(this->args[0]);
 
-	std::set<std::string>	channels = client->getJoinedChannels();//닉첸 할 때 오퍼레이터set에서도 업데이트
+	std::set<std::string>	channels = client->getJoinedChannels();//닉네임 변경 시 오퍼레이터set에서도 업데이트
 	for (std::set<std::string>::iterator it = channels.begin(); it != channels.end(); ++it)
 	{
 		std::map<std::string, Channel*>::iterator channelIt = server.getAllChannels().find(*it);

@@ -28,7 +28,6 @@ class Channel
 		Channel();
 	public:
 		Channel(const std::string& name);
-		// Channel(const std::string& name, const std::string& topic, const std::string& key);//InspIRC에선 생성 시 name외에 설정 불가
 		Channel(const Channel& obj);
 		Channel&	operator=(const Channel& obj);
 		~Channel();
