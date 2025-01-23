@@ -16,7 +16,10 @@ std::string Request::execQuit(Client *client, Server &server)
 		std::map<std::string, Channel*>::iterator channelIt = server.getAllChannels().find(*it);
 		Channel* channel = channelIt->second;
 
-		std::map<int, Client*> &channelClients = channel->getClients();
+		channel->removeClient(client->getNickName());
+		channel->removeOperator(client->getNickName());
+
+		const std::map<int, Client*> &channelClients = channel->getClients();
 		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
 		{
 			Client *channelClient = it->second;

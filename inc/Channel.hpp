@@ -15,7 +15,7 @@ class Channel
 		std::string	name; // 채널 이름
 		std::string	topic; // 채널 주제
 		std::string	key; // 채널 비밀번호
-		int	clientCnt; // 채널에 접속 중인 유저 수 //안쓰이는 듯 하다
+		int	clientCnt; // 채널에 접속 중인 유저 수 
 		int maxClient;
 
 		//i - invite only 모드 주기 / 풀기
@@ -48,7 +48,6 @@ class Channel
 		void	inviteClient(const std::string& invitee);
 		bool    isInvited(const std::string& nickname);
 		void 	removeInvitee(const std::string& nickname);
-		// void	addInvitee(const std::string& nickname);
 		
 		size_t		getClientCount() const;
 		bool	isFull() const;

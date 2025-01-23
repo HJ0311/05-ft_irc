@@ -28,7 +28,6 @@ std::string Request::execInvite(Client *inviter, Server &server) {
 	channel->inviteClient(invitee->getNickName());
 	std::string message =  INVITE(inviter->getNickName(), inviter->getUserName(), inviter->getHostName(), invitee->getNickName(), this->args[1]);
 	send(invitee->getClntSockFd(), message.c_str(), message.length(), 0);
-	//TODO 이것도 모든 채널의 사용자에게??
 
 	return (RPL_INVITING(inviter->getNickName(), invitee->getNickName(), this->args[1]));
 }
