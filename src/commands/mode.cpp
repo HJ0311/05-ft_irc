@@ -188,7 +188,7 @@ void Request::changeClientLimitMode(Client *client, const char &sign, std::vecto
 		int i = paramIdx;
 		paramIdx++;
 
-		for (int j = 0; j <  static_cast<int>(args[i].size()); ++j) {
+		for (int j = 0; j <static_cast<int>(args[i].size()); ++j) {
 			if (!isdigit(args[i][j])) {
 				send(client->getClntSockFd(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).c_str(), ERR_INVALIDMODEPARAM(client->getNickName(), args[0], "l", args[i]).length(), 0);
 				return ;
