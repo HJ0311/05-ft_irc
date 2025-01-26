@@ -14,13 +14,19 @@ std::string Request::execQuit(Client *client, Server &server)
 		channel->removeClient(client->getNickName());
 		channel->removeOperator(client->getNickName());
 
-		const std::map<int, Client*> &channelClients = channel->getClients();
-		for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
-		{
-			Client *channelClient = it->second;
-			if (channelClient != client)
-				clientsToNotify.insert(channelClient->getClntSockFd());
+		if (channel->getClientCount() == 0) {
+			delete channelIt->second;
+			server.getAllChannels().erase(channelIt);
+		} else {
+			const std::map<int, Client*> &channelClients = channel->getClients();
+			for (std::map<int, Client*>::const_iterator it = channelClients.begin(); it != channelClients.end(); ++it)
+			{
+				Client *channelClient = it->second;
+				if (channelClient != client)
+					clientsToNotify.insert(channelClient->getClntSockFd());
+			}
 		}
+
 	}
 
 	for (std::set<int>::iterator it = clientsToNotify.begin(); it != clientsToNotify.end(); ++it)
