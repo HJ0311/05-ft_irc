@@ -13,7 +13,7 @@ std::string Request::execPrivmsg(Client *sender, Server &server)
 	std::string	senderHostname = sender->getHostName();
 
 	std::string outgoingMessage = ":" + senderNickname + "!" + senderUsername + "@" + senderHostname +
-								  " PRIVMSG " + target + " :" + message + "\r\n";
+								  " PRIVMSG " + target + message + "\r\n";
 
 	if (target[0] == '#')
 	{
