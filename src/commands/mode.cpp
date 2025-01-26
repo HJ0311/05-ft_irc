@@ -100,7 +100,7 @@ std::string Request::validateModeFlag(Client *client, std::vector<std::string> &
 			if (sign == 1)
 				paramSize++;
 		}
-		else
+		else if (!(flags[i] == 'i' || flags[i] == 't'))
 			return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
 	}
 
