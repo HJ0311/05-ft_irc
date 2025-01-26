@@ -3,8 +3,7 @@
 void	joinOpt(Client *client, Channel *channel, std::string joinMessage)
 {
 	std::string	namesMessage = joinMessage;
-	
-	std::cout << channel->getTopic() << std::endl;
+
 	if (channel->getTopic() != "")
 		namesMessage += RPL_TOPIC(channel->getName(), channel->getTopic());
 	

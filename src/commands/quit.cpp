@@ -14,11 +14,6 @@ std::string Request::execQuit(Client *client, Server &server)
 		channel->removeOperator(client->getNickName());
 		channel->removeClient(client->getNickName());
 		
-		if (channel->getClientCount() <= 0) {
-			std::map<std::string, Channel*>::iterator	it = server.getAllChannels().find(channelIt->first);
-			delete it->second;
-			server.getAllChannels().erase(it);
-		}
 		client->removeChannel(channelIt->first);
 
 		if (channel->getClientCount() == 0) {

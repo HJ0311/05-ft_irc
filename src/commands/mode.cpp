@@ -79,31 +79,34 @@ std::string Request::prepareModeParams(Channel *channel)
 
 std::string Request::validateModeFlag(Client *client, std::vector<std::string> &args) {
 	
-	char available[] = {'+', '-', 't', 'i', 'k', 'o', 'l'};
-	size_t size = sizeof(available) / sizeof(available[0]);
+	// char available[] = {'+', '-', 't', 'i', 'k', 'o', 'l'};
+	// size_t size = sizeof(available) / sizeof(available[0]);
 	size_t	paramSize = 0;
 	std::string flags = args[1];
 	int		sign = 1;
 
 	for (size_t i = 0; i < flags.size(); ++i){
-		char *p = std::find(available, available + size, flags[i]);
-		if (p == available + size) {
-			return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
-		}
+		// char *p = std::find(available, available + size, flags[i]);
+		// if (p == available + size) {
+		// 	return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
+		// }
 		if (flags[i] == '+')
 			sign = 1;
-		if (flags[i] == '-')
+		else if (flags[i] == '-')
 			sign = -1;
-		if (flags[i] == 'o')
+		else if (flags[i] == 'o')
 			paramSize++;
 		else if (flags[i] == 'l' || flags[i] == 'k') {
 			if (sign == 1)
 				paramSize++;
 		}
+		else
+			return ERR_UNKNOWNMODE(client->getNickName(), flags[i]);
 	}
 
-	if (args.size() != paramSize + 2)
+	if (args.size() < paramSize + 2) {
 		return ERR_NEEDMOREPARAMS("MODE");
+	}
 
 	return "";
 }
