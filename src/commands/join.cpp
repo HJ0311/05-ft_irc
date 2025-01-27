@@ -7,7 +7,7 @@ void	joinOpt(Client *client, Channel *channel, std::string joinMessage)
 	if (channel->getTopic() != "")
 		namesMessage += RPL_TOPIC(channel->getName(), channel->getTopic());
 	
-	namesMessage += ":ircserv 353 " + client->getNickName() + " = " + channel->getName() + " ";
+	namesMessage += ":ircserv 353 " + client->getNickName() + " = " + channel->getName() + " :";
 
 	std::map<int, Client*>	clients = channel->getClients();
 	for (std::map<int, Client*>::iterator it = clients.begin(); it != clients.end(); ++it)

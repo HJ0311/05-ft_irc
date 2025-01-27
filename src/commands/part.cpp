@@ -28,6 +28,9 @@ std::string Request::execPart(Client *client, Server &server)
 			send(clientFd, partMessage.c_str(), partMessage.length(), 0);
 	}
 
+	if (channel->isOperator(client->getNickName()))
+		channel->removeOperator(client->getNickName());
+
 	channel->removeClient(client->getNickName());
 	if (channel->getClientCount() == 0)
 	{
