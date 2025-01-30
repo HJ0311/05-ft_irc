@@ -5,7 +5,7 @@ std::string Request::execPass(const Server &server, Client *client) {
 	if (client->getRegisterStatus()) 
 		return ERR_ALREADYREGISTERED();
 
-	if (this->args.size() < 1) {
+	if (this->args.size() < 1 || this->args.size() > 2) {
 		client->setErrorClose(true);
 		return ERR_NEEDMOREPARAMS("PASS");
 	}
