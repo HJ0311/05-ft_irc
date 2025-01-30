@@ -10,6 +10,8 @@ class Client
 		Client&	operator=(const Client& obj);
 		~Client();
 
+		std::string	recvBuffer; // 클라이언트별로 데이터를 저장할 버퍼
+
 		int	getSockFd() const;
 
 		const std::string&	getNickName() const;

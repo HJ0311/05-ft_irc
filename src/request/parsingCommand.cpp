@@ -17,10 +17,17 @@ void	Server::clientRequest(int i)
 		removeFromChannels(this->clients[senderFd]);
 		close(senderFd);
 		removeFromPoll(i);
+		return;
 	}
-	else
-		execCommandByLine(i, buf);
-	memset(&buf, 0, 5000);
+	client->recvBuffer.append(buf, recvBytes);
+
+	size_t	pos;
+	while ((pos = client->recvBuffer.find("\r\n")) != std::string::npos)
+	{
+		std::string	line = client->recvBuffer.substr(0, pos);
+		execCommandByLine(i, line);
+		client->recvBuffer.erase(0, pos + 2);
+	}
 }
 
 void Server::execCommandByLine(int i, const std::string &message)
